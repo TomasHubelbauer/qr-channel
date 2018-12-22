@@ -11,3 +11,5 @@ I am doing it again because I like the idea and I want to finally put forth a pr
 In the future I'd like to explore ways of bringing down the time required to establish the connection.
 
 This repository is up at [https://tomashubelbauer.github.io/qr-channel/](https://tomashubelbauer.github.io/qr-channel/) courtesy of GitHub Pages.
+
+I am using jsQR by Cosmo for QR code parsing.
