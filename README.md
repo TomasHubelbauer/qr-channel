@@ -1,4 +1,4 @@
-# QR Channel
+# [QR Channel](https://tomashubelbauer.github.io/qr-channel/)
 
 This is an experiment in using QR codes to establish WebRTC connection between devices equipped with web cams by exchanging the necessary
 SDP messages required to establish a WebRTC connection.
