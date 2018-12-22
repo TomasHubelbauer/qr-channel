@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>QR Channel</h1>
-    <video autoplay id="viewfinderVideo"></video>
+    <video playinline id="viewfinderVideo"></video>
     <canvas id="sketchCanvas"></canvas>
     <p id="messageP"></p>
     <script>
@@ -17,6 +17,8 @@ const messageP = document.querySelector('#messageP');
 void async function() {
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
   viewfinderVideo.srcObject = mediaStream;
+  // Play within the `getUserMedia` gesture, `autoplay` won't work
+  await viewfinderVideo.play();
   requestAnimationFrame(function tick() {
     sketchCanvas.width = viewfinderVideo.videoWidth;
     sketchCanvas.height = viewfinderVideo.videoHeight;
