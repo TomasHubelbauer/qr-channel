@@ -38,7 +38,7 @@ void async function() {
       requestAnimationFrame(tick);
     });
   } catch (error) {
-    alert('An error happened');
+    alert('An error happened ' + JSON.stringify(error));
   }
 }()
     </script>
