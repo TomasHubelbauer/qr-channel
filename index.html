@@ -15,27 +15,31 @@ const viewfinderVideo = document.querySelector('#viewfinderVideo');
 const sketchCanvas = document.querySelector('#sketchCanvas');
 const messageP = document.querySelector('#messageP');
 void async function() {
-  const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-  viewfinderVideo.srcObject = mediaStream;
-  // Try to fix iOS Safari with this solution from Cosmo's demo
-  video.setAttribute("playsinline", true)
-  // Play within the `getUserMedia` gesture, `autoplay` won't work
-  await viewfinderVideo.play();
-  requestAnimationFrame(function tick() {
-    sketchCanvas.width = viewfinderVideo.videoWidth;
-    sketchCanvas.height = viewfinderVideo.videoHeight;
-    if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
-      const context = sketchCanvas.getContext('2d');
-      context.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
-      const imageData = context.getImageData(0, 0, sketchCanvas.width, sketchCanvas.height);
-      const code = jsQR(imageData.data, imageData.width, imageData.height);
-      if (code !== null) {
-        messageP.textContent = code.data;
+  try {
+    const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    viewfinderVideo.srcObject = mediaStream;
+    // Try to fix iOS Safari with this solution from Cosmo's demo
+    video.setAttribute("playsinline", true)
+    // Play within the `getUserMedia` gesture, `autoplay` won't work
+    await viewfinderVideo.play();
+    requestAnimationFrame(function tick() {
+      sketchCanvas.width = viewfinderVideo.videoWidth;
+      sketchCanvas.height = viewfinderVideo.videoHeight;
+      if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
+        const context = sketchCanvas.getContext('2d');
+        context.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
+        const imageData = context.getImageData(0, 0, sketchCanvas.width, sketchCanvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height);
+        if (code !== null) {
+          messageP.textContent = code.data;
+        }
       }
-    }
 
-    requestAnimationFrame(tick);
-  });
+      requestAnimationFrame(tick);
+    });
+  } catch (error) {
+    alert('An error happened');
+  }
 }()
     </script>
   </body>
