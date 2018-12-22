@@ -7,6 +7,14 @@
   </head>
   <body>
     <h1>QR Channel</h1>
-    <p>Work in progress…</p>
+    <video id="viewfinderVideo"></video>
+    <script>
+const viewfinderVideo = document.querySelector('#viewfinderVideo');
+void async function() {
+  const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+  viewfinderVideo.srcObject = mediaStream;
+  
+}()
+    </script>
   </body>
 </html>
