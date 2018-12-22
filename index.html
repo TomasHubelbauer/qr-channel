@@ -8,12 +8,22 @@
   <body>
     <h1>QR Channel</h1>
     <video autoplay id="viewfinderVideo"></video>
+    <canvas id="sketchCanvas"></canvas>
     <script>
 const viewfinderVideo = document.querySelector('#viewfinderVideo');
+const sketchCanvas = document.querySelector('#sketchCanvas');
 void async function() {
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
   viewfinderVideo.srcObject = mediaStream;
-  
+  requestAnimationFrame(function tick() {
+    sketchCanvas.width = viewfinderVideo.videoWidth;
+    sketchCanvas.height = viewfinderVideo.videoHeight;
+    sketchCanvas.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
+    const imageData = canvas.getImageData(0, 0, sketchCanvas.width, sketchCanvas.height);
+    const code = jsQR(imageData.data, imageData.width, imageData.height);
+    document.title = code;
+    requestAnimationFrame(tick);
+  });
 }()
     </script>
   </body>
