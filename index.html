@@ -18,8 +18,9 @@ void async function() {
   requestAnimationFrame(function tick() {
     sketchCanvas.width = viewfinderVideo.videoWidth;
     sketchCanvas.height = viewfinderVideo.videoHeight;
-    sketchCanvas.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
-    const imageData = canvas.getImageData(0, 0, sketchCanvas.width, sketchCanvas.height);
+    const context = sketchCanvas.getContext('2d');
+    context.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
+    const imageData = context.getImageData(0, 0, sketchCanvas.width, sketchCanvas.height);
     const code = jsQR(imageData.data, imageData.width, imageData.height);
     document.title = code;
     requestAnimationFrame(tick);
