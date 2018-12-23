@@ -217,6 +217,7 @@ const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
 const sLineRegex = /^s=-$/g;
 const tLineRegex = /^t=0 0$/g;
 const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/g;
+const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
 
 function test(sdp) {
   const lines = [];
@@ -238,7 +239,11 @@ function test(sdp) {
       // Ignore, no data
     } else if ((match = aFingerprintLineRegex.exec(line)) !== null) {
       const [_, hash] = match;
+      // TODO: Remove the colons and figure out how to handle case (escaping)
       data.hash = hash;
+    } else if ((match = aGroupLineRegex.exec(line)) !== null) {
+      const [_, name] = match;
+      data.name = name;
     } else {
       console.log(line);
       lines.push(line);
@@ -251,6 +256,7 @@ function test(sdp) {
     's=-',
     't=0 0',
     `a=fingerprint:sha-256 ${data.hash}`,
+    `a=group:BUNDLE ${data.name}`,
     ...lines,
   ].join('\r\n');
   console.log(value);
