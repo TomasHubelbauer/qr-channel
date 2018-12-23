@@ -193,10 +193,14 @@ const aSendRecvLineRegex = /^a=sendrecv$/;
 const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
 const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
 const aMidLineRegex = /^a=mid:(0|data)$/g;
-const aSetupLineRegex = /^a=setup:actpass$/g;
+const aSetupLineRegex = /^a=setup:(actpass|active)$/g;
 const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/g;
 
 function test(sdp) {
+  if (sdp.type !== 'offer' && sdp.type !== 'answer') {
+    throw new Error(`Can only handle offer and answer session descriptions`);
+  }
+  
   const lines = [];
   let match;
   const data = {};
@@ -239,10 +243,11 @@ function test(sdp) {
     } else if ((match = aMidLineRegex.exec(line)) !== null) {
       // Ignore, we hardcode mid name to dash
     } else if ((match = aSetupLineRegex.exec(line)) !== null) {
-      // Ignore, no data
+      // Ignore, deriveable from type
     } else if ((match = aMaxMessageSizeLineRegex.exec(line)) !== null) {
       // Ignore, optional
     } else {
+      // TODO: Throw
       console.log(line);
       lines.push(line);
     }
@@ -263,7 +268,7 @@ function test(sdp) {
     `a=ice-ufrag:${data.ufrag}`,
     `a=ice-pwd:${data.pwd}`,
     'a=mid:0',
-    'a=setup:actpass',
+    `a=setup:${sdp.type === 'offer' ? 'actpass' : ''}${sdp.type === 'answer' ? 'active' : ''}`,
     ...lines,
   ].join('\r\n');
   console.log(value);
