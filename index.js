@@ -93,18 +93,18 @@ window.addEventListener('load', async () => {
       const count = Math.ceil(message.length / size);
       const index = counter % count;
       const code = message.substr(index * size, size);
-      console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
+      //console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
       displayMessage(message);
       await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
       counter++;
     }
   }
     
-  function displayMessage(message) {
+  function displayMessage(code) {
     const qr = qrcode(0, 'L');
-    qr.addData(message, 'Byte');
+    qr.addData(code, 'Byte');
     qr.make();
-    codeCanvas.title = message;
+    codeCanvas.title = code;
 
     const { width, height } = codeCanvas.getBoundingClientRect();
     if (codeCanvas.width !== width || codeCanvas.height !== height) {
