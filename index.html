@@ -56,7 +56,7 @@
             }
 
             context.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
-            const imageData = context.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvasRena.height);
+            const imageData = context.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
             const code = jsQR(imageData.data, imageData.width, imageData.height);
             if (code !== null) {
               messageP.textContent = code.data;
