@@ -185,4 +185,4 @@ window.addEventListener('load', async () => {
   }
 });
 
-window.addEventListener('unhandledrejection', alert);
+window.addEventListener('unhandledrejection', event => alert(event.reason));
