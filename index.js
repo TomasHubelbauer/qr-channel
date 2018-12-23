@@ -42,6 +42,12 @@ window.addEventListener('load', async () => {
 
     peerConnection.addEventListener(key.slice(2), event => console.log('peerConnection', key, event));
   }
+  
+  peerConnection.addEventListener('signalingstatechange', () => console.log('signalingState', peerConnection.signalingState));
+  
+  peerConnection.addEventListener('icegatheringstatechange', () => console.log('icegatheringstatechange', peerConnection.iceGatheringState));
+  
+  peerConnection.addEventListener('icecandidate', event => console.log('icecandidate', event.candidate));
 
   const dataChannel = peerConnection.createDataChannel('');
   for (const key in dataChannel) {
