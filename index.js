@@ -1,8 +1,8 @@
-const viewfinderVideo = document.querySelector('#viewfinderVideo');
-const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
-const codeCanvas = document.querySelector('#codeCanvas');
+window.addEventListener('load', async () => {
+  const viewfinderVideo = document.querySelector('#viewfinderVideo');
+  const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
+  const codeCanvas = document.querySelector('#codeCanvas');
 
-void async function() {
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
   viewfinderVideo.srcObject = mediaStream;
   // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
@@ -66,4 +66,4 @@ void async function() {
 
     await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
   }
-}()
+});
