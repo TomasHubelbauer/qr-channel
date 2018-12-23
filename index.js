@@ -37,7 +37,7 @@ window.addEventListener('load', async () => {
   const peerConnection = new RTCPeerConnection();
   for (const key in peerConnection) {
     if (!/^on/.test(key)) {
-      return;
+      continue;
     }
 
     console.log(key);
@@ -47,7 +47,7 @@ window.addEventListener('load', async () => {
   const dataChannel = peerConnection.createDataChannel('');
   for (const key in dataChannel) {
     if (!/^on/.test(key)) {
-      return;
+      continue;
     }
     
     console.log(key);
