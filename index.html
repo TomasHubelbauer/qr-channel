@@ -5,15 +5,22 @@
     <title>QR Channel</title>
     <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
     <script src="https://unpkg.com/qrcode-generator"></script>
+    <style>
+      #viewfinderVideo { display: none; }
+      #sketchCanvas { height: 128px; }
+      #codeCanvas {  }
+    </style>
   </head>
   <body>
     <h1>QR Channel</h1>
     <video id="viewfinderVideo"></video>
     <canvas id="sketchCanvas"></canvas>
+    <canvas id="codeCanvas"></canvas>
     <p id="messageP"></p>
     <script>
 const viewfinderVideo = document.querySelector('#viewfinderVideo');
 const sketchCanvas = document.querySelector('#sketchCanvas');
+const codeCanvas = document.querySelector('#codeCanvas');
 const messageP = document.querySelector('#messageP');
 void async function() {
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
@@ -22,7 +29,6 @@ void async function() {
   viewfinderVideo.setAttribute('playsinline', true);
   // Play within the `getUserMedia` gesture, `autoplay` won't work
   await viewfinderVideo.play();
-  
   // Keep a reference to the context to refresh upon video size change
   let context;
   requestAnimationFrame(function tick() {
@@ -45,10 +51,13 @@ void async function() {
   });
 }()
       
-const qr = qrcode(0, 'H');
-qr.addData('TEST', 'Byte');
-qr.make();
-console.log(qr.createDataURL());
+      const qr = qrcode(1, 'L');
+      qr.addData('01234567890123456789', 'Numeric');
+      qr.make();
+      const cellSize = 15;
+      codeCanvas.width = qrcode.getModuleCount() * cellSize;
+      codeCanvas.height = qrcode.getModuleCount() * cellSize;
+      qr.renderTo2dContext(codeCanvas.getContext('2d'), cellSize);
     </script>
   </body>
 </html>
