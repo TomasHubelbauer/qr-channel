@@ -55,7 +55,7 @@
             viewfinderContext.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
             const imageData = viewfinderContext.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
             const code = jsQR(imageData.data, imageData.width, imageData.height);
-            if (code !== null) {
+            if (code !== null && code.data !== '') {
               alert(code.data);
             }
           }
