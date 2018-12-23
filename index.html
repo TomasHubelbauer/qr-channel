@@ -26,16 +26,13 @@
     </style>
   </head>
   <body>
-    <h1>QR Channel</h1>
     <video id="viewfinderVideo"></video>
     <canvas id="viewfinderCanvas"></canvas>
     <canvas id="codeCanvas"></canvas>
-    <p id="messageP"></p>
     <script>
       const viewfinderVideo = document.querySelector('#viewfinderVideo');
       const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
       const codeCanvas = document.querySelector('#codeCanvas');
-      const messageP = document.querySelector('#messageP');
       
       void async function() {
         const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
@@ -45,7 +42,7 @@
         // Play within the `getUserMedia` gesture, `autoplay` won't work
         await viewfinderVideo.play();
         
-        // Keep a reference to the context to refresh upon video size change
+        // Remember the context and refresh it when dimensions change
         let context;
         requestAnimationFrame(function tick() {
           if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
@@ -59,7 +56,7 @@
             const imageData = context.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
             const code = jsQR(imageData.data, imageData.width, imageData.height);
             if (code !== null) {
-              messageP.textContent = code.data;
+              alert(code.data);
             }
           }
 
@@ -67,29 +64,38 @@
         });
       }()
       
-      const qr = qrcode(1, 'L');
-      qr.addData('01234567890123456789', 'Numeric');
-      qr.make();
-      
-      const { width, height } = codeCanvas.getBoundingClientRect();
-      codeCanvas.width = width;
-      codeCanvas.height = height;
-      // TODO: Reuse context if dimensions haven't changed since last render
-      const context = codeCanvas.getContext('2d');
-      // TODO: Clear context
-      
-      const size = Math.min(codeCanvas.width, codeCanvas.height);
-      const moduleCount = qr.getModuleCount();
-      const cellSize = size / moduleCount;
-      
-      const x = (width - size) / 2;
-      const y = (height - size) / 2;
-      for (let cellX = 0; cellX < moduleCount; cellX++) {
-        for (let cellY = 0; cellY < moduleCount; cellY++) {
-          if (qr.isDark(cellX, cellY)) {
-            context.fillRect(x + cellX * cellSize, y + cellY * cellSize, cellSize, cellSize);
+      // Remember the context and refresh it when dimensions change
+      let context;
+      while (true) {
+        const message = Date.now();
+        const qr = qrcode(1, 'L');
+        qr.addData(message, 'Numeric');
+        qr.make();
+
+        const { width, height } = codeCanvas.getBoundingClientRect();
+        if (codeCanvas.width !== width || codeCanvas.height !== height) {
+          codeCanvas.width = width;
+          codeCanvas.height = height;
+          context = codeCanvas.getContext('2d');
+        } else {
+          context.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
+        }
+
+        const size = Math.min(codeCanvas.width, codeCanvas.height);
+        const moduleCount = qr.getModuleCount();
+        const cellSize = size / moduleCount;
+
+        const x = (width - size) / 2;
+        const y = (height - size) / 2;
+        for (let cellX = 0; cellX < moduleCount; cellX++) {
+          for (let cellY = 0; cellY < moduleCount; cellY++) {
+            if (qr.isDark(cellX, cellY)) {
+              context.fillRect(x + cellX * cellSize, y + cellY * cellSize, cellSize, cellSize);
+            }
           }
         }
+        
+        await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
       }
     </script>
   </body>
