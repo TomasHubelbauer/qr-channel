@@ -35,7 +35,14 @@ window.addEventListener('load', async () => {
   });
   
   const peerConnection = new RTCPeerConnection();
+  for (const key of Object.keys(peerConnection).filter(key => /^on/.test(key))) {
+    peerConnection.addEventListener(key.slice(2), event => console.log('peerConnection', key, event));
+  }
 
+  const dataChannel = peerConnection.createDataChannel('');
+  for (const key of Object.keys(dataChannel).filter(key => /^on/.test(key))) {
+    dataChannel.addEventListener(key.slice(2), event => console.log('dataChannel', key, event));
+  }
   
   while (true) {
     const message = Date.now().toString();
