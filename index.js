@@ -187,7 +187,7 @@ const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9
 const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
 const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
 const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
-const mLineRegex = /^m=application 9 (UDP\/DTLS\/SCTP 5000|DTLS\/SCTP webrtc-datachannel)$/g;
+const mLineRegex = /^m=application 9 (UDP\/DTLS\/SCTP webrtc-datachannel|DTLS\/SCTP 5000)$/g;
 const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
 const aSendRecvLineRegex = /^a=sendrecv$/;
 const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
