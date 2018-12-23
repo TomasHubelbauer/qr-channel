@@ -198,9 +198,101 @@ function encode(sdp) {
 }
 
 // Decodes SDP + ICE candidates from a QR alphanumeric string
+// TODO: Build a test rig that connects to itself within the same browser tab JS context and run the messages thru this and back
 function decode(value) {
-  return {
-    type: 'offer', // TODO: Or answer,
-    sdp: 'v=0\r\n',
-  };
+  // This is the same in Firefox and in Chrome
+  yield 'v=0';
+  // This differs in Firefox and Chrome and I am not sure what needs to stay in order for this not to break
+  // Ideally `mozilla...THIS_IS_SDPARTA-64.0` would be reduced to just the dash
+  // The long number seems to always be 19 digits long
+  // The number after it is different in Chrome and Firefox
+  // TODO: Find out what it means and if we can skip it
+  // The IP address is neutered in both Firefox and Chrome, but Chrome goes with localhost and Firefox with blank IP
+  // TODO: Find out if we can choose one that will work for both
+  yield 'o=- 0000000000000000000 2 IN IP4 127.0.0.1'; // Chrome
+  yield 'o=mozilla...THIS_IS_SDPARTA-64.0 0000000000000000000 0 IN IP4 0.0.0.0';
+  // This is the same again
+  yield 's=-';
+  yield 't=0 0';
+  /*
+    The order of the following fields differs in Chrome and in Firefox
+    In Chrome it goes: group, msid, application, c=IN, ice-ufrag, ice-pwd, ice-opts, fingerprint, setup, mid:data, sct, cands
+    In Firefox it goes: fingerprint, group, ice-opts, msid, app, c-IN, a=sendrecv, ice-pwd, ice-ufrag, mid:0, setup, sctport, mms, cands
+    TODO: Find out if this can go in one order that will work (it must as Firefox and Chrome can interoperate)
+  */
+
+  // Firefox and Chrome differ here again, Firefox says "0" and Chrome says "data"
+  yield 'a=group:BUNDLE data'; // Chrome
+  yield 'a=group:BUNDLE 0'; // Firefox
+  // This differs too
+  yield 'a=msid-semantic: WMS'; // Chrome
+  yield 'a=msid-semantic:WMS *'; // Firefox
+  // Another difference
+  yield 'm=application 9 DTLS/SCTP 5000'; // Chrome
+  yield 'm=application 9 UDP/DTLS/SCTP webrtc-datachannel'; // Firefox
+  // This is the same in both, including the empty IP (whereas in `o=` Chrome gives localhost)
+  yield 'c=IN IP4 0.0.0.0';
+  // Chrome gives shorter `ufrag` (4 vs 8) and `pwd` (24 vs 32), interestingly, in any case both need to specially encoded
+  // The Firefox password is GUID serialized and lowercased, we could use that and use upper then lower it ourselves and save data
+  yield 'a=ice-ufrag:...';
+  yield 'a=ice-pwd:...';
+  // Same
+  yield 'a=ice-options:trickle';
+  yield 'a=fingerprint:sha-256 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00';
+  yield 'a=setup:actpass';
+  // This differs the same way `a-msid` does, Chrome gives "data" and Firefox gives "0"
+  yield 'a=mid:data'; // Chrome
+  yield 'a=mid:0'; // Firefox
+  // This is interesting, because now the `webrtc-datachannel` string is given by Chrome and Firefox has a shorter line
+  // It looks like this line depends on what you do in the other line
+  yield 'a=sctpmap:5000 webrtc-datachannel 1024'; // Chrome
+  yield 'a=sctp-port:5000'; // Firefox
+  // This is Firefox-only
+  yield 'a=sendrecv';
+  yield 'a=max-message-size:1073741823';
+  
+  
+  // TODO: Study https://webrtchacks.com/sdp-anatomy/
+  // TODO: Study https://webrtchacks.com/the-minimum-viable-sdp/ but keep in mind QR alphanumeric is a bit different here
 }
+
+/*
+Chrome:
+
+v=0
+o=- 0000000000000000000 2 IN IP4 127.0.0.1
+s=-
+t=0 0
+a=group:BUNDLE data
+a=msid-semantic: WMS
+m=application 9 DTLS/SCTP 5000
+c=IN IP4 0.0.0.0
+a=ice-ufrag:????
+a=ice-pwd:????????????????????????
+a=ice-options:trickle
+a=fingerprint:sha-256 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00
+a=setup:actpass
+a=mid:data
+a=sctpmap:5000 webrtc-datachannel 1024
+
+Firefox:
+
+v=0
+o=mozilla...THIS_IS_SDPARTA-64.0 0000000000000000000 0 IN IP4 0.0.0.0
+s=-
+t=0 0
+a=fingerprint:sha-256 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00
+a=group:BUNDLE 0
+a=ice-options:trickle
+a=msid-semantic:WMS *
+m=application 9 UDP/DTLS/SCTP webrtc-datachannel
+c=IN IP4 0.0.0.0
+a=sendrecv
+a=ice-pwd:????????????????????????????????
+a=ice-ufrag:????????
+a=mid:0
+a=setup:actpass
+a=sctp-port:5000
+a=max-message-size:1073741823
+
+*/
