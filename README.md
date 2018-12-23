@@ -13,3 +13,12 @@ In the future I'd like to explore ways of bringing down the time required to est
 This repository is up at [https://tomashubelbauer.github.io/qr-channel/](https://tomashubelbauer.github.io/qr-channel/) courtesy of GitHub Pages.
 
 I am using jsQR by Cosmo for QR code parsing.
+
+## Packages Used
+
+- QR code reading: `jsQR`
+  - [GitHub](https://github.com/cozmo/jsQR)
+  - [npm](https://www.npmjs.com/package/jsqr)
+- QR code generation: `qrcode-generator`
+  - [GitHub](https://github.com/kazuhikoarase/qrcode-generator)
+  - [npm](https://www.npmjs.com/package/qrcode-generator)
