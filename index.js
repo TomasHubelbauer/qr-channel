@@ -100,7 +100,7 @@ window.addEventListener('load', async () => {
   }
     
   function displayMessage(message) {
-    const qr = qrcode(1, 'L');
+    const qr = qrcode(0, 'L');
     qr.addData(message, 'Byte');
     qr.make();
     codeCanvas.title = message;
