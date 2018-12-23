@@ -94,15 +94,15 @@ window.addEventListener('load', async () => {
       const index = counter % count;
       const code = message.substr(index * size, size);
       //console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
-      displayMessage(message);
+      displayMessage(code);
       await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
       counter++;
     }
   }
     
-  function displayMessage(code) {
+  function displayMessage(message) {
     const qr = qrcode(0, 'L');
-    qr.addData(code, 'Byte');
+    qr.addData(message, 'Byte');
     qr.make();
     codeCanvas.title = code;
 
