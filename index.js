@@ -225,10 +225,11 @@ function* decode(value) {
 
 async function rig() {
   const peerConnection1 = new RTCPeerConnection();
-  monitor(peerConnection1, 'peerConnection1');
+  monitor(peerConnection1, '1');
   const dataChannel = peerConnection1.createDataChannel(null);
   monitor(dataChannel, 'dataChannel');
   // Wait until the candidates are collected in the session description (cripple trickle ICE)
+  await peerConnection1.createOffer(); // Throw-away offer meant to kick-off candidate collection
   await new Promise((resolve, reject) => {
     peerConnection1.addEventListener('icecandidate', event => {
       console.log(event.candidate);
@@ -241,7 +242,7 @@ async function rig() {
   const offer = await peerConnection1.createOffer();
   await peerConnection1.setLocalDescription(offer);
   const peerConnection2 = new RTCPeerConnection();
-  monitor(peerConnection2, 'peerConnection2');
+  monitor(peerConnection2, '2');
   await peerConnection2.setRemoteDescription(offer);
   const answer = await peerConnection2.createAnswer();
   await peerConnection2.setLocalDescription(answer);
