@@ -227,12 +227,18 @@ function* decode(value) {
 }
 
 function test(sdp) {
-  const lines = sdp.sdp.split(/\r\n/g);
-  for (const line of lines) {
-    console.log(line);
+  const lines = [];
+  for (const line of sdp.sdp.split(/\r\n/g)) {
+    if (/^v=0$/g.test(line)) {
+      // Ignore
+    } else if (false) {
+      
+    } else {
+      lines.push(line);
+    }
   }
   
-  const value = lines.join('\r\n');
+  const value = 'v=0\r\n' + lines.join('\r\n');
   return new RTCSessionDescription({ type: sdp.type, sdp: value });
 }
 
