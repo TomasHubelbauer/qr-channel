@@ -48,8 +48,6 @@ window.addEventListener('load', async () => {
     requestAnimationFrame(tick);
   });
   
-  let message = '';
-  
   const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
   monitor(peerConnection, 'peerConnection');
   
@@ -61,17 +59,7 @@ window.addEventListener('load', async () => {
     iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ';
   });
   
-  peerConnection.addEventListener('icecandidate', event => {
-    if (event.candidate !== null) {
-      
-      message += event.candidate.candidate + '\0' + event.candidate.sdpMid + '\0' + event.candidate.sdpMLineIndex + '\0';
-    } else {
-      message += '\0';
-      console.log(JSON.stringify(message));
-    }
-  });
-
-  const dataChannel = peerConnection.createDataChannel('');
+  const dataChannel = peerConnection.createDataChannel(null);
   monitor(dataChannel, 'dataChannel');
   
   // Start from -1 so that 0 falls on the non-empty message value (with SDP or ICE candidate SDP in it)
@@ -79,9 +67,9 @@ window.addEventListener('load', async () => {
   // TODO: Derive this not from char length but from the type number (have it not be automatic)
   const size = 50;
   
-  // Fire and forget
+  // Fire and forget now that we have all candidates
   rotate();
-
+  
   // Fire and forget so that we can keep looping messages
   broadcast();
   
@@ -122,6 +110,7 @@ window.addEventListener('load', async () => {
   }
   
   async function rotate() {
+    const message = peerConnection.getLocalDescription().sdp;
     while (true) {
       const count = Math.ceil(message.length / size);
       const index = counter % count;
