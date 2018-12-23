@@ -216,6 +216,7 @@ const vLineRegex = /^v=0$/g;
 const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
 const sLineRegex = /^s=-$/g;
 const tLineRegex = /^t=0  0$/g;
+const aFingerprintLineRegex = /^a:=fingerprint:sha-256 (([0-9a-f]{2}:){31}[0-9a-f]{2})$/g;
 
 function test(sdp) {
   const lines = [];
@@ -235,8 +236,8 @@ function test(sdp) {
       // Ignore, no data
     } else if ((match = tLineRegex.exec(line)) !== null) {
       // Ignore, no data
-    } else if (false) {
-      
+    } else if ((match = aFingerprintLineRegex.exec(line)) !== null) {
+      console.log(match);
     } else {
       console.log(line);
       lines.push(line);
