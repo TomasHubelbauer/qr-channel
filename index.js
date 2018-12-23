@@ -252,7 +252,12 @@ async function rig() {
   });
   
   dataChannel.addEventListener('open', () => {
-    dataChannel.send('test');
+    dataChannel.send('message from 1');
+  });
+  
+  peerConnection2.addEventListener('datachannel', event => {
+    console.log(event.channel);
+    // TODO: Message from 2 if open
   });
 }
 
