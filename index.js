@@ -255,6 +255,8 @@ function test(sdp) {
       // Ignore, deriveable from media
     } else if ((match = aSctpMapLineRegex.exec(line)) !== null) {
       // Ignore, deriveable from media
+    } else if (line === '') {
+      // Ignore, no data
     } else {
       throw new Error(`Unexpected SDP line '${line}'.`);
     }
@@ -276,6 +278,7 @@ function test(sdp) {
     'a=mid:0',
     `a=setup:${sdp.type === 'offer' ? 'actpass' : ''}${sdp.type === 'answer' ? 'active' : ''}`,
     `a=sctp${data.media === 'firefox' ? '-port:5000' : ''}${data.media === 'chrome' ? 'map:5000 webrtc-datachannel 1024' : ''}`,
+    '',
   ].join('\r\n');
   console.log(value);
   return new RTCSessionDescription({ type: sdp.type, sdp: value });
