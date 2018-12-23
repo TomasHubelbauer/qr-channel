@@ -44,8 +44,8 @@ void async function() {
   }
 }()
       
-const qr = qrcode(4, 'L');
-qr.addData('Hi!');
+const qr = qrcode(0, 'H');
+qr.addData('TEST', 'Byte');
 qr.make();
 console.log(qr.createDataURL());
     </script>
