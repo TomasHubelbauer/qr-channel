@@ -1,4 +1,6 @@
 window.addEventListener('load', async () => {
+  // Bail while we're playing with the SDP rig
+  return;
   const viewfinderVideo = document.querySelector('#viewfinderVideo');
   const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
   const codeCanvas = document.querySelector('#codeCanvas');
@@ -49,13 +51,7 @@ window.addEventListener('load', async () => {
   let message = '';
   
   const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
-  for (const key in peerConnection) {
-    if (!/^on/.test(key)) {
-      continue;
-    }
-
-    peerConnection.addEventListener(key.slice(2), event => console.log('peerConnection', key, event));
-  }
+  monitor(peerConnection, 'peerConnection');
   
   peerConnection.addEventListener('signalingstatechange', () => {
     signalingStateP.textContent += peerConnection.signalingState + '; ';
@@ -76,13 +72,7 @@ window.addEventListener('load', async () => {
   });
 
   const dataChannel = peerConnection.createDataChannel('');
-  for (const key in dataChannel) {
-    if (!/^on/.test(key)) {
-      continue;
-    }
-    
-    dataChannel.addEventListener(key.slice(2), event => console.log('dataChannel', key, event));
-  }
+  monitor(dataChannel, 'dataChannel');
   
   // Start from -1 so that 0 falls on the non-empty message value (with SDP or ICE candidate SDP in it)
   let counter = -1;
@@ -105,22 +95,10 @@ window.addEventListener('load', async () => {
   // TODO: Rewrite this to be able to act on partial messages so that collection of chunks and establishment of the connection do not have to be strictly sequential
   async function connect() {
     const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
-    for (const key in peerConnection) {
-      if (!/^on/.test(key)) {
-        continue;
-      }
-
-      peerConnection.addEventListener(key.slice(2), event => console.log('peerConnection', key, event));
-    }
+    monitor(peerConnection, 'peerConnection');
     
     const dataChannel = peerConnection.createDataChannel('');
-    for (const key in dataChannel) {
-      if (!/^on/.test(key)) {
-        continue;
-      }
-
-      dataChannel.addEventListener(key.slice(2), event => console.log('dataChannel', key, event));
-    }
+    monitor(dataChannel, 'dataChannel');
  
     const message = chunks.join('');
     const parts = message.split('\0');
@@ -255,6 +233,37 @@ function decode(value) {
   // TODO: Study https://webrtchacks.com/sdp-anatomy/
   // TODO: Study https://webrtchacks.com/the-minimum-viable-sdp/ but keep in mind QR alphanumeric is a bit different here
 }
+
+async function rig() {
+  const peerConnection1 = new RTCPeerConnection();
+  monitor(peerConnection1, 'peerConnection1');
+  const dataChannel = peerConnection1.createDataChannel(null);
+  monitor(dataChannel, 'dataChannel');
+  const offer = await peerConnection1.createOffer();
+  await peerConnection1.setLocalDescription(offer);
+  const peerConnection2 = new RTCPeerConnection();
+  monitor(peerConnection2, 'peerConnection2');
+  await peerConnection2.setRemoteDescription(offer);
+  const answer = await peerConnection2.createAnswer();
+  await peerConnection2.setLocalDescription(answer);
+  await peerConnection1.setRemoteDescription(answer);
+  dataChannel.send('test');
+}
+
+function monitor(obj, label) {
+  for (const key in obj) {
+    if (!/^on/.test(key)) {
+      continue;
+    }
+
+    obj.addEventListener(key.slice(2), event => console.log(label, key, event));
+  }
+}
+
+// Propagate asynchronous errors to the console
+void async function() {
+  await rig();
+}()
 
 /*
 Chrome:
