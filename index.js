@@ -29,7 +29,8 @@ window.addEventListener('load', async () => {
       const imageData = viewfinderContext.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
       const code = jsQR(imageData.data, imageData.width, imageData.height);
       if (code !== null && code.data !== '') {
-        alert(code.data);
+        const [index, count, size, code] = code.data.split(';', 4);
+        alert(JSON.stringofy({ index, count, size, code }));
       }
     }
 
@@ -94,7 +95,7 @@ window.addEventListener('load', async () => {
       const index = counter % count;
       const code = message.substr(index * size, size);
       //console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
-      displayMessage(code);
+      displayMessage(`${index};${count};${size};${code}`);
       await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
       counter++;
     }
