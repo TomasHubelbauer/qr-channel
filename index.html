@@ -43,17 +43,17 @@
         await viewfinderVideo.play();
         
         // Remember the context and refresh it when dimensions change
-        let context;
+        let viewfinderContext;
         requestAnimationFrame(function tick() {
           if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
             if (viewfinderCanvas.width !== viewfinderVideo.videoWidth || viewfinderCanvas.height !== viewfinderVideo.videoHeight) {
               viewfinderCanvas.width = viewfinderVideo.videoWidth;
               viewfinderCanvas.height = viewfinderVideo.videoHeight;
-              context = viewfinderCanvas.getContext('2d');
+              viewfinderContext = viewfinderCanvas.getContext('2d');
             }
 
-            context.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
-            const imageData = context.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
+            viewfinderContext.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
+            const imageData = viewfinderContext.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
             const code = jsQR(imageData.data, imageData.width, imageData.height);
             if (code !== null) {
               alert(code.data);
@@ -64,7 +64,7 @@
         });
         
         // Remember the context and refresh it when dimensions change
-        let context;
+        let codeContext;
         while (true) {
           const message = Date.now();
           const qr = qrcode(1, 'L');
@@ -75,9 +75,9 @@
           if (codeCanvas.width !== width || codeCanvas.height !== height) {
             codeCanvas.width = width;
             codeCanvas.height = height;
-            context = codeCanvas.getContext('2d');
+            codeContext = codeCanvas.getContext('2d');
           } else {
-            context.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
+            codeContext.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
           }
 
           const size = Math.min(codeCanvas.width, codeCanvas.height);
@@ -89,7 +89,7 @@
           for (let cellX = 0; cellX < moduleCount; cellX++) {
             for (let cellY = 0; cellY < moduleCount; cellY++) {
               if (qr.isDark(cellX, cellY)) {
-                context.fillRect(x + cellX * cellSize, y + cellY * cellSize, cellSize, cellSize);
+                codeContext.fillRect(x + cellX * cellSize, y + cellY * cellSize, cellSize, cellSize);
               }
             }
           }
