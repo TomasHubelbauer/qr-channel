@@ -56,7 +56,7 @@ window.addEventListener('load', async () => {
   });
   
   peerConnection.addEventListener('icecandidate', event => {
-  
+    message += event.candidate.sdp;
   });
 
   const dataChannel = peerConnection.createDataChannel('');
