@@ -208,6 +208,7 @@ const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
 const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
 const mLineRegex = /^m=application 9 (UDP\/)?DTLS\/SCTP (5000|webrtc-datachannel)$/g;
 const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
+const aSendRecvLineRegex = /^a=sendrecv$/;
 
 function test(sdp) {
   const lines = [];
@@ -244,6 +245,8 @@ function test(sdp) {
       data.todo = line;
     } else if ((match = cLineRegex.exec(line)) !== null) {
        // Ignore, no data
+    } else if ((match = aSendRecvLineRegex.exec(line)) !== null) {
+      // Ignore, optional?
     } else {
       console.log(line);
       lines.push(line);
