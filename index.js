@@ -40,7 +40,6 @@ window.addEventListener('load', async () => {
       continue;
     }
 
-    console.log(key);
     peerConnection.addEventListener(key.slice(2), event => console.log('peerConnection', key, event));
   }
 
@@ -50,7 +49,6 @@ window.addEventListener('load', async () => {
       continue;
     }
     
-    console.log(key);
     dataChannel.addEventListener(key.slice(2), event => console.log('dataChannel', key, event));
   }
   
