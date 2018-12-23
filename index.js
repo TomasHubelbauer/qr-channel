@@ -172,14 +172,10 @@ function* decode(value) {
 
   /*
     The order of the following fields differs in Chrome and in Firefox
-    In Chrome it goes: group, msid, application, c=IN, ice-ufrag, ice-pwd, ice-opts, fingerprint, setup, mid:data, sct, cands
-    In Firefox it goes: fingerprint, group, ice-opts, msid, app, c-IN, a=sendrecv, ice-pwd, ice-ufrag, mid:0, setup, sctport, mms, cands
-    TODO: Find out if this can go in one order that will work (it must as Firefox and Chrome can interoperate)
+    Chrome: aGroup, aMsid, mApp, c, aIceUfrag, aIcePwd, aIceOpts, aFingerprint, aSetup, aMid, aSctpMap
+    Firefox: aFingerprint, aGroup, aIceOpts, aMsic, mApp, c, aSendRecv, aIcePwd, aIceUfrag, aMid, aSetup, aSctpPort, aMax
   */
 
-  // Firefox and Chrome differ here again, Firefox says "0" and Chrome says "data"
-  yield 'a=group:BUNDLE data'; // Chrome
-  yield 'a=group:BUNDLE 0'; // Firefox
   // This differs too
   yield 'a=msid-semantic: WMS'; // Chrome
   yield 'a=msid-semantic:WMS *'; // Firefox
@@ -193,8 +189,6 @@ function* decode(value) {
   yield 'a=ice-ufrag:...';
   yield 'a=ice-pwd:...';
   // Same
-  yield 'a=ice-options:trickle';
-  yield 'a=fingerprint:sha-256 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00';
   yield 'a=setup:actpass';
   // This differs the same way `a-msid` does, Chrome gives "data" and Firefox gives "0"
   yield 'a=mid:data'; // Chrome
@@ -218,6 +212,7 @@ const sLineRegex = /^s=-$/g;
 const tLineRegex = /^t=0 0$/g;
 const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/g;
 const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
+const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
 
 function test(sdp) {
   const lines = [];
@@ -243,7 +238,10 @@ function test(sdp) {
       data.hash = hash;
     } else if ((match = aGroupLineRegex.exec(line)) !== null) {
       const [_, name] = match;
+      // TODO: Find out if this can be changed to a dash assuming the same change is applied to the a:mid line
       data.name = name;
+    } else if ((match = aIceOptions.exec(line)) !== null) {
+       // Ignore, no data
     } else {
       console.log(line);
       lines.push(line);
@@ -257,6 +255,7 @@ function test(sdp) {
     't=0 0',
     `a=fingerprint:sha-256 ${data.hash}`,
     `a=group:BUNDLE ${data.name}`,
+    'a=ice-options:trickle',
     ...lines,
   ].join('\r\n');
   console.log(value);
