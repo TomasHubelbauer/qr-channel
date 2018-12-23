@@ -195,6 +195,8 @@ const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
 const aMidLineRegex = /^a=mid:(0|data)$/g;
 const aSetupLineRegex = /^a=setup:(actpass|active)$/g;
 const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/g;
+const aSctpPortLineRegex = /^a=sctp-port:5000$/g;
+const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel 1024$/g;
 
 function test(sdp) {
   if (sdp.type !== 'offer' && sdp.type !== 'answer') {
@@ -249,6 +251,10 @@ function test(sdp) {
       // Ignore, deriveable from type
     } else if ((match = aMaxMessageSizeLineRegex.exec(line)) !== null) {
       // Ignore, optional
+    } else if ((match = aSctpPortLineRegex.exec(line)) !== null) {
+      // Ignore, deriveable from media
+    } else if ((match = aSctpMapLineRegex.exec(line)) !== null) {
+      // Ignore, deriveable from media
     } else {
       throw new Error(`Unexpected SDP line '${line}'.`);
     }
