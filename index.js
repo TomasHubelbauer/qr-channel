@@ -34,6 +34,10 @@ window.addEventListener('load', async () => {
       if (code !== null && code.data !== '') {
         const [index, count, size, text] = code.data.split(';', 4);
         chunks[index] = text;
+        if (chunks.length === count) {
+          connect();
+        }
+        
         chunksP.textContent = `Chunks (${count}): ` + Object.keys(chunks);
       }
     }
@@ -91,6 +95,11 @@ window.addEventListener('load', async () => {
     const sessionDescription = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(sessionDescription);
     message += sessionDescription.sdp + ',';
+  }
+  
+  async function connect() {
+    const message = chunks.join('');
+    alert(message);
   }
   
   async function rotate() {
