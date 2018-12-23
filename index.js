@@ -46,11 +46,11 @@ window.addEventListener('load', async () => {
   }
   
   peerConnection.addEventListener('signalingstatechange', () => {
-    signalingStateP.textContent += ' ' + peerConnection.signalingState;
+    signalingStateP.textContent += peerConnection.signalingState + '; ';
   });
   
   peerConnection.addEventListener('icegatheringstatechange', () => {
-    iceGatheringStateP.textContent += ' ' + peerConnection.iceGatheringState;
+    iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ';
   });
   
   peerConnection.addEventListener('icecandidate', event => console.log('icecandidate', event.candidate));
