@@ -34,7 +34,7 @@ window.addEventListener('load', async () => {
     requestAnimationFrame(tick);
   });
   
-  const peerConnection = new RTCPeerConnection();
+  const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stuns:stun.example.org' } ] });
   for (const key in peerConnection) {
     if (!/^on/.test(key)) {
       continue;
