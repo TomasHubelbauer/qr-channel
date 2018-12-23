@@ -211,6 +211,7 @@ const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
 const aSendRecvLineRegex = /^a=sendrecv$/;
 const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
 const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
+const aMidLineRegex = /^a=mid:(0|data)$/g;
 
 function test(sdp) {
   const lines = [];
@@ -235,9 +236,7 @@ function test(sdp) {
       // TODO: Remove the colons and figure out how to handle case (escaping)
       data.hash = hash;
     } else if ((match = aGroupLineRegex.exec(line)) !== null) {
-      const [_, name] = match;
-      // TODO: Find out if this can be changed to a dash assuming the same change is applied to the `a=mid` line
-      data.name = name;
+      // Ignore, we hardcode mid name to dash
     } else if ((match = aIceOptionsLineRegex.exec(line)) !== null) {
        // Ignore, no data
     } else if ((match = aMsidSemanticLineRegex.exec(line)) !== null) {
@@ -253,6 +252,8 @@ function test(sdp) {
       data.ufrag = match[1];
     } else if ((match = aIcePwdLineRegex.exec(line)) !== null) {
       data.pwd = match[1];
+    } else if ((match = aMidLineRegex.exec(line)) !== null) {
+      // Ignore, we hardcode mid name to dash
     } else {
       console.log(line);
       lines.push(line);
@@ -265,7 +266,7 @@ function test(sdp) {
     's=-',
     't=0 0',
     `a=fingerprint:sha-256 ${data.hash}`,
-    `a=group:BUNDLE ${data.name}`,
+    `a=group:BUNDLE 0`,
     'a=ice-options:trickle',
     'a=msid-semantic:WMS',
     // TODO: Read the kind bit and print the right line
@@ -273,6 +274,7 @@ function test(sdp) {
     'c=IN IP4 0.0.0.0',
     `a=ice-ufrag:${data.ufrag}`,
     `a=ice-pwd:${data.pwd}`,
+    'a=mid:0',
     ...lines,
   ].join('\r\n');
   console.log(value);
