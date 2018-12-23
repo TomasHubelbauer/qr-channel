@@ -216,7 +216,7 @@ const vLineRegex = /^v=0$/g;
 const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
 const sLineRegex = /^s=-$/g;
 const tLineRegex = /^t=0 0$/g;
-const aFingerprintLineRegex = /^a:=fingerprint:sha-256 (([0-9a-f]{2}:){31}[0-9a-f]{2})$/g;
+const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/g;
 
 function test(sdp) {
   const lines = [];
@@ -237,7 +237,8 @@ function test(sdp) {
     } else if ((match = tLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if ((match = aFingerprintLineRegex.exec(line)) !== null) {
-      console.log(match);
+      const [_, hash] = match;
+      data.hash = hash;
     } else {
       console.log(line);
       lines.push(line);
@@ -249,6 +250,7 @@ function test(sdp) {
     `o=- ${data.sessionId} ${data.sessionVersion} IN IP4 ${data.ipv4}`,
     's=-',
     't=0 0',
+    `a=fingerprint:sha-256 ${data.hash}`,
     ...lines,
   ].join('\r\n');
   console.log(value);
