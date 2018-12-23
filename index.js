@@ -97,6 +97,7 @@ window.addEventListener('load', async () => {
     message += sessionDescription.sdp + '///';
   }
   
+  // TODO: Create a new receiving peer connection to establish this communication line
   async function connect() {
     const message = chunks.join('');
     const [sdpString, ...iceStrings] = message.split('///');
