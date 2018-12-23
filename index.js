@@ -241,10 +241,10 @@ async function rig() {
   const dataChannel = peerConnection1.createDataChannel(null);
   monitor(dataChannel, 'dc 1');
   
-  const offer = await peerConnection1.createOffer();
+  const offer = test(await peerConnection1.createOffer());
   await peerConnection1.setLocalDescription(offer);
   await peerConnection2.setRemoteDescription(offer);
-  const answer = await peerConnection2.createAnswer();
+  const answer = test(await peerConnection2.createAnswer());
   await peerConnection2.setLocalDescription(answer);
   await peerConnection1.setRemoteDescription(answer);
   
