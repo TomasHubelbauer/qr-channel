@@ -213,6 +213,7 @@ const tLineRegex = /^t=0 0$/g;
 const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/g;
 const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
 const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
+const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
 
 function test(sdp) {
   const lines = [];
@@ -242,6 +243,8 @@ function test(sdp) {
       data.name = name;
     } else if ((match = aIceOptionsLineRegex.exec(line)) !== null) {
        // Ignore, no data
+    } else if ((match = aMsidSemanticLineRegex.exec(line)) !== null) {
+       // Ignore, browsers set different values (Chrome ` WMS`, Firefox `WMS *`), but `WMS` works for both
     } else {
       console.log(line);
       lines.push(line);
@@ -256,6 +259,7 @@ function test(sdp) {
     `a=fingerprint:sha-256 ${data.hash}`,
     `a=group:BUNDLE ${data.name}`,
     'a=ice-options:trickle',
+    'a=msid-semantic:WMS',
     ...lines,
   ].join('\r\n');
   console.log(value);
