@@ -34,11 +34,11 @@ window.addEventListener('load', async () => {
       if (code !== null && code.data !== '') {
         const [index, count, size, text] = code.data.split(';', 4);
         chunks[index] = text;
-        if (chunks.length === count) {
+        chunksP.textContent = `Chunks (${chunks.length}/${count}): ` + Object.keys(chunks);
+        // Fire and forget
+        if (chunks.length === Number(count)) {
           connect();
         }
-        
-        chunksP.textContent = `Chunks (${count}): ` + Object.keys(chunks);
       }
     }
 
