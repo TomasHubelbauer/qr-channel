@@ -230,7 +230,7 @@ async function rig() {
   monitor(peerConnection2, '2');
   
   const dataChannel = peerConnection1.createDataChannel(null);
-  monitor(dataChannel, 'dataChannel');
+  monitor(dataChannel, 'dc 1');
   
   const offer = await peerConnection1.createOffer();
   await peerConnection1.setLocalDescription(offer);
@@ -252,12 +252,14 @@ async function rig() {
   });
   
   dataChannel.addEventListener('open', () => {
-    dataChannel.send('message from 1');
+    dataChannel.send('message from 1 to 2');
   });
   
   peerConnection2.addEventListener('datachannel', event => {
-    console.log(event.channel);
-    // TODO: Message from 2 if open
+    monitor(event.channel, 'dc 2');
+      event.channel.addEventListener('open', () => {
+        event.channel.send('message from 2 to 1');
+      });
   });
 }
 
