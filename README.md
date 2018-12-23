@@ -30,3 +30,10 @@ In the future I'd like to explore ways of bringing down the time required to est
 - QR code generation: `qrcode-generator`
   - [GitHub](https://github.com/kazuhikoarase/qrcode-generator)
   - [npm](https://www.npmjs.com/package/qrcode-generator)
+
+## Roadmap
+
+Also see the `TODO` comments in the source code.
+
+- [ ] Finalize the SDP+ICE compression & decompression algorithms
+- [ ] Fix the camera problem in Chrome
