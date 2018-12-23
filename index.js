@@ -29,8 +29,8 @@ window.addEventListener('load', async () => {
       const imageData = viewfinderContext.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
       const code = jsQR(imageData.data, imageData.width, imageData.height);
       if (code !== null && code.data !== '') {
-        const [index, count, size, code] = code.data.split(';', 4);
-        alert(JSON.stringofy({ index, count, size, code }));
+        const [index, count, size, text] = code.data.split(';', 4);
+        alert(JSON.stringofy({ index, count, size, text }));
       }
     }
 
