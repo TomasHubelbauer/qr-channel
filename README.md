@@ -7,7 +7,9 @@ exchanging QR codes with offer/answer SDP data and ICE candidate data.
 
 This has been done before and I've attempted it several times before as well.
 
-- [ ] Link prior art
+- (2014) https://franklinta.com/2014/10/19/serverless-webrtc-using-qr-codes/
+- (2015) https://github.com/phiresky/webrtc-remote-touch-pen-input
+- (2018) https://github.com/AquiGorka/webrtc-qr
 
 I am doing it again because I like the idea and I want to finally put forth a prototype of my own that I'll actually finish.
 In the future I'd like to explore ways of bringing down the time required to establish the peer connection.
