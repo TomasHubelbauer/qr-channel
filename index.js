@@ -228,22 +228,19 @@ async function rig() {
   monitor(peerConnection1, '1');
   const dataChannel = peerConnection1.createDataChannel(null);
   monitor(dataChannel, 'dataChannel');
-  // Wait until the candidates are collected in the session description (cripple trickle ICE)
-  console.log(await peerConnection1.createOffer()); // Throw-away offer meant to kick-off candidate collection
-  await new Promise((resolve, reject) => {
-    peerConnection1.addEventListener('icecandidate', event => {
-      console.log(event.candidate);
-      if (event.candidate === null) {
-        resolve();
-      }
-    });
-  });
-
   const offer = await peerConnection1.createOffer();
   await peerConnection1.setLocalDescription(offer);
   const peerConnection2 = new RTCPeerConnection();
   monitor(peerConnection2, '2');
   await peerConnection2.setRemoteDescription(offer);
+  peerConnection1.addEventListener('icecandidate', event => {
+    console.log(event.candidate);
+    if (event.candidate !== null) {
+      peerConnection2.addIceCandidate(event.candidate);
+    }
+  });
+
+  // TODO: Do I need to wait for the ICE candidates here?
   const answer = await peerConnection2.createAnswer();
   await peerConnection2.setLocalDescription(answer);
   await peerConnection1.setRemoteDescription(answer);
