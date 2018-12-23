@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <title>QR Channel</title>
     <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
+    <script src="https://unpkg.com/qrcodejs/qrcode.js"></script>
   </head>
   <body>
     <h1>QR Channel</h1>
@@ -42,6 +43,8 @@ void async function() {
     throw error;
   }
 }()
+      
+      console.log(new QRCode());
     </script>
   </body>
 </html>
