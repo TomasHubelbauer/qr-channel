@@ -2,6 +2,8 @@ window.addEventListener('load', async () => {
   const viewfinderVideo = document.querySelector('#viewfinderVideo');
   const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
   const codeCanvas = document.querySelector('#codeCanvas');
+  const signalingStateP = document.querySelector('#signalingStateP');
+  const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
 
    // Remember the context and refresh it when dimensions change
   let codeContext;
@@ -43,9 +45,13 @@ window.addEventListener('load', async () => {
     peerConnection.addEventListener(key.slice(2), event => console.log('peerConnection', key, event));
   }
   
-  peerConnection.addEventListener('signalingstatechange', () => console.log('signalingState', peerConnection.signalingState));
+  peerConnection.addEventListener('signalingstatechange', () => {
+    signalingStateP.textContent += ' ' + peerConnection.signalingState;
+  });
   
-  peerConnection.addEventListener('icegatheringstatechange', () => console.log('icegatheringstatechange', peerConnection.iceGatheringState));
+  peerConnection.addEventListener('icegatheringstatechange', () => {
+    iceGatheringStateP.textContent += ' ' + peerConnection.iceGatheringState;
+  });
   
   peerConnection.addEventListener('icecandidate', event => console.log('icecandidate', event.candidate));
 
