@@ -226,31 +226,31 @@ function* decode(value) {
 async function rig() {
   const peerConnection1 = new RTCPeerConnection();
   monitor(peerConnection1, '1');
-  const dataChannel = peerConnection1.createDataChannel(null);
-  monitor(dataChannel, 'dataChannel');
-  const offer = await peerConnection1.createOffer();
-  await peerConnection1.setLocalDescription(offer);
   const peerConnection2 = new RTCPeerConnection();
   monitor(peerConnection2, '2');
+  
+  const dataChannel = peerConnection1.createDataChannel(null);
+  monitor(dataChannel, 'dataChannel');
+  
+  const offer = await peerConnection1.createOffer();
+  await peerConnection1.setLocalDescription(offer);
   await peerConnection2.setRemoteDescription(offer);
+  const answer = await peerConnection2.createAnswer();
+  await peerConnection2.setLocalDescription(answer);
+  await peerConnection1.setRemoteDescription(answer);
+  
   peerConnection1.addEventListener('icecandidate', event => {
-    console.log(event.candidate);
     if (event.candidate !== null) {
       peerConnection2.addIceCandidate(event.candidate);
     }
   });
   
   peerConnection2.addEventListener('icecandidate', event => {
-    console.log(event.candidate);
     if (event.candidate !== null) {
       peerConnection1.addIceCandidate(event.candidate);
     }
   });
 
-  // TODO: Do I need to wait for the ICE candidates here?
-  const answer = await peerConnection2.createAnswer();
-  await peerConnection2.setLocalDescription(answer);
-  await peerConnection1.setRemoteDescription(answer);
   //dataChannel.send('test');
 }
 
