@@ -72,7 +72,8 @@ window.addEventListener('load', async () => {
     dataChannel.addEventListener(key.slice(2), event => console.log('dataChannel', key, event));
   }
   
-  let counter = 0;
+  // Start from -1 so that 0 falls on the non-empty message value (with SDP or ICE candidate SDP in it)
+  let counter = -1;
   const size = 50;
   
   // Fire and forget
@@ -90,7 +91,7 @@ window.addEventListener('load', async () => {
   async function rotate() {
     while (true) {
       const count = Math.ceil(message.length / size);
-      const index = (counter % count) - 1;
+      const index = counter % count;
       const code = message.substr(index * size, size);
       console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
       displayMessage(message);
