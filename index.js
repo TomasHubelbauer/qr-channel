@@ -239,7 +239,7 @@ function test(sdp) {
     } else if ((match = cLineRegex.exec(line)) !== null) {
        // Ignore, no data
     } else if ((match = aSendRecvLineRegex.exec(line)) !== null) {
-      // Ignore, optional
+      // Ignore, optional (Firefox only)
     } else if ((match = aIceUfragLineRegex.exec(line)) !== null) {
       data.ufrag = match[1];
     } else if ((match = aIcePwdLineRegex.exec(line)) !== null) {
@@ -250,13 +250,15 @@ function test(sdp) {
     } else if ((match = aSetupLineRegex.exec(line)) !== null) {
       // Ignore, deriveable from type
     } else if ((match = aMaxMessageSizeLineRegex.exec(line)) !== null) {
-      // Ignore, optional
+      // Ignore, optional (Firefox only)
     } else if ((match = aSctpPortLineRegex.exec(line)) !== null) {
       // Ignore, deriveable from media
     } else if ((match = aSctpMapLineRegex.exec(line)) !== null) {
       // Ignore, deriveable from media
     } else if (line === '') {
       // Ignore, no data
+    } else if (line === 'b=AS:30') {
+      // Ignore, random (Chrome only)
     } else {
       throw new Error(`Unexpected SDP line '${line}'.`);
     }
