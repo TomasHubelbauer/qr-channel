@@ -34,7 +34,7 @@ window.addEventListener('load', async () => {
       if (code !== null && code.data !== '') {
         const [index, count, size, text] = code.data.split(';', 4);
         chunks[index] = text;
-        chunksP.textContent = Object.keys(chunks);
+        chunksP.textContent = `Chunks (${count}): ` + Object.keys(chunks);
       }
     }
 
