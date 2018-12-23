@@ -66,9 +66,10 @@ window.addEventListener('load', async () => {
   
   peerConnection.addEventListener('icecandidate', event => {
     if (event.candidate !== null) {
-      message += event.candidate.candidate + '///';
+      
+      message += event.candidate.candidate + '\0' + event.candidate.sdpMid + '\0' + event.candidate.sdpMLineIndex + '\0';
     } else {
-      message += '///DONE';
+      message += '\0';
     }
   });
 
@@ -94,13 +95,13 @@ window.addEventListener('load', async () => {
   async function broadcast() {
     const sessionDescription = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(sessionDescription);
-    message += sessionDescription.sdp + '///';
+    message += sesionDescription.type + '\0' + sessionDescription.sdp + '\0';
   }
   
   // TODO: Create a new receiving peer connection to establish this communication line
   async function connect() {
     const message = chunks.join('');
-    const [sdpString, ...iceStrings] = message.split('///');
+    const [sdpString, ...iceStrings] = message.split('\0');
     
     const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
     for (const key in peerConnection) {
