@@ -70,6 +70,7 @@
           const qr = qrcode(1, 'L');
           qr.addData(message, 'Numeric');
           qr.make();
+          codeCanvas.title = message;
 
           const { width, height } = codeCanvas.getBoundingClientRect();
           if (codeCanvas.width !== width || codeCanvas.height !== height) {
