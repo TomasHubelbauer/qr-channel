@@ -82,8 +82,8 @@
       const moduleCount = qr.getModuleCount();
       const cellSize = size / moduleCount;
       
-      const x = width - size;
-      const y = height - size;
+      const x = (width - size) / 2;
+      const y = (height - size) / 2;
       for (let cellX = 0; cellX < moduleCount; cellX++) {
         for (let cellY = 0; cellY < moduleCount; cellY++) {
           if (qr.isDark(cellX, cellY)) {
