@@ -240,7 +240,7 @@ function test(sdp) {
       const [_, name] = match;
       // TODO: Find out if this can be changed to a dash assuming the same change is applied to the a:mid line
       data.name = name;
-    } else if ((match = aIceOptions.exec(line)) !== null) {
+    } else if ((match = aIceOptionsLineRegex.exec(line)) !== null) {
        // Ignore, no data
     } else {
       console.log(line);
