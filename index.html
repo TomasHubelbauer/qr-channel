@@ -62,41 +62,41 @@
 
           requestAnimationFrame(tick);
         });
-      }()
-      
-      // Remember the context and refresh it when dimensions change
-      let context;
-      while (true) {
-        const message = Date.now();
-        const qr = qrcode(1, 'L');
-        qr.addData(message, 'Numeric');
-        qr.make();
+        
+        // Remember the context and refresh it when dimensions change
+        let context;
+        while (true) {
+          const message = Date.now();
+          const qr = qrcode(1, 'L');
+          qr.addData(message, 'Numeric');
+          qr.make();
 
-        const { width, height } = codeCanvas.getBoundingClientRect();
-        if (codeCanvas.width !== width || codeCanvas.height !== height) {
-          codeCanvas.width = width;
-          codeCanvas.height = height;
-          context = codeCanvas.getContext('2d');
-        } else {
-          context.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
-        }
+          const { width, height } = codeCanvas.getBoundingClientRect();
+          if (codeCanvas.width !== width || codeCanvas.height !== height) {
+            codeCanvas.width = width;
+            codeCanvas.height = height;
+            context = codeCanvas.getContext('2d');
+          } else {
+            context.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
+          }
 
-        const size = Math.min(codeCanvas.width, codeCanvas.height);
-        const moduleCount = qr.getModuleCount();
-        const cellSize = size / moduleCount;
+          const size = Math.min(codeCanvas.width, codeCanvas.height);
+          const moduleCount = qr.getModuleCount();
+          const cellSize = size / moduleCount;
 
-        const x = (width - size) / 2;
-        const y = (height - size) / 2;
-        for (let cellX = 0; cellX < moduleCount; cellX++) {
-          for (let cellY = 0; cellY < moduleCount; cellY++) {
-            if (qr.isDark(cellX, cellY)) {
-              context.fillRect(x + cellX * cellSize, y + cellY * cellSize, cellSize, cellSize);
+          const x = (width - size) / 2;
+          const y = (height - size) / 2;
+          for (let cellX = 0; cellX < moduleCount; cellX++) {
+            for (let cellY = 0; cellY < moduleCount; cellY++) {
+              if (qr.isDark(cellX, cellY)) {
+                context.fillRect(x + cellX * cellSize, y + cellY * cellSize, cellSize, cellSize);
+              }
             }
           }
+
+          await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
         }
-        
-        await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
-      }
+      }()
     </script>
   </body>
 </html>
