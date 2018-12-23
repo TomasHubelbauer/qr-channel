@@ -100,7 +100,7 @@ window.addEventListener('load', async () => {
       const code = message.substr(index * size, size);
       //console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
       displayMessage(`${index};${count};${size};${code}`);
-      await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
+      await new Promise((resolve, reject) => window.setTimeout(resolve, 100));
       counter++;
     }
   }
