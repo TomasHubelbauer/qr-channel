@@ -236,8 +236,7 @@ function test(sdp) {
     if ((match = vLineRegex.exec(line)) !== null) {
       // Ignore
     } else if ((match = oLineRegex.test(line)) !== null) {
-      const [_, sessionId, sessionVersion, ip4] = match;
-      console.log(sessionId, sessionVersion, ip4);
+      console.log(match);
     } else if (false) {
       
     } else {
