@@ -250,8 +250,10 @@ async function rig() {
       peerConnection1.addIceCandidate(event.candidate);
     }
   });
-
-  //dataChannel.send('test');
+  
+  dataChannel.addEventListener('open', () => {
+    dataChannel.send('test');
+  });
 }
 
 function monitor(obj, label) {
