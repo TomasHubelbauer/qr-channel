@@ -32,11 +32,12 @@ window.addEventListener('load', async () => {
       const imageData = viewfinderContext.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
       const code = jsQR(imageData.data, imageData.width, imageData.height);
       if (code !== null && code.data !== '') {
-        const [index, count, size, text] = code.data.split(';', 4);
+        const [index, count, text] = code.data.split('\0', 3);
         chunks[index] = text;
-        chunksP.textContent = `Chunks (${chunks.length}/${count}): ` + Object.keys(chunks);
-        // Fire and forget
-        if (chunks.length === Number(count) && !chunks.find(chunk => chunk === undefined)) {
+        chunksP.textContent = `Chunks (${Object.keys(chunks).length}/${count}): ` + Object.keys(chunks);
+        // Check the number of keys to ignore uninitialized array items
+        if (Object.keys(chunks).length === Number(count)) {
+          // Fire and forget
           connect();
         }
       }
@@ -98,11 +99,9 @@ window.addEventListener('load', async () => {
     message += sesionDescription.type + '\0' + sessionDescription.sdp + '\0';
   }
   
-  // TODO: Create a new receiving peer connection to establish this communication line
+  // TODO: Handle both offer and answer cases
+  // TODO: Rewrite this to be able to act on partial messages so that collection of chunks and establishment of the connection do not have to be strictly sequential
   async function connect() {
-    const message = chunks.join('');
-    const [sdpString, ...iceStrings] = message.split('\0');
-    
     const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
     for (const key in peerConnection) {
       if (!/^on/.test(key)) {
@@ -120,13 +119,21 @@ window.addEventListener('load', async () => {
 
       dataChannel.addEventListener(key.slice(2), event => console.log('dataChannel', key, event));
     }
+ 
+    const message = chunks.join('');
+    const parts = message.split('\0');
     
-    const sdp = new RTCSessionDescription({ sdp: sdpString, type: 'offer' });
-    await peerConnection.setRemoteDescription(sdp);
-    for (const iceString of iceStrings) {
+    // TODO: Handle this possible being an answer to own offer and not different offer
+    const offer = new RTCSessionDescription({ type: parts[0], sdp: parts[1] });
+    await peerConnection.setRemoteDescription(offer);
+    
+    // TODO: Parse candidates from the groups of three items
+    for (const /* TODO */) {
       const candidate = new RTCIceCandidate({ candidate: iceString, sdpMid: 0, sdpMLineIndex: 0 });
       await peerConnection.addIceCandidate(candidate);
     }
+    
+    // TODO: Verify only a blank item was left (confirming we're at the end of the candidates)
     
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
@@ -140,7 +147,7 @@ window.addEventListener('load', async () => {
       const index = counter % count;
       const code = message.substr(index * size, size);
       //console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
-      displayMessage(`${index};${count};${size};${code}`);
+      displayMessage(`${index}\0${count}\0${code}`);
       await new Promise((resolve, reject) => window.setTimeout(resolve, 100));
       counter++;
     }
