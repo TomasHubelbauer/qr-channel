@@ -177,7 +177,7 @@ function encode(sdp) {
 
 // Decodes SDP + ICE candidates from a QR alphanumeric string
 // TODO: Build a test rig that connects to itself within the same browser tab JS context and run the messages thru this and back
-function decode(value) {
+function* decode(value) {
   // This is the same in Firefox and in Chrome
   yield 'v=0';
   // This differs in Firefox and Chrome and I am not sure what needs to stay in order for this not to break
