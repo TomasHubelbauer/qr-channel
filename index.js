@@ -228,6 +228,10 @@ function* decode(value) {
 
 function test(sdp) {
   const lines = sdp.sdp.split(/\r\n/g);
+  for (const line of lines) {
+    console.log(line);
+  }
+  
   const value = lines.join('\r\n');
   return new RTCSessionDescription({ type: sdp.type, sdp: value });
 }
