@@ -99,8 +99,15 @@ window.addEventListener('load', async () => {
   
   async function connect() {
     const message = chunks.join('');
-    const [sdp, ...ices] = message.split('///');
-    alert(JSON.stringify({ sdp, ices }));
+    const [sdpString, ...iceStrings] = message.split('///');
+    const sdp = new RTCSessionDescription({ sdp: sdpString, type: 'offer' });
+    await peerConnection.setRemoteDescription(sdp);
+    for (const iceString of iceStrings) {
+      const candidate = new RTCIceCandidate({ candidate: iceString, sdpMid: 0, sdpMLineIndex: 0 });
+      await peerConnection.addIceCandidate(candidate);
+    }
+    
+    alert('done');
   }
   
   async function rotate() {
