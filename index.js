@@ -98,7 +98,7 @@ window.addEventListener('load', async () => {
   async function broadcast() {
     const sessionDescription = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(sessionDescription);
-    message += sesionDescription.type + '\0' + sessionDescription.sdp + '\0';
+    message += sessionDescription.type + '\0' + sessionDescription.sdp + '\0';
   }
   
   // TODO: Handle both offer and answer cases
