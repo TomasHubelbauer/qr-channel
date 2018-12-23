@@ -76,7 +76,7 @@ window.addEventListener('load', async () => {
     const count = Math.ceil(message.length / 100);
     const index = count / counter - 1;
     const code = message.substr(index * 100, 100);
-    console.log(counter, count, index, JSON.stringify(message), JSON.stringify(code));
+    console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
     displayMessage(message);
     await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
     counter++;
