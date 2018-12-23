@@ -3,6 +3,9 @@ window.addEventListener('load', async () => {
   const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
   const codeCanvas = document.querySelector('#codeCanvas');
 
+   // Remember the context and refresh it when dimensions change
+  let codeContext;
+  
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
   viewfinderVideo.srcObject = mediaStream;
   // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
@@ -39,10 +42,7 @@ window.addEventListener('load', async () => {
     displayMessage(message);
     await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
   }
-  
-  // Remember the context and refresh it when dimensions change
-  let codeContext;
-  
+    
   function displayMessage(message) {
     const qr = qrcode(1, 'L');
     qr.addData(message, 'Numeric');
