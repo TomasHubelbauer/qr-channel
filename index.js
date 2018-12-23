@@ -158,15 +158,18 @@ window.addEventListener('unhandledrejection', event => alert(event.reason));
 
 // Encodes SDP + ICE candidates into a QR alphanumeric string
 function encode(sdp) {
-  // TYPE bit (offer/answer)
-  // 
-  
-  return ``;
+  const type = sdp.type;
+  const sessionId = sdp;
+  const sessionVersion = sdp;
+  // TODO: Extra the rest of the bits, then format them to a compact string (including escaping)
+  return JSON.stringify({ type });
 }
 
 // Decodes SDP + ICE candidates from a QR alphanumeric string
 // TODO: Build a test rig that connects to itself within the same browser tab JS context and run the messages thru this and back
 function* decode(value) {
+  // TODO: Parse and unescape the formatted compressed string and pull out the data bits
+
   // This is the same in Firefox and in Chrome
   yield 'v=0';
   // This differs in Firefox and Chrome and I am not sure what needs to stay in order for this not to break
@@ -221,6 +224,12 @@ function* decode(value) {
   
   // TODO: Study https://webrtchacks.com/sdp-anatomy/
   // TODO: Study https://webrtchacks.com/the-minimum-viable-sdp/ but keep in mind QR alphanumeric is a bit different here
+}
+
+function test(sdp) {
+  const lines = sdp.sdp.split(/\r\n/g);
+  const value = lines.join('\r\n');
+  return new RTCSessionDescription({ type: sdp.type, sdp: value });
 }
 
 async function rig() {
