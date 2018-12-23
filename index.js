@@ -210,7 +210,7 @@ const mLineRegex = /^m=application 9 (UDP\/)?DTLS\/SCTP (5000|webrtc-datachannel
 const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
 const aSendRecvLineRegex = /^a=sendrecv$/;
 const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
-const aIcePwdLineRegex = /^a=ice-pwd:(.*):$/g;
+const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
 
 function test(sdp) {
   const lines = [];
