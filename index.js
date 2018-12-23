@@ -228,6 +228,16 @@ async function rig() {
   monitor(peerConnection1, 'peerConnection1');
   const dataChannel = peerConnection1.createDataChannel(null);
   monitor(dataChannel, 'dataChannel');
+  // Wait until the candidates are collected in the session description (cripple trickle ICE)
+  await new Promise((resolve, reject) => {
+    peerConnection1.addEventListener('icecandidate', event => {
+      console.log(event.candidate);
+      if (event.candidate === null) {
+        resolve();
+      }
+    });
+  });
+
   const offer = await peerConnection1.createOffer();
   await peerConnection1.setLocalDescription(offer);
   const peerConnection2 = new RTCPeerConnection();
@@ -236,7 +246,7 @@ async function rig() {
   const answer = await peerConnection2.createAnswer();
   await peerConnection2.setLocalDescription(answer);
   await peerConnection1.setRemoteDescription(answer);
-  dataChannel.send('test');
+  //dataChannel.send('test');
 }
 
 function monitor(obj, label) {
