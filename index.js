@@ -57,7 +57,7 @@ window.addEventListener('load', async () => {
   
   peerConnection.addEventListener('icecandidate', event => {
     if (event.candidate !== null) {
-      message += event.candidate.candidate;
+      message += event.candidate.candidate + ',';
     } else {
       message += ';';
     }
@@ -72,25 +72,31 @@ window.addEventListener('load', async () => {
     dataChannel.addEventListener(key.slice(2), event => console.log('dataChannel', key, event));
   }
   
-  // Fire and forget so that we can keep looping messages
-  broadcast();
-  
   let counter = 0;
   const size = 50;
-  while (true) {
-    const count = Math.ceil(message.length / size);
-    const index = (count / counter) - 1;
-    const code = message.substr(index * size, size);
-    console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
-    displayMessage(message);
-    await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
-    counter++;
-  }
+  
+  // Fire and forget
+  rotate();
+
+  // Fire and forget so that we can keep looping messages
+  broadcast();
   
   async function broadcast() {
     const sessionDescription = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(sessionDescription);
-    console.log(sessionDescription);
+    message += sessionDescription.sdp + ',';
+  }
+  
+  async function rotate() {
+    while (true) {
+      const count = Math.ceil(message.length / size);
+      const index = (counter % count) - 1;
+      const code = message.substr(index * size, size);
+      console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
+      displayMessage(message);
+      await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
+      counter++;
+    }
   }
     
   function displayMessage(message) {
