@@ -170,29 +170,10 @@ function encode(sdp) {
 function* decode(value) {
   // TODO: Parse and unescape the formatted compressed string and pull out the data bits
 
-  /*
-    The order of the following fields differs in Chrome and in Firefox
-    Chrome: aGroup, aMsid, mApp, c, aIceUfrag, aIcePwd, aIceOpts, aFingerprint, aSetup, aMid, aSctpMap
-    Firefox: aFingerprint, aGroup, aIceOpts, aMsic, mApp, c, aSendRecv, aIcePwd, aIceUfrag, aMid, aSetup, aSctpPort, aMax
-  */
-
-  // Chrome gives shorter `ufrag` (4 vs 8) and `pwd` (24 vs 32), interestingly, in any case both need to specially encoded
-  // The Firefox password is GUID serialized and lowercased, we could use that and use upper then lower it ourselves and save data
-  yield 'a=ice-ufrag:...';
-  yield 'a=ice-pwd:...';
-  // Same
-  yield 'a=setup:actpass';
-  // This differs the same way `a-msid` does, Chrome gives "data" and Firefox gives "0"
-  yield 'a=mid:data'; // Chrome
-  yield 'a=mid:0'; // Firefox
   // This is interesting, because now the `webrtc-datachannel` string is given by Chrome and Firefox has a shorter line
   // It looks like this line depends on what you do in the other line
   yield 'a=sctpmap:5000 webrtc-datachannel 1024'; // Chrome
   yield 'a=sctp-port:5000'; // Firefox
-  // This is Firefox-only
-  yield 'a=sendrecv';
-  yield 'a=max-message-size:1073741823';
-  
   
   // TODO: Study https://webrtchacks.com/sdp-anatomy/
   // TODO: Study https://webrtchacks.com/the-minimum-viable-sdp/ but keep in mind QR alphanumeric is a bit different here
@@ -212,6 +193,8 @@ const aSendRecvLineRegex = /^a=sendrecv$/;
 const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
 const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
 const aMidLineRegex = /^a=mid:(0|data)$/g;
+const aSetupLineRegex = /^a=setup:actpass$/g;
+const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/g;
 
 function test(sdp) {
   const lines = [];
@@ -251,9 +234,14 @@ function test(sdp) {
     } else if ((match = aIceUfragLineRegex.exec(line)) !== null) {
       data.ufrag = match[1];
     } else if ((match = aIcePwdLineRegex.exec(line)) !== null) {
+      // TODO: See if knowing that for Firefox this is a serialized GUID we could make assumptions about case and save escaping
       data.pwd = match[1];
     } else if ((match = aMidLineRegex.exec(line)) !== null) {
       // Ignore, we hardcode mid name to dash
+    } else if ((match = aSetupLineRegex.exec(line)) !== null) {
+      // Ignore, no data
+    } else if ((match = aMaxMessageSizeLineRegex.exec(line)) !== null) {
+      // Ignore, optional
     } else {
       console.log(line);
       lines.push(line);
@@ -275,6 +263,7 @@ function test(sdp) {
     `a=ice-ufrag:${data.ufrag}`,
     `a=ice-pwd:${data.pwd}`,
     'a=mid:0',
+    'a=setup:actpass',
     ...lines,
   ].join('\r\n');
   console.log(value);
@@ -338,7 +327,7 @@ void async function() {
 
 /*
 - It is possible to use a dash for session ID even though Firefox sets it (Chrome uses dash)
-
+- The `a=mid` bundle name line can use a hardcoded name as long as the name is the same in the `a=group` line
 
 Chrome:
 
