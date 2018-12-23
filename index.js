@@ -4,9 +4,12 @@ window.addEventListener('load', async () => {
   const codeCanvas = document.querySelector('#codeCanvas');
   const signalingStateP = document.querySelector('#signalingStateP');
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
+  const chunksP = document.querySelector('#chunksP');
 
    // Remember the context and refresh it when dimensions change
   let codeContext;
+  
+  const chunks = [];
   
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
   viewfinderVideo.srcObject = mediaStream;
@@ -30,7 +33,8 @@ window.addEventListener('load', async () => {
       const code = jsQR(imageData.data, imageData.width, imageData.height);
       if (code !== null && code.data !== '') {
         const [index, count, size, text] = code.data.split(';', 4);
-        alert(JSON.stringify({ index, count, size, text }));
+        chunks[index] = text;
+        chunksP.textContent = Object.keys(chunks);
       }
     }
 
