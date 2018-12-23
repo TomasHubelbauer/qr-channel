@@ -101,12 +101,34 @@ window.addEventListener('load', async () => {
   async function connect() {
     const message = chunks.join('');
     const [sdpString, ...iceStrings] = message.split('///');
+    
+    const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+    for (const key in peerConnection) {
+      if (!/^on/.test(key)) {
+        continue;
+      }
+
+      peerConnection.addEventListener(key.slice(2), event => console.log('peerConnection', key, event));
+    }
+    
+    const dataChannel = peerConnection.createDataChannel('');
+    for (const key in dataChannel) {
+      if (!/^on/.test(key)) {
+        continue;
+      }
+
+      dataChannel.addEventListener(key.slice(2), event => console.log('dataChannel', key, event));
+    }
+    
     const sdp = new RTCSessionDescription({ sdp: sdpString, type: 'offer' });
     await peerConnection.setRemoteDescription(sdp);
     for (const iceString of iceStrings) {
       const candidate = new RTCIceCandidate({ candidate: iceString, sdpMid: 0, sdpMLineIndex: 0 });
       await peerConnection.addIceCandidate(candidate);
     }
+    
+    const answer = await peerConnection.createAnswer();
+    await peerConnection.setLocalDescription(answer);
     
     alert('done');
   }
