@@ -176,11 +176,6 @@ function* decode(value) {
     Firefox: aFingerprint, aGroup, aIceOpts, aMsic, mApp, c, aSendRecv, aIcePwd, aIceUfrag, aMid, aSetup, aSctpPort, aMax
   */
 
-  // Another difference
-  yield 'm=application 9 DTLS/SCTP 5000'; // Chrome
-  yield 'm=application 9 UDP/DTLS/SCTP webrtc-datachannel'; // Firefox
-  // This is the same in both, including the empty IP (whereas in `o=` Chrome gives localhost)
-  yield 'c=IN IP4 0.0.0.0';
   // Chrome gives shorter `ufrag` (4 vs 8) and `pwd` (24 vs 32), interestingly, in any case both need to specially encoded
   // The Firefox password is GUID serialized and lowercased, we could use that and use upper then lower it ourselves and save data
   yield 'a=ice-ufrag:...';
@@ -246,7 +241,7 @@ function test(sdp) {
        // Ignore, browsers set different values (Chrome ` WMS`, Firefox `WMS *`), but `WMS` works for both
     } else if ((match = mLineRegex.exec(line)) !== null) {
       // TODO: Parse out which of the two types it is and set a bit indicating that, also consider the `a=stcp*` line
-      lines.push(line);
+      data.todo = line;
     } else if ((match = cLineRegex.exec(line)) !== null) {
        // Ignore, no data
     } else {
@@ -265,7 +260,7 @@ function test(sdp) {
     'a=ice-options:trickle',
     'a=msid-semantic:WMS',
     // TODO: Read the kind bit and print the right line
-    // 'm=application 9 DTLS/SCTP 5000',
+    data.todo,
     'c=IN IP4 0.0.0.0',
     ...lines,
   ].join('\r\n');
