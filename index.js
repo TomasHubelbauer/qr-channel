@@ -36,6 +36,8 @@ window.addEventListener('load', async () => {
     requestAnimationFrame(tick);
   });
   
+  let message = '';
+  
   const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
   for (const key in peerConnection) {
     if (!/^on/.test(key)) {
@@ -53,7 +55,9 @@ window.addEventListener('load', async () => {
     iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ';
   });
   
-  peerConnection.addEventListener('icecandidate', event => console.log('icecandidate', event.candidate));
+  peerConnection.addEventListener('icecandidate', event => {
+  
+  });
 
   const dataChannel = peerConnection.createDataChannel('');
   for (const key in dataChannel) {
@@ -67,10 +71,15 @@ window.addEventListener('load', async () => {
   // Fire and forget so that we can keep looping messages
   broadcast();
   
+  let counter = 0;
   while (true) {
-    const message = Date.now().toString();
+    const count = message.length / 100;
+    const index = counter % count;
+    const code = message.substr(index * 100, 100);
+    console.log(counter, count, index, code);
     displayMessage(message);
     await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
+    counter++;
   }
   
   async function broadcast() {
