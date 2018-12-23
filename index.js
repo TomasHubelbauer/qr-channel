@@ -71,7 +71,7 @@ window.addEventListener('load', async () => {
       message += event.candidate.candidate + '\0' + event.candidate.sdpMid + '\0' + event.candidate.sdpMLineIndex + '\0';
     } else {
       message += '\0';
-      console.log(message);
+      console.log(JSON.stringify(message));
     }
   });
 
@@ -188,3 +188,19 @@ window.addEventListener('load', async () => {
 });
 
 window.addEventListener('unhandledrejection', event => alert(event.reason));
+
+// Encodes SDP + ICE candidates into a QR alphanumeric string
+function encode(sdp) {
+  // TYPE bit (offer/answer)
+  // 
+  
+  return ``;
+}
+
+// Decodes SDP + ICE candidates from a QR alphanumeric string
+function decode(value) {
+  return {
+    type: 'offer', // TODO: Or answer,
+    sdp: 'v=0\r\n',
+  };
+}
