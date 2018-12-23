@@ -130,15 +130,15 @@ window.addEventListener('load', async () => {
     await peerConnection.setRemoteDescription(offer);
     
     // TODO: Parse candidates from the groups of three items
-    for (const /* TODO */) {
-      const candidate = new RTCIceCandidate({ candidate: iceString, sdpMid: 0, sdpMLineIndex: 0 });
-      await peerConnection.addIceCandidate(candidate);
-    }
+    //for (const ) {
+    //  const candidate = new RTCIceCandidate({ candidate: iceString, sdpMid: 0, sdpMLineIndex: 0 });
+    //  await peerConnection.addIceCandidate(candidate);
+    //}
     
     // TODO: Verify only a blank item was left (confirming we're at the end of the candidates)
     
-    const answer = await peerConnection.createAnswer();
-    await peerConnection.setLocalDescription(answer);
+    //const answer = await peerConnection.createAnswer();
+    //await peerConnection.setLocalDescription(answer);
     
     alert('done');
   }
