@@ -34,7 +34,7 @@ window.addEventListener('load', async () => {
     requestAnimationFrame(tick);
   });
   
-  const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun.l.google.com:19302' } ] });
+  const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
   for (const key in peerConnection) {
     if (!/^on/.test(key)) {
       continue;
