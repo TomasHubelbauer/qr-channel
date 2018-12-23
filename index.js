@@ -97,3 +97,5 @@ window.addEventListener('load', async () => {
     }
   }
 });
+
+window.addEventListener('unhandledrejection', console.error);
