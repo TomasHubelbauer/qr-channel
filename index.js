@@ -170,20 +170,6 @@ function encode(sdp) {
 function* decode(value) {
   // TODO: Parse and unescape the formatted compressed string and pull out the data bits
 
-  // This is the same in Firefox and in Chrome
-  yield 'v=0';
-  // This differs in Firefox and Chrome and I am not sure what needs to stay in order for this not to break
-  // Ideally `mozilla...THIS_IS_SDPARTA-64.0` would be reduced to just the dash
-  // The long number seems to always be 19 digits long
-  // The number after it is different in Chrome and Firefox
-  // TODO: Find out what it means and if we can skip it
-  // The IP address is neutered in both Firefox and Chrome, but Chrome goes with localhost and Firefox with blank IP
-  // TODO: Find out if we can choose one that will work for both
-  yield 'o=- 0000000000000000000 2 IN IP4 127.0.0.1'; // Chrome
-  yield 'o=mozilla...THIS_IS_SDPARTA-64.0 0000000000000000000 0 IN IP4 0.0.0.0';
-  // This is the same again
-  yield 's=-';
-  yield 't=0 0';
   /*
     The order of the following fields differs in Chrome and in Firefox
     In Chrome it goes: group, msid, application, c=IN, ice-ufrag, ice-pwd, ice-opts, fingerprint, setup, mid:data, sct, cands
@@ -229,6 +215,7 @@ function* decode(value) {
 const vLineRegex = /^v=0$/g;
 const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
 const sLineRegex = /^s=-$/g;
+const tLineRegex = /^t=0  0$/g;
 
 function test(sdp) {
   const lines = [];
@@ -240,9 +227,13 @@ function test(sdp) {
     } else if ((match = oLineRegex.exec(line)) !== null) {
       const [_, sessionId, sessionVersion, ipv4] = match;
       data.sessionId = sessionId;
+      // TODO: See if we can get away with sticking to a zero for this (even though Chrome sets it to 2, Firefox to 0)
       data.sessionVersion = sessionVersion;
+      // TODO: See if we can get away with sticking to localhost or 0.0.0.0 for this even though Chrome and Firefox differ
       data.ipv4 = ipv4;
     } else if ((match = sLineRegex.exec(line)) !== null) {
+      // Ignore, no data
+    } else if ((match = tLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if (false) {
       
@@ -256,6 +247,7 @@ function test(sdp) {
     'v=0',
     `o=- ${data.sessionId} ${data.sessionVersion} IN IP4 ${data.ipv4}`,
     's=-',
+    't=0 0',
     ...lines,
   ].join('\r\n');
   console.log(value);
