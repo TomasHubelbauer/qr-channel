@@ -44,10 +44,18 @@ window.addEventListener('load', async () => {
     dataChannel.addEventListener(key.slice(2), event => console.log('dataChannel', key, event));
   }
   
+  // Fire and forget so that we can keep looping messages
+  broadcast();
+  
   while (true) {
     const message = Date.now().toString();
     displayMessage(message);
     await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
+  }
+  
+  async function broadcast() {
+    const sessionDescription = await peerConnection.createOffer();
+    console.log(sessionDescription);
   }
     
   function displayMessage(message) {
