@@ -187,7 +187,7 @@ const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9
 const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
 const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
 const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
-const mLineRegex = /^m=application 9 (UDP\/)?DTLS\/SCTP (5000|webrtc-datachannel)$/g;
+const mLineRegex = /^m=application 9 (UDP\/DTLS\/SCTP 5000|DTLS\/SCTP webrtc-datachannel)$/g;
 const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
 const aSendRecvLineRegex = /^a=sendrecv$/;
 const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
@@ -229,8 +229,11 @@ function test(sdp) {
     } else if ((match = aMsidSemanticLineRegex.exec(line)) !== null) {
        // Ignore, browsers set different values (Chrome ` WMS`, Firefox `WMS *`), but `WMS` works for both
     } else if ((match = mLineRegex.exec(line)) !== null) {
-      // TODO: Parse out which of the two types it is and set a bit indicating that, also consider the `a=stcp*` line
-      data.todo = line;
+      switch (match[1]) {
+        case 'UDP/DTLS/SCTP webrtc-datachannel': data.media = 'firefox'; break;
+        case 'DTLS/SCTP 5000': data.media = 'chrome'; break;
+        default: throw new Error(`Unexpected media line value '${match[1]}'.`);
+      }
     } else if ((match = cLineRegex.exec(line)) !== null) {
        // Ignore, no data
     } else if ((match = aSendRecvLineRegex.exec(line)) !== null) {
@@ -247,9 +250,7 @@ function test(sdp) {
     } else if ((match = aMaxMessageSizeLineRegex.exec(line)) !== null) {
       // Ignore, optional
     } else {
-      // TODO: Throw
-      console.log(line);
-      lines.push(line);
+      throw new Error(`Unexpected SDP line '${line}'.`);
     }
   }
   
@@ -262,14 +263,13 @@ function test(sdp) {
     `a=group:BUNDLE 0`,
     'a=ice-options:trickle',
     'a=msid-semantic:WMS',
-    // TODO: Read the kind bit and print the right line
-    data.todo,
+    `m=application 9 ${data.media === 'firefox' ? 'UDP/DTLS/SCTP webrtc-datachannel' : ''}${data.media === 'chrome' ? 'DTLS/SCTP 5000' : ''}`,
     'c=IN IP4 0.0.0.0',
     `a=ice-ufrag:${data.ufrag}`,
     `a=ice-pwd:${data.pwd}`,
     'a=mid:0',
     `a=setup:${sdp.type === 'offer' ? 'actpass' : ''}${sdp.type === 'answer' ? 'active' : ''}`,
-    ...lines,
+    `a=sctp${data.media === 'firefox' ? '-port:5000' : ''}${data.media === 'chrome' ? 'map:5000 webrtc-datachannel 1024' : ''}`,
   ].join('\r\n');
   console.log(value);
   return new RTCSessionDescription({ type: sdp.type, sdp: value });
