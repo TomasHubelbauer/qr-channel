@@ -30,7 +30,7 @@ window.addEventListener('load', async () => {
       const code = jsQR(imageData.data, imageData.width, imageData.height);
       if (code !== null && code.data !== '') {
         const [index, count, size, text] = code.data.split(';', 4);
-        alert(JSON.stringofy({ index, count, size, text }));
+        alert(JSON.stringify({ index, count, size, text }));
       }
     }
 
