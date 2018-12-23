@@ -232,13 +232,15 @@ const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
 function test(sdp) {
   const lines = [];
   let match;
+  const data = {};
   for (const line of sdp.sdp.split(/\r\n/g)) {
     if ((match = vLineRegex.exec(line)) !== null) {
       // Ignore
     } else if ((match = oLineRegex.exec(line)) !== null) {
-      console.log(match);
-      const [_, sessionId, sessionVersion, ip4] = match;
-      console.log({ sessionId, sessionVersion, ip4 });
+      const [_, sessionId, sessionVersion, ipv4] = match;
+      data.sessionId = sessionId;
+      data.sessionVersion = sessionVersion;
+      data.ipv4 = ip4;
     } else if (false) {
       
     } else {
@@ -247,7 +249,8 @@ function test(sdp) {
     }
   }
   
-  const value = 'v=0\r\n' + lines.join('\r\n');
+  const value = `v=0\r\no=- ${data.sessionId} ${data.sessionVersion} IN IP4 ${data.ipv4}` + lines.join('\r\n');
+  console.log(value);
   return new RTCSessionDescription({ type: sdp.type, sdp: value });
 }
 
