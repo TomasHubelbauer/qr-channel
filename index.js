@@ -231,11 +231,12 @@ const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
 
 function test(sdp) {
   const lines = [];
+  let match;
   for (const line of sdp.sdp.split(/\r\n/g)) {
-    if (vLineRegex.test(line)) {
+    if ((match = vLineRegex.exec(line)) !== null) {
       // Ignore
-    } else if (oLineRegex.test(line)) {
-      const [_, sessionId, sessionVersion, ip4] = oLineRegex.exec(line);
+    } else if ((match = oLineRegex.test(line)) !== null) {
+      const [_, sessionId, sessionVersion, ip4] = match;
       console.log(sessionId, sessionVersion, ip4);
     } else if (false) {
       
