@@ -55,8 +55,8 @@ void async function() {
       qr.addData('01234567890123456789', 'Numeric');
       qr.make();
       const cellSize = 15;
-      codeCanvas.width = qrcode.getModuleCount() * cellSize;
-      codeCanvas.height = qrcode.getModuleCount() * cellSize;
+      codeCanvas.width = qr.getModuleCount() * cellSize;
+      codeCanvas.height = qr.getModuleCount() * cellSize;
       qr.renderTo2dContext(codeCanvas.getContext('2d'), cellSize);
     </script>
   </body>
