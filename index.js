@@ -85,6 +85,7 @@ window.addEventListener('load', async () => {
   
   // Start from -1 so that 0 falls on the non-empty message value (with SDP or ICE candidate SDP in it)
   let counter = -1;
+  // TODO: Derive this not from char length but from the type number (have it not be automatic)
   const size = 50;
   
   // Fire and forget
