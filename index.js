@@ -63,6 +63,7 @@ window.addEventListener('load', async () => {
   
   async function broadcast() {
     const sessionDescription = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(sessionDescription);
     console.log(sessionDescription);
   }
     
