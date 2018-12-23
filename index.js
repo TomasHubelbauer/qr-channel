@@ -36,7 +36,7 @@ window.addEventListener('load', async () => {
         chunks[index] = text;
         chunksP.textContent = `Chunks (${chunks.length}/${count}): ` + Object.keys(chunks);
         // Fire and forget
-        if (chunks.length === Number(count)) {
+        if (chunks.length === Number(count) && !chunks.find(chunk => chunk === undefined)) {
           connect();
         }
       }
