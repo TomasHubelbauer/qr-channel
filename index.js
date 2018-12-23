@@ -226,11 +226,17 @@ function* decode(value) {
   // TODO: Study https://webrtchacks.com/the-minimum-viable-sdp/ but keep in mind QR alphanumeric is a bit different here
 }
 
+const vLineRegex = /^v=0$/g;
+const oLineRefex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
+
 function test(sdp) {
   const lines = [];
   for (const line of sdp.sdp.split(/\r\n/g)) {
-    if (/^v=0$/g.test(line)) {
+    if (vLineRegex.test(line)) {
       // Ignore
+    } else if (oLineRegex.test(line)) {
+      const [_, sessionId, sessionVersion, ip4] = oLineRegex.exec(line);
+      console.log(sessionId, sessionVersion, ip4);
     } else if (false) {
       
     } else {
