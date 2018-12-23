@@ -73,7 +73,7 @@ window.addEventListener('load', async () => {
   
   let counter = 0;
   while (true) {
-    const count = Math.floor(message.length / 100);
+    const count = Math.ceil(message.length / 100);
     const index = counter % count;
     const code = message.substr(index * 100, 100);
     console.log(counter, count, index, code);
