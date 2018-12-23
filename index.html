@@ -7,7 +7,7 @@
     <script src="https://unpkg.com/qrcode-generator"></script>
     <style>
       #viewfinderVideo { display: none; }
-      #sketchCanvas {
+      #viewfinderCanvas {
         height: 100%;
         left: 0;
         opacity: .1;
@@ -21,12 +21,12 @@
   <body>
     <h1>QR Channel</h1>
     <video id="viewfinderVideo"></video>
-    <canvas id="sketchCanvas"></canvas>
+    <canvas id="viewfinderCanvas"></canvas>
     <canvas id="codeCanvas"></canvas>
     <p id="messageP"></p>
     <script>
       const viewfinderVideo = document.querySelector('#viewfinderVideo');
-      const sketchCanvas = document.querySelector('#sketchCanvas');
+      const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
       const codeCanvas = document.querySelector('#codeCanvas');
       const messageP = document.querySelector('#messageP');
       
@@ -42,14 +42,14 @@
         let context;
         requestAnimationFrame(function tick() {
           if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
-            if (sketchCanvas.width !== viewfinderVideo.videoWidth || sketchCanvas.height !== viewfinderVideo.videoHeight) {
-              sketchCanvas.width = viewfinderVideo.videoWidth;
-              sketchCanvas.height = viewfinderVideo.videoHeight;
-              context = sketchCanvas.getContext('2d');
+            if (viewfinderCanvas.width !== viewfinderVideo.videoWidth || viewfinderCanvas.height !== viewfinderVideo.videoHeight) {
+              viewfinderCanvas.width = viewfinderVideo.videoWidth;
+              viewfinderCanvas.height = viewfinderVideo.videoHeight;
+              context = viewfinderCanvas.getContext('2d');
             }
 
             context.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
-            const imageData = context.getImageData(0, 0, sketchCanvas.width, sketchCanvas.height);
+            const imageData = context.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvasRena.height);
             const code = jsQR(imageData.data, imageData.width, imageData.height);
             if (code !== null) {
               messageP.textContent = code.data;
