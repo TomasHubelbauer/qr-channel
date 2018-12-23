@@ -228,6 +228,7 @@ function* decode(value) {
 
 const vLineRegex = /^v=0$/g;
 const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
+const sLineRegex = /^s=-$/g;
 
 function test(sdp) {
   const lines = [];
@@ -235,12 +236,14 @@ function test(sdp) {
   const data = {};
   for (const line of sdp.sdp.split(/\r\n/g)) {
     if ((match = vLineRegex.exec(line)) !== null) {
-      // Ignore
+      // Ignore, no data
     } else if ((match = oLineRegex.exec(line)) !== null) {
       const [_, sessionId, sessionVersion, ipv4] = match;
       data.sessionId = sessionId;
       data.sessionVersion = sessionVersion;
       data.ipv4 = ipv4;
+    } else if ((match = sLineRegex.exec(line)) !== null) {
+      // Ignore, no data
     } else if (false) {
       
     } else {
@@ -249,7 +252,12 @@ function test(sdp) {
     }
   }
   
-  const value = `v=0\r\no=- ${data.sessionId} ${data.sessionVersion} IN IP4 ${data.ipv4}` + lines.join('\r\n');
+  const value = [
+    'v=0',
+    `o=- ${data.sessionId} ${data.sessionVersion} IN IP4 ${data.ipv4}`,
+    's=-',
+    ...lines,
+  ].join('\r\n');
   console.log(value);
   return new RTCSessionDescription({ type: sdp.type, sdp: value });
 }
@@ -310,6 +318,9 @@ void async function() {
 }()
 
 /*
+- It is possible to use a dash for session ID even though Firefox sets it (Chrome uses dash)
+
+
 Chrome:
 
 v=0
