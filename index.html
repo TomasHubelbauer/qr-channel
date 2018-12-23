@@ -39,6 +39,7 @@ void async function() {
     });
   } catch (error) {
     alert('An error happened ' + JSON.stringify(error));
+    throw error;
   }
 }()
     </script>
