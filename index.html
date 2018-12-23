@@ -7,7 +7,14 @@
     <script src="https://unpkg.com/qrcode-generator"></script>
     <style>
       #viewfinderVideo { display: none; }
-      #sketchCanvas { height: 128px; }
+      #sketchCanvas {
+        height: 100%;
+        left: 0;
+        opacity: .1;
+        position: fixed;
+        top: 0;
+        width: 100%;
+      }
       #codeCanvas {  }
     </style>
   </head>
@@ -60,6 +67,9 @@
       codeCanvas.width = qr.getModuleCount() * cellSize;
       codeCanvas.height = qr.getModuleCount() * cellSize;
       qr.renderTo2dContext(codeCanvas.getContext('2d'), cellSize);
+      
+      const peerConnection = new RTCPeerConnection();
+      alert(peerConnection);
     </script>
   </body>
 </html>
