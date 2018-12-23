@@ -74,7 +74,7 @@ window.addEventListener('load', async () => {
   let counter = 0;
   while (true) {
     const count = message.length / 100;
-    const index = counter % count;
+    const index = Math.floor(counter % count);
     const code = message.substr(index * 100, 100);
     console.log(counter, count, index, code);
     displayMessage(message);
