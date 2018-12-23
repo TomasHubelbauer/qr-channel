@@ -83,13 +83,14 @@
           const size = Math.min(codeCanvas.width, codeCanvas.height);
           const moduleCount = qr.getModuleCount();
           const cellSize = size / moduleCount;
+          const ceilSize = Math.ceil(cellSize);
 
           const x = (width - size) / 2;
           const y = (height - size) / 2;
           for (let cellX = 0; cellX < moduleCount; cellX++) {
             for (let cellY = 0; cellY < moduleCount; cellY++) {
               if (qr.isDark(cellX, cellY)) {
-                codeContext.fillRect(x + cellX * cellSize, y + cellY * cellSize, cellSize, cellSize);
+                codeContext.fillRect(x + cellX * cellSize, y + cellY * cellSize, ceilSize, ceilSize);
               }
             }
           }
