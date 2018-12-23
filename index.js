@@ -239,6 +239,13 @@ async function rig() {
       peerConnection2.addIceCandidate(event.candidate);
     }
   });
+  
+  peerConnection2.addEventListener('icecandidate', event => {
+    console.log(event.candidate);
+    if (event.candidate !== null) {
+      peerConnection1.addIceCandidate(event.candidate);
+    }
+  });
 
   // TODO: Do I need to wait for the ICE candidates here?
   const answer = await peerConnection2.createAnswer();
