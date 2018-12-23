@@ -209,6 +209,8 @@ const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
 const mLineRegex = /^m=application 9 (UDP\/)?DTLS\/SCTP (5000|webrtc-datachannel)$/g;
 const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
 const aSendRecvLineRegex = /^a=sendrecv$/;
+const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
+const aIcePwdLineRegex = /^a=ice-pwd(.*):$/g;
 
 function test(sdp) {
   const lines = [];
@@ -246,7 +248,11 @@ function test(sdp) {
     } else if ((match = cLineRegex.exec(line)) !== null) {
        // Ignore, no data
     } else if ((match = aSendRecvLineRegex.exec(line)) !== null) {
-      // Ignore, optional?
+      // Ignore, optional
+    } else if ((match = aIceUfragLineRegex.exec(line)) !== null) {
+      data.ufrag = match[1];
+    } else if ((match = aIcePwdLineRegex.exec(line)) !== null) {
+      data.pwd = match[1];
     } else {
       console.log(line);
       lines.push(line);
@@ -265,6 +271,8 @@ function test(sdp) {
     // TODO: Read the kind bit and print the right line
     data.todo,
     'c=IN IP4 0.0.0.0',
+    `a=ice-ufrag:${data.ufrag}`,
+    `a=ice-pwd:${data.pwd}`,
     ...lines,
   ].join('\r\n');
   console.log(value);
