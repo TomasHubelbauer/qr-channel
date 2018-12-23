@@ -30,11 +30,20 @@ window.addEventListener('load', async () => {
 
     requestAnimationFrame(tick);
   });
+  
+  const peerConnection = new RTCPeerConnection();
 
-  // Remember the context and refresh it when dimensions change
-  let codeContext;
+  
   while (true) {
     const message = Date.now().toString();
+    displayMessage(message);
+    await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
+  }
+  
+  // Remember the context and refresh it when dimensions change
+  let codeContext;
+  
+  function displayMessage(message) {
     const qr = qrcode(1, 'L');
     qr.addData(message, 'Numeric');
     qr.make();
@@ -63,7 +72,5 @@ window.addEventListener('load', async () => {
         }
       }
     }
-
-    await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
   }
 });
