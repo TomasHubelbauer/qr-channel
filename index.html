@@ -16,32 +16,33 @@ const viewfinderVideo = document.querySelector('#viewfinderVideo');
 const sketchCanvas = document.querySelector('#sketchCanvas');
 const messageP = document.querySelector('#messageP');
 void async function() {
-  try {
-    const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-    viewfinderVideo.srcObject = mediaStream;
-    // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
-    viewfinderVideo.setAttribute('playsinline', true);
-    // Play within the `getUserMedia` gesture, `autoplay` won't work
-    await viewfinderVideo.play();
-    requestAnimationFrame(function tick() {
-      sketchCanvas.width = viewfinderVideo.videoWidth;
-      sketchCanvas.height = viewfinderVideo.videoHeight;
-      if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
-        const context = sketchCanvas.getContext('2d');
-        context.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
-        const imageData = context.getImageData(0, 0, sketchCanvas.width, sketchCanvas.height);
-        const code = jsQR(imageData.data, imageData.width, imageData.height);
-        if (code !== null) {
-          messageP.textContent = code.data;
-        }
+  const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+  viewfinderVideo.srcObject = mediaStream;
+  // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
+  viewfinderVideo.setAttribute('playsinline', true);
+  // Play within the `getUserMedia` gesture, `autoplay` won't work
+  await viewfinderVideo.play();
+  
+  // Keep a reference to the context to refresh upon video size change
+  let context;
+  requestAnimationFrame(function tick() {
+    if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
+      if (sketchCanvas.width !== viewfinderVideo.videoWidth || sketchCanvas.height !== viewfinderVideo.videoHeight) {
+        sketchCanvas.width = viewfinderVideo.videoWidth;
+        sketchCanvas.height = viewfinderVideo.videoHeight;
+        context = sketchCanvas.getContext('2d');
       }
 
-      requestAnimationFrame(tick);
-    });
-  } catch (error) {
-    alert('An error happened ' + JSON.stringify(error));
-    throw error;
-  }
+      context.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
+      const imageData = context.getImageData(0, 0, sketchCanvas.width, sketchCanvas.height);
+      const code = jsQR(imageData.data, imageData.width, imageData.height);
+      if (code !== null) {
+        messageP.textContent = code.data;
+      }
+    }
+
+    requestAnimationFrame(tick);
+  });
 }()
       
 const qr = qrcode(0, 'H');
