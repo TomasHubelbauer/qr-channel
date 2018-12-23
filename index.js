@@ -234,6 +234,7 @@ function test(sdp) {
     } else if (false) {
       
     } else {
+      console.log(line);
       lines.push(line);
     }
   }
