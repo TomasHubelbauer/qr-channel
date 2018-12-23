@@ -66,9 +66,10 @@ window.addEventListener('load', async () => {
   
   peerConnection.addEventListener('icecandidate', event => {
     if (event.candidate !== null) {
-      message += event.candidate.candidate + ',';
+      message += event.candidate.candidate + '///';
+      console.log(message);
     } else {
-      message += ';';
+      message += '///DONE';
     }
   });
 
@@ -94,7 +95,8 @@ window.addEventListener('load', async () => {
   async function broadcast() {
     const sessionDescription = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(sessionDescription);
-    message += sessionDescription.sdp + ',';
+    message += sessionDescription.sdp + '///';
+    console.log(message);
   }
   
   async function connect() {
