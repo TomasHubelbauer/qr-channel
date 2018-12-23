@@ -240,7 +240,7 @@ function test(sdp) {
       const [_, sessionId, sessionVersion, ipv4] = match;
       data.sessionId = sessionId;
       data.sessionVersion = sessionVersion;
-      data.ipv4 = ip4;
+      data.ipv4 = ipv4;
     } else if (false) {
       
     } else {
