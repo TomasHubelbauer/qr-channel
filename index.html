@@ -15,7 +15,14 @@
         top: 0;
         width: 100%;
       }
-      #codeCanvas {  }
+      #codeCanvas {
+        height: 100%;
+        left: 0;
+        opacity: .9;
+        position: fixed;
+        top: 0;
+        width: 100%;
+      }
     </style>
   </head>
   <body>
@@ -63,13 +70,27 @@
       const qr = qrcode(1, 'L');
       qr.addData('01234567890123456789', 'Numeric');
       qr.make();
-      const cellSize = 15;
-      codeCanvas.width = qr.getModuleCount() * cellSize;
-      codeCanvas.height = qr.getModuleCount() * cellSize;
-      qr.renderTo2dContext(codeCanvas.getContext('2d'), cellSize);
       
-      const peerConnection = new RTCPeerConnection();
-      alert(peerConnection);
+      const { width, height } = codeCanvas.getBoundingClientRect();
+      codeCanvas.width = width;
+      codeCanvas.height = height;
+      // TODO: Reuse context if dimensions haven't changed since last render
+      const context = codeCanvas.getContext('2d');
+      // TODO: Clear context
+      
+      const size = Math.min(codeCanvas.width, codeCanvas.height);
+      const moduleCount = qr.getModuleCount();
+      const cellSize = size / moduleCount;
+      
+      const x = width - size;
+      const y = height - size;
+      for (let cellX = 0; cellX < moduleCount; cellX++) {
+        for (let cellY = 0; cellY < moduleCount; cellY++) {
+          if (qr.isDark(cellX, cellY)) {
+            context.fillRect(x + cellX * cellSize, y + cellY * cellSize, cellSize, cellSize);
+          }
+        }
+      }
     </script>
   </body>
 </html>
