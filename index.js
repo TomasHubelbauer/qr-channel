@@ -227,7 +227,7 @@ function* decode(value) {
 }
 
 const vLineRegex = /^v=0$/g;
-const oLineRefex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
+const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
 
 function test(sdp) {
   const lines = [];
