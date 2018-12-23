@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>QR Channel</h1>
-    <video playinline id="viewfinderVideo"></video>
+    <video id="viewfinderVideo"></video>
     <canvas id="sketchCanvas"></canvas>
     <p id="messageP"></p>
     <script>
@@ -18,8 +18,8 @@ void async function() {
   try {
     const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
     viewfinderVideo.srcObject = mediaStream;
-    // Try to fix iOS Safari with this solution from Cosmo's demo
-    viewfinderVideo.setAttribute("playsinline", true)
+    // Set this through JavaScript (not HTML) to make iOS Safari work
+    viewfinderVideo.playsinline = true;
     // Play within the `getUserMedia` gesture, `autoplay` won't work
     await viewfinderVideo.play();
     requestAnimationFrame(function tick() {
