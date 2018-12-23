@@ -229,7 +229,7 @@ async function rig() {
   const dataChannel = peerConnection1.createDataChannel(null);
   monitor(dataChannel, 'dataChannel');
   // Wait until the candidates are collected in the session description (cripple trickle ICE)
-  await peerConnection1.createOffer(); // Throw-away offer meant to kick-off candidate collection
+  console.log(await peerConnection1.createOffer()); // Throw-away offer meant to kick-off candidate collection
   await new Promise((resolve, reject) => {
     peerConnection1.addEventListener('icecandidate', event => {
       console.log(event.candidate);
