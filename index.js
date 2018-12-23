@@ -71,6 +71,7 @@ window.addEventListener('load', async () => {
       message += event.candidate.candidate + '\0' + event.candidate.sdpMid + '\0' + event.candidate.sdpMLineIndex + '\0';
     } else {
       message += '\0';
+      console.log(message);
     }
   });
 
