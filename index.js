@@ -76,10 +76,11 @@ window.addEventListener('load', async () => {
   broadcast();
   
   let counter = 0;
+  const size = 50;
   while (true) {
-    const count = Math.ceil(message.length / 100);
+    const count = Math.ceil(message.length / size);
     const index = (count / counter) - 1;
-    const code = message.substr(index * 100, 100);
+    const code = message.substr(index * size, size);
     console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
     displayMessage(message);
     await new Promise((resolve, reject) => window.setTimeout(resolve, 1000));
@@ -94,7 +95,7 @@ window.addEventListener('load', async () => {
     
   function displayMessage(message) {
     const qr = qrcode(1, 'L');
-    qr.addData(message, 'Numeric');
+    qr.addData(message, 'Byte');
     qr.make();
     codeCanvas.title = message;
 
