@@ -176,9 +176,6 @@ function* decode(value) {
     Firefox: aFingerprint, aGroup, aIceOpts, aMsic, mApp, c, aSendRecv, aIcePwd, aIceUfrag, aMid, aSetup, aSctpPort, aMax
   */
 
-  // This differs too
-  yield 'a=msid-semantic: WMS'; // Chrome
-  yield 'a=msid-semantic:WMS *'; // Firefox
   // Another difference
   yield 'm=application 9 DTLS/SCTP 5000'; // Chrome
   yield 'm=application 9 UDP/DTLS/SCTP webrtc-datachannel'; // Firefox
@@ -215,6 +212,7 @@ const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
 const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
 const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
 const mLineRegex = /^m=application 9 (UDP\/)?DTLS\/SCTP (5000|webrtc-datachannel)$/g;
+const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
 
 function test(sdp) {
   const lines = [];
@@ -240,14 +238,17 @@ function test(sdp) {
       data.hash = hash;
     } else if ((match = aGroupLineRegex.exec(line)) !== null) {
       const [_, name] = match;
-      // TODO: Find out if this can be changed to a dash assuming the same change is applied to the a:mid line
+      // TODO: Find out if this can be changed to a dash assuming the same change is applied to the `a=mid` line
       data.name = name;
     } else if ((match = aIceOptionsLineRegex.exec(line)) !== null) {
        // Ignore, no data
     } else if ((match = aMsidSemanticLineRegex.exec(line)) !== null) {
        // Ignore, browsers set different values (Chrome ` WMS`, Firefox `WMS *`), but `WMS` works for both
     } else if ((match = mLineRegex.exec(line)) !== null) {
-      // Ignore?
+      // TODO: Parse out which of the two types it is and set a bit indicating that, also consider the `a=stcp*` line
+      lines.push(line);
+    } else if ((match = cLineRegex.exec(line)) !== null) {
+       // Ignore, no data
     } else {
       console.log(line);
       lines.push(line);
@@ -263,7 +264,9 @@ function test(sdp) {
     `a=group:BUNDLE ${data.name}`,
     'a=ice-options:trickle',
     'a=msid-semantic:WMS',
-    'm=application 9 DTLS/SCTP 5000',
+    // TODO: Read the kind bit and print the right line
+    // 'm=application 9 DTLS/SCTP 5000',
+    'c=IN IP4 0.0.0.0',
     ...lines,
   ].join('\r\n');
   console.log(value);
