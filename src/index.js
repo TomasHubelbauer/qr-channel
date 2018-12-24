@@ -10,18 +10,10 @@ window.addEventListener('load', async () => {
   
   const signalingStateP = document.querySelector('#signalingStateP');
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
-  const chunksP = document.querySelector('#chunksP');
-  
-  const chunks = [];
-  scan((index, count, text) => {
-    chunks[index] = text;
-    chunksP.textContent = `Chunks (${Object.keys(chunks).length}/${count}): ` + Object.keys(chunks);
-    // Check the number of keys to ignore uninitialized array items
-    if (Object.keys(chunks).length === count) {
-      const message = chunks.join('');
-      // Fire and forget
-      connect(decode(message));
-    }
+
+  scan(message => {
+    // Fire and forget
+    connect(decode(message));
   });
   
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
