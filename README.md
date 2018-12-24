@@ -33,7 +33,11 @@ In the future I'd like to explore ways of bringing down the time required to est
 
 ## Roadmap
 
-Also see the `TODO` comments in the source code.
+Also see the `TODO` comments in the source code and MarkDown checkboxen in the other MarkDown files.
 
-- [ ] Finalize the SDP+ICE compression & decompression algorithms
-- [ ] Fix the camera problem in Chrome
+- [ ] Finalize SDP encoding/decoding, particularly using string over JSON escaping and unescaping to QR alphanumeric alphabet
+- [ ] Fix the camera problem in Chrome if persists
+- [ ] Fix the SDP rig not working in mobile Safari
+- [ ] Work on ICE candidate encoding/decoding similar to the SDP pipeline
+- [ ] Consider flashing SDP and ICE candidates and individual messages if the sizes work out and chunking is not needed
+- [ ] Use trickle ICE by decoupling SDP processing and ICE candidate processing
