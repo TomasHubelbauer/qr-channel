@@ -4,6 +4,6 @@ export default function monitor(obj, label) {
       continue;
     }
 
-    obj.addEventListener(key.slice(2), event => console.log(label, key, event));
+    obj.addEventListener(key.slice(2), event => alert(label, key, event));
   }
 }
