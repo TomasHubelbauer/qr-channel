@@ -17,6 +17,7 @@ body {
 
 #logsP {
   font-family: monospace;
+  overflow: auto;
   white-space: pre;
 }
 
@@ -31,9 +32,9 @@ body {
   
   #codeCanvas {
     height: calc(100vh - 2vw);
-    left: 1vw;
+    left: calc((100vw - 100vh) / 2);
     top: 1vw;
-    width: calc(100vw - 2vw);
+    width: calc(100vh - 2vw);
   }
     
   #logsP {
