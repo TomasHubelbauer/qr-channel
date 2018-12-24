@@ -35,7 +35,7 @@ window.addEventListener('load', async () => {
   } catch (error) {
     alert('Click the page to begin');
     // Retry in a gesture handler to make Chrome work
-    document.body.addEventListener('pointerdown', _ => {
+    document.body.addEventListener('pointerdown', async _ => {
       try {
         await viewfinderVideo.play();
         await offer();
