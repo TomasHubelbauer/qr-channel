@@ -24,20 +24,25 @@ export default function encode(sdp) {
     throw new Error(`Can only handle offer and answer session descriptions`);
   }
   
-  const data = { type: sdp.type };
+  const type = sdp.type;
+  let id;
+  let hash;
+  let media;
+  let ufrag;
+  let pwd;
   let match;
   for (const line of sdp.sdp.split(/\r\n/g)) {
     if ((match = vLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if ((match = oLineRegex.exec(line)) !== null) {
-      data.id = match[1];
+      id = match[1];
     } else if ((match = sLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if ((match = tLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if ((match = aFingerprintLineRegex.exec(line)) !== null) {
-      // TODO: Remove the colons and figure out how to handle case (escaping)
-      data.hash = match[1];
+      // TODO: Find out if it is safe to assume there's never mixed case
+      hash = match[1].replace(/:/g, '');
     } else if ((match = aGroupLineRegex.exec(line)) !== null) {
       // Ignore, we hardcode mid name to dash
     } else if ((match = aIceOptionsLineRegex.exec(line)) !== null) {
@@ -46,8 +51,8 @@ export default function encode(sdp) {
        // Ignore, browsers set different values (Chrome ` WMS`, Firefox `WMS *`), but `WMS` works for both
     } else if ((match = mLineRegex.exec(line)) !== null) {
       switch (match[1]) {
-        case 'UDP/DTLS/SCTP webrtc-datachannel': data.media = 'firefox'; break;
-        case 'DTLS/SCTP 5000': data.media = 'chrome'; break;
+        case 'UDP/DTLS/SCTP webrtc-datachannel': media = 'firefox'; break;
+        case 'DTLS/SCTP 5000': media = 'chrome'; break;
         default: throw new Error(`Unexpected media line value '${match[1]}'.`);
       }
     } else if ((match = cLineRegex.exec(line)) !== null) {
@@ -55,10 +60,23 @@ export default function encode(sdp) {
     } else if ((match = aSendRecvLineRegex.exec(line)) !== null) {
       // Ignore, optional (Firefox only)
     } else if ((match = aIceUfragLineRegex.exec(line)) !== null) {
-      data.ufrag = match[1];
+      ufrag = match[1];
+      if (!/^[a-zA-Z0-9]$/g.test(ufrag)) {
+        throw new Error('TODO: Implement escaping to QR alphanumeric alphabet');
+      }
+      
+      if (/[A-Z]/g.test(ufrag)) {
+        throw new Error('TODO: Implement escaping casing and make casing information a part of the message');
+      }
     } else if ((match = aIcePwdLineRegex.exec(line)) !== null) {
-      // TODO: See if knowing that for Firefox this is a serialized GUID we could make assumptions about case and save escaping
-      data.pwd = match[1];
+      pwd = match[1];
+      if (!/^[a-zA-Z0-9]$/g.test(pwd)) {
+        throw new Error('TODO: Implement escaping to QR alphanumeric alphabet');
+      }
+      
+      if (/[A-Z]/g.test(pwd)) {
+        throw new Error('TODO: Implement escaping casing and make casing information a part of the message');
+      }
     } else if ((match = aMidLineRegex.exec(line)) !== null) {
       // Ignore, we hardcode mid name to dash
     } else if ((match = aSetupLineRegex.exec(line)) !== null) {
@@ -78,8 +96,21 @@ export default function encode(sdp) {
     }
   }
   
-  const encoded = data;
-  console.log(encoded);
+  let value = '';
+  // Encode three bits of information into one alphanumeric character to save space
+  switch (type + '+' media) {
+    case 'offer+firefox': value += 'O';
+    case 'offer+chrome': value += 'P';
+    case 'answer+firefox': value += 'A';
+    case 'answer+chrome': value += 'B';
+  }
   
-  return data;
+  value += ufrag + '.';
+  value += pwd + '.';
+  // TODO: Compress the ID by translating it from decimal to QR-alphanumeral (base 43 [excluding the period])
+  value += id + '.';
+  value += hash;
+  
+  console.log(value, value.length);
+  return { type, id, hash, media, ufrag, pwd };
 }
