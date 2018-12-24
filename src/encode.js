@@ -23,7 +23,7 @@ const aCandidateLineRegex = /^a=candidate:.*$/;
 // Encodes SDP + ICE candidates into a QR alphanumeric string
 export default function encode(sdp) {
   if (sdp.type !== 'offer' && sdp.type !== 'answer') {
-    throw new Error(`Can only handle offer and answer session descriptions`);
+    throw new Error(`Can only handle offer and answer session descriptions, not ${sdp.type}.`);
   }
   
   const type = sdp.type;
@@ -39,7 +39,7 @@ export default function encode(sdp) {
       // Ignore, no data
     } else if ((match = line.match(oLineRegex)) !== null) {
       id = match[1];
-      if (id.length !== 19 || id.length !== 18) {
+      if (id.length !== 19 && id.length !== 18) {
         throw new Error(`TODO: Implement a mechanism for handling IDs that are not 18-19 digits long: ${id} (${id.length})`);
       }
     } else if ((match = line.match(sLineRegex)) !== null) {
