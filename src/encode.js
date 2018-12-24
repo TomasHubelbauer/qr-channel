@@ -36,6 +36,9 @@ export default function encode(sdp) {
       // Ignore, no data
     } else if ((match = oLineRegex.exec(line)) !== null) {
       id = match[1];
+      if (id.length !== 19) {
+        throw new Error('TODO: Implement a mechanism for handling IDs that are not 19 digits long');
+      }
     } else if ((match = sLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if ((match = tLineRegex.exec(line)) !== null) {
@@ -105,11 +108,8 @@ export default function encode(sdp) {
     case 'answer+chrome': value += 'B'; break;
   }
   
-  value += ufrag + '.';
-  value += pwd + '.';
-  // TODO: Compress the ID by translating it from decimal to QR-alphanumeral (base 43 [excluding the period])
-  value += id + '.';
-  value += hash;
+  // TODO: Rebase the ID from decimal to QR-alphanumeral (base 43 excluding the colon) if it beats a fixed 19-digit slice
+  value += hash + id + ufrag + ':' + pwd;
   
   console.log(value, value.length);
   return { type, id, hash, media, ufrag, pwd };
