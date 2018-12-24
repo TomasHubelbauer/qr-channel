@@ -41,9 +41,9 @@
 
 @media only screen and (orientation : portrait) {
   #viewfinderVideo {
-    bottom: 0;
+    bottom: 1vw;
     position: fixed;
-    right: 0;
+    right: 1vw;
     width: 10vw;
   }
   
@@ -52,8 +52,9 @@
   }
   
   #codeCanvas {
-    background: white;
+    display: block;
     height: calc(100vw - 10vh);
+    margin: 0 auto
     width: calc(100vw - 10vh);
   }
     
