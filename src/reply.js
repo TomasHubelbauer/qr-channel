@@ -1,19 +1,37 @@
 import decode from './decode.js';
 import monitor from './monitor.js';
 
-export default function reply(message) {
+const peerConnections = {};
+
+export default async function reply(message) {
   if (message.startsWith('a=candidate:')) {
     // TODO: Figure out what peer connection the candidate belongs to from the session ID (add it to the candidate QR code)
-    console.log('Candidate', message);
+    const sessionId = 'todo';
+    const peerConnection = peerConnections[sessionId];
+    // Ignore the candidate if we do not yet have the connection it belongs to
+    if (peerConnection !== undefined) {
+      const candidate = null;
+      await peerConnection.addIceCandidate();
+    }
   }
   
   const sessionDescription = decode(message);
   switch (sessionDescription.type) {
     case 'offer': {
+      // TODO: Discard own offering peer connection
       const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+      const sessionId = 'todo';
+      peerConnections[sessionId] = peerConnection;
       monitor(peerConnection, 'peerConnection');
-      console.log('answering someone elses offer');
-      // TODO: Discard my own offer
+      
+      // TODO: Broadcast this new peer connection so that we start showing the answer and its candidates
+      
+      await peerConnection.setRemoteDescription(sessionDescription);
+      const answer = await peerConnection.createAnswer();
+      await peerConnection.setLocalDescription(answer);
+      
+      // TODO: Wait for the data channel event and its opening event
+      console.log('Waiting for the data channel');
       break;
     }
     case 'answer': {
