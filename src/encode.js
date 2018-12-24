@@ -110,7 +110,5 @@ export default function encode(sdp) {
   
   // TODO: Rebase the ID from decimal to QR-alphanumeral (base 43 excluding the colon) if it beats a fixed 19-digit slice
   value += hash + id + ufrag + ':' + pwd;
-  
-  console.log(value, value.length);
-  return { type, id, hash, media, ufrag, pwd };
+  return value;
 }
