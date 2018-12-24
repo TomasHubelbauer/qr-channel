@@ -268,9 +268,9 @@ class Chunker {
     while (true) {
       // Show local first and remove last to ensure correct flow order
       const message = (this.peerConnection.remoteDescription || this.peerConnection.localDescription).sdp;
-      const count = Math.ceil(this.message.length / Chunker.SIZE);
+      const count = Math.ceil(message.length / Chunker.SIZE);
       const index = this.counter % count;
-      const code = this.message.substr(index * Chunker.SIZE, Chunker.SIZE);
+      const code = message.substr(index * Chunker.SIZE, Chunker.SIZE);
       const chunk = `${index}\0${count}\0${code}`;
       this.counter++;
 
