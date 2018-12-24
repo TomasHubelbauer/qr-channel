@@ -157,55 +157,15 @@ window.addEventListener('load', async () => {
 window.addEventListener('unhandledrejection', event => alert(event.reason));
 
 // Encodes SDP + ICE candidates into a QR alphanumeric string
+// TODO: Finalize compressing and escaping
 function encode(sdp) {
-  const type = sdp.type;
-  const sessionId = sdp;
-  const sessionVersion = sdp;
-  // TODO: Extra the rest of the bits, then format them to a compact string (including escaping)
-  return JSON.stringify({ type });
-}
-
-// Decodes SDP + ICE candidates from a QR alphanumeric string
-// TODO: Build a test rig that connects to itself within the same browser tab JS context and run the messages thru this and back
-function* decode(value) {
-  // TODO: Parse and unescape the formatted compressed string and pull out the data bits
-
-  // This is interesting, because now the `webrtc-datachannel` string is given by Chrome and Firefox has a shorter line
-  // It looks like this line depends on what you do in the other line
-  yield 'a=sctpmap:5000 webrtc-datachannel 1024'; // Chrome
-  yield 'a=sctp-port:5000'; // Firefox
-  
-  // TODO: Study https://webrtchacks.com/sdp-anatomy/
-  // TODO: Study https://webrtchacks.com/the-minimum-viable-sdp/ but keep in mind QR alphanumeric is a bit different here
-}
-
-const vLineRegex = /^v=0$/g;
-const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
-const sLineRegex = /^s=-$/g;
-const tLineRegex = /^t=0 0$/g;
-const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/g;
-const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
-const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
-const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
-const mLineRegex = /^m=application 9 (UDP\/DTLS\/SCTP webrtc-datachannel|DTLS\/SCTP 5000)$/g;
-const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
-const aSendRecvLineRegex = /^a=sendrecv$/;
-const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
-const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
-const aMidLineRegex = /^a=mid:(0|data)$/g;
-const aSetupLineRegex = /^a=setup:(actpass|active)$/g;
-const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/g;
-const aSctpPortLineRegex = /^a=sctp-port:5000$/g;
-const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel 1024$/g;
-
-function test(sdp) {
   if (sdp.type !== 'offer' && sdp.type !== 'answer') {
     throw new Error(`Can only handle offer and answer session descriptions`);
   }
   
   const lines = [];
   let match;
-  const data = {};
+  const data = { type: sdp.type };
   for (const line of sdp.sdp.split(/\r\n/g)) {
     if ((match = vLineRegex.exec(line)) !== null) {
       // Ignore, no data
@@ -264,6 +224,13 @@ function test(sdp) {
     }
   }
   
+  console.log(data);
+  return data;
+}
+
+// Decodes SDP + ICE candidates from a QR alphanumeric string
+// TODO: Finalize decompressing and unescaping
+function decode(data) {
   const value = [
     'v=0',
     `o=- ${data.sessionId} ${data.sessionVersion} IN IP4 ${data.ipv4}`,
@@ -282,8 +249,30 @@ function test(sdp) {
     `a=sctp${data.media === 'firefox' ? '-port:5000' : ''}${data.media === 'chrome' ? 'map:5000 webrtc-datachannel 1024' : ''}`,
     '',
   ].join('\r\n');
-  console.log(value);
-  return new RTCSessionDescription({ type: sdp.type, sdp: value });
+  return new RTCSessionDescription({ type: data.type, sdp: value });
+}
+
+const vLineRegex = /^v=0$/g;
+const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
+const sLineRegex = /^s=-$/g;
+const tLineRegex = /^t=0 0$/g;
+const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/g;
+const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
+const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
+const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
+const mLineRegex = /^m=application 9 (UDP\/DTLS\/SCTP webrtc-datachannel|DTLS\/SCTP 5000)$/g;
+const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
+const aSendRecvLineRegex = /^a=sendrecv$/;
+const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
+const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
+const aMidLineRegex = /^a=mid:(0|data)$/g;
+const aSetupLineRegex = /^a=setup:(actpass|active)$/g;
+const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/g;
+const aSctpPortLineRegex = /^a=sctp-port:5000$/g;
+const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel 1024$/g;
+
+function test(sdp) {
+   return decode(encode(sdp));
 }
 
 async function rig() {
@@ -344,6 +333,8 @@ void async function() {
 /*
 - It is possible to use a dash for session ID even though Firefox sets it (Chrome uses dash)
 - The `a=mid` bundle name line can use a hardcoded name as long as the name is the same in the `a=group` line
+- https://webrtchacks.com/sdp-anatomy/
+- https://webrtchacks.com/the-minimum-viable-sdp/ but keep in mind QR alphanumeric is a bit different here
 
 Chrome:
 
