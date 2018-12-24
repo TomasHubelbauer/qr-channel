@@ -71,6 +71,8 @@ export default function encode(sdp) {
       if (/[A-Z]/g.test(ufrag)) {
         throw new Error('TODO: Implement escaping casing and make casing information a part of the message');
       }
+      
+      ufrag = ufrag.toUpperCase();
     } else if ((match = aIcePwdLineRegex.exec(line)) !== null) {
       pwd = match[1];
       if (!/^[a-zA-Z0-9]+$/g.test(pwd)) {
@@ -80,6 +82,8 @@ export default function encode(sdp) {
       if (/[A-Z]/g.test(pwd)) {
         throw new Error('TODO: Implement escaping casing and make casing information a part of the message');
       }
+      
+      pwd = pwd.toUpperCase();
     } else if ((match = aMidLineRegex.exec(line)) !== null) {
       // Ignore, we hardcode mid name to dash
     } else if ((match = aSetupLineRegex.exec(line)) !== null) {
