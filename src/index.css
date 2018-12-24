@@ -41,11 +41,10 @@
 
 @media only screen and (orientation : portrait) {
   #viewfinderVideo {
-    height: 100vh;
-    left: 0;
+    bottom: 0;
     position: fixed;
-    top: 0;
-    width: 100vw;
+    right: 0;
+    width: 10vw;
   }
   
   #viewfinderCanvas {
@@ -54,15 +53,15 @@
   
   #codeCanvas {
     background: rgba(255, 255, 255, .9);
-    height: calc(100vw - 2vh);
-    left: 1vh;
+    height: calc(100vw - 10vh);
+    left: 5vh;
     position: fixed;
-    top: calc((100vh - 100vw) / 2);
-    width: calc(100vw - 2vh);
+    top: 5vh;
+    width: calc(100vw - 10vh);
   }
   
   #debugDiv {
-    padding: 100vh 0 0 0;
+    padding: 100vw 0 0 0;
   }
   
   #logsP {
