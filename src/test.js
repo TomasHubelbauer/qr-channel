@@ -27,7 +27,7 @@ export default async function test() {
     const offerData = encode(await peerConnection1.createOffer());
     console.log(offerData, offerData.length);
     const offerCode = qrcode(0, 'L');
-    offerCode.addData(offerData, 'Byte');
+    offerCode.addData(offerData, 'Alphanumeric');
     offerCode.make();
     console.log(offerCode.getModuleCount(), offerCode.createDataURL(10, 10));
     const offer = decode(offerData);
@@ -38,7 +38,7 @@ export default async function test() {
     const answerData = encode(await peerConnection2.createAnswer());
     console.log(answerData, answerData.length);
     const answerCode = qrcode(0, 'L');
-    answerCode.addData(answerData, 'Byte');
+    answerCode.addData(answerData, 'Alphanumeric');
     answerCode.make();
     console.log(answerCode.getModuleCount(), answerCode.createDataURL(10, 10));
     const answer = decode(answerData);
