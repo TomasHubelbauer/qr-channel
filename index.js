@@ -157,7 +157,7 @@ window.addEventListener('load', async () => {
 window.addEventListener('unhandledrejection', event => alert(event.reason));
 
 const vLineRegex = /^v=0$/g;
-const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 \d+.\d+.\d+.\d+$/g;
+const oLineRegex = /^o=.* (\d+) \d+ IN IP4 \d+.\d+.\d+.\d+$/g;
 const sLineRegex = /^s=-$/g;
 const tLineRegex = /^t=0 0$/g;
 const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/g;
@@ -189,18 +189,14 @@ function encode(sdp) {
     if ((match = vLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if ((match = oLineRegex.exec(line)) !== null) {
-      const [_, sessionId, sessionVersion, ipv4] = match;
-      data.sessionId = sessionId;
-      // TODO: See if we can get away with sticking to a zero for this (even though Chrome sets it to 2, Firefox to 0)
-      //data.sessionVersion = sessionVersion;
+      data.id = match[1];
     } else if ((match = sLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if ((match = tLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if ((match = aFingerprintLineRegex.exec(line)) !== null) {
-      const [_, hash] = match;
       // TODO: Remove the colons and figure out how to handle case (escaping)
-      data.hash = hash;
+      data.hash = match[1];
     } else if ((match = aGroupLineRegex.exec(line)) !== null) {
       // Ignore, we hardcode mid name to dash
     } else if ((match = aIceOptionsLineRegex.exec(line)) !== null) {
@@ -250,7 +246,7 @@ function encode(sdp) {
 function decode(data) {
   const value = [
     'v=0',
-    `o=- ${data.sessionId} 0 IN IP4 0.0.0.0`,
+    `o=- ${data.id} 0 IN IP4 0.0.0.0`,
     's=-',
     't=0 0',
     `a=fingerprint:sha-256 ${data.hash}`,
