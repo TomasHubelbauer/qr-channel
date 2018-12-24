@@ -10,11 +10,11 @@ export default async function broadcast() {
     let message;
     if (index === 0) {
       // TODO: Display encoded description
-      message = 'sdp';
+      message = 'SDP';
     } else {
       const candidate = candidates[index - 1];
       // TODO: Display encoded candidate
-      message = 'candidate #' + index;
+      message = 'CANDIDATE NO. ' + index;
     }
     
     const qr = qrcode(0, 'L');
