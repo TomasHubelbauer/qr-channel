@@ -331,14 +331,4 @@ function monitor(obj, label) {
   }
 }
 
-// Propagate asynchronous errors to the console
-void async function() {
-  await rig();
-}()
-
-/*
-- It is possible to use a dash for session ID even though Firefox sets it (Chrome uses dash)
-- The `a=mid` bundle name line can use a hardcoded name as long as the name is the same in the `a=group` line
-- https://webrtchacks.com/sdp-anatomy/
-- https://webrtchacks.com/the-minimum-viable-sdp/ but keep in mind QR alphanumeric is a bit different here
-*/
+rig();
