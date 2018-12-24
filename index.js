@@ -1,3 +1,5 @@
+import modulate from './module.js';
+
 window.addEventListener('load', async () => {
   const viewfinderVideo = document.querySelector('#viewfinderVideo');
   const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
@@ -344,3 +346,5 @@ class Scanner {
 class Coder {
   // TODO: Move encoding and decoding here, regexes to static class fields
 }
+
+modulate();
