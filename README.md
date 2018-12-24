@@ -23,6 +23,10 @@ Also see the `TODO` comments in the source code and MarkDown checkboxen in the o
 - [ ] Consider compressing ICE similarly to SDP so they might all fit on 1 QR code (not N) and we'd be rotating only 2 QR codes
 - [ ] Handle receiving both offers and answers by managing the corresponding peer connections
 - [ ] Handle responding to a given message only once (keep track of offers, answers and candidates processed)
+- [ ] Allow alternating between portrait and environment camera in development
+  - The portrait one is production screen to screen workflow where the user ideally doesn't need to watch both screens
+  - The environment one is development sequential workflow where screens are watched to aid debugging
+  - [ ] Document this in the Debugging section above once added
 
 ## Crediting
 
