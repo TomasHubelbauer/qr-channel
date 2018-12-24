@@ -1,15 +1,12 @@
 import scan from './scan.js';
+import broadcast from './broadcast.js';
 import encode from './encode.js';
 import decode from './decode.js';
 
 window.addEventListener('load', async () => {
-  const codeCanvas = document.querySelector('#codeCanvas');
   const signalingStateP = document.querySelector('#signalingStateP');
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
   const chunksP = document.querySelector('#chunksP');
-
-   // Remember the context and refresh it when dimensions change
-  let codeContext;
   
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
   viewfinderVideo.srcObject = mediaStream;
@@ -42,7 +39,7 @@ window.addEventListener('load', async () => {
   await peerConnection.setLocalDescription(sessionDescription);
 
   // Start rotating now that we have SDP
-  const chunker = new Chunker(peerConnection, codeCanvas);
+  broadcast(peerConnection);
   
   // TODO: Handle both offer and answer cases
   // TODO: Rewrite this to be able to act on partial messages so that collection of chunks and establishment of the connection do not have to be strictly sequential
@@ -146,60 +143,3 @@ function monitor(obj, label) {
 }
 
 rig();
-
-class Chunker {
-  constructor(peerConnection, codeCanvas) {
-    this.peerConnection = peerConnection;
-    this.codeCanvas = codeCanvas;
-    this.counter = 0;
-    // Fire and forget
-    this.rotate();
-  }
-  
-  async rotate() {
-    // TODO: Wait only until the class exists, we'll `delete` it once we have established the peer connection
-    while (true) {
-      // Show local first and remove last to ensure correct flow order
-      const message = (this.peerConnection.remoteDescription || this.peerConnection.localDescription).sdp;
-      const count = Math.ceil(message.length / Chunker.SIZE);
-      const index = this.counter % count;
-      const code = message.substr(index * Chunker.SIZE, Chunker.SIZE);
-      const chunk = `${index}\0${count}\0${code}`;
-      this.counter++;
-
-      const qr = qrcode(0, 'L');
-      qr.addData(chunk, 'Byte');
-      qr.make();
-      this.codeCanvas.title = code;
-
-      const { width, height } = this.codeCanvas.getBoundingClientRect();
-      if (this.codeCanvas.width !== width || this.codeCanvas.height !== height) {
-        this.codeCanvas.width = width;
-        this.codeCanvas.height = height;
-        this.codeContext = this.codeCanvas.getContext('2d');
-      } else {
-        this.codeContext.clearRect(0, 0, this.codeCanvas.width, this.codeCanvas.height);
-      }
-
-      const size = Math.min(this.codeCanvas.width, this.codeCanvas.height);
-      const moduleCount = qr.getModuleCount();
-      const cellSize = size / moduleCount;
-      const ceilSize = Math.ceil(cellSize);
-
-      const x = (width - size) / 2;
-      const y = (height - size) / 2;
-      for (let cellX = 0; cellX < moduleCount; cellX++) {
-        for (let cellY = 0; cellY < moduleCount; cellY++) {
-          if (qr.isDark(cellX, cellY)) {
-            this.codeContext.fillRect(x + cellX * cellSize, y + cellY * cellSize, ceilSize, ceilSize);
-          }
-        }
-      }
-      
-      await new Promise(resolve => window.setTimeout(resolve, 100));
-    }
-  }
-}
-
-// TODO: Use a fixed chunk size derived from a set QR code type number chosen based on the screen size (big desktop, small mobile)
-Chunker.SIZE = 50;
