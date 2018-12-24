@@ -3,7 +3,7 @@ export default function scan(onChunk) {
   const viewfinderVideo = document.querySelector('#viewfinderVideo');
   const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
   let viewfinderContext;
-  window.requestAnimationFrame(function scan() {
+  window.requestAnimationFrame(function recognize() {
     if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
       if (viewfinderCanvas.width !== viewfinderVideo.videoWidth || viewfinderCanvas.height !== viewfinderVideo.videoHeight) {
         viewfinderCanvas.width = viewfinderVideo.videoWidth;
@@ -20,6 +20,6 @@ export default function scan(onChunk) {
       }
     }
 
-    requestAnimationFrame(scan);
+    requestAnimationFrame(recognize);
   });
 }
