@@ -15,6 +15,11 @@ body {
   position: fixed;
 }
 
+#logsP {
+  font-family: monospace;
+  white-space: pre;
+}
+
 /* Use the bigger, horizontal (vw), viewport unit for the QR code spacing */
 /* Place the viewfinder stream to the right of the QR code in the room left due to the width difference of the page and the code */
 @media only screen and (orientation : landscape) {
@@ -29,6 +34,10 @@ body {
     left: 1vw;
     top: 1vw;
     width: calc(100vw - 2vw);
+  }
+    
+  #logsP {
+    width: calc((100vw - 100vh) / 2);
   }
 }
 
@@ -50,9 +59,4 @@ body {
     top: 1vh;
     width: calc(100vw - 2vh);
   }
-}
-
-#logsP {
-  font-family: monospace;
-  white-space: pre;
 }
