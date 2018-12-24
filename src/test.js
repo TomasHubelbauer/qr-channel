@@ -29,7 +29,7 @@ export default async function test() {
     const offerCode = qrcode(0, 'L');
     offerCode.addData(offerData, 'Alphanumeric');
     offerCode.make();
-    console.log(offerCode, offerCode.createDataURL(10, 10));
+    console.log(offerCode.getModuleCount(), offerCode.createDataURL(10, 10));
     const offer = decode(offerData);
 
     await peerConnection1.setLocalDescription(offer);
@@ -40,7 +40,7 @@ export default async function test() {
     const answerCode = qrcode(0, 'L');
     answerCode.addData(answerData, 'Alphanumeric');
     answerCode.make();
-    console.log(answerCode, answerCode.createDataURL(10, 10));
+    console.log(answerCode.getModuleCount(), answerCode.createDataURL(10, 10));
     const answer = decode(answerData);
 
     await peerConnection2.setLocalDescription(answer);
