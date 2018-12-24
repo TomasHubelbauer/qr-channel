@@ -52,7 +52,7 @@
   }
   
   #codeCanvas {
-    background: rgba(255, 255, 255, .9);
+    background: white;
     height: calc(100vw - 10vh);
     left: 5vh;
     position: fixed;
