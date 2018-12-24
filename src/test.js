@@ -2,7 +2,7 @@ import monitor from './monitor.js';
 import encode from './encode.js';
 import decode from './decode.js';
 
-export default function() {
+export default function test() {
   const peerConnection1 = new RTCPeerConnection();
   monitor(peerConnection1, '1');
   const peerConnection2 = new RTCPeerConnection();
