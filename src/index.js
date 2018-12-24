@@ -2,6 +2,7 @@ import scan from './scan.js';
 import broadcast from './broadcast.js';
 import encode from './encode.js';
 import decode from './decode.js';
+import monitor from './monitor.js';
 
 window.addEventListener('load', async () => {
   const signalingStateP = document.querySelector('#signalingStateP');
@@ -130,16 +131,6 @@ async function rig() {
       alert('1: ' + event.data);
     });
   });
-}
-
-function monitor(obj, label) {
-  for (const key in obj) {
-    if (!/^on/.test(key)) {
-      continue;
-    }
-
-    obj.addEventListener(key.slice(2), event => console.log(label, key, event));
-  }
 }
 
 rig();
