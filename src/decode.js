@@ -2,13 +2,19 @@
 export default function decode(value) {
   let type;
   let media;
+  let idLength;
   switch (value[0]) {
-    case 'O': type = 'offer'; media = 'firefox'; break;
-    case 'P': type = 'offer'; media = 'chrome'; break;
-    case 'A': type = 'answer'; media = 'firefox'; break;
-    case 'B': type = 'answer'; media = 'chrome'; break;
+    case 'O': type = 'offer'; media = 'firefox'; idLength = 19; break;
+    case 'P': type = 'offer'; media = 'chrome'; idLength = 19; break;
+    case 'Q': type = 'offer'; media = 'firefox'; idLength = 18; break;
+    case 'R': type = 'offer'; media = 'chrome'; idLength = 18; break;
+    case 'A': type = 'answer'; media = 'firefox'; idLength = 19; break;
+    case 'B': type = 'answer'; media = 'chrome'; idLength = 19; break;
+    case 'C': type = 'answer'; media = 'firefox'; idLength = 18; break;
+    case 'D': type = 'answer'; media = 'chrome'; idLength = 18; break;
+    default: throw new Error(`Unexpected differentiation character '${value[0]}'.`);
   }
-  
+
   // TODO: Read a new bit which says whether the ICE candidates are lowercased or mixedcased
   const hashRaw = value.slice(1, 1 + 64); // TODO: Insert the colons
   let hash = '';
@@ -17,8 +23,8 @@ export default function decode(value) {
   }
 
   hash = hash.slice(0, -1);
-  const id = value.slice(1 + 64, 1 + 64 + 19);
-  const ufrag = value.slice(1 + 64 + 19, value.indexOf(':')).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
+  const id = value.slice(1 + 64, 1 + 64 + idLength);
+  const ufrag = value.slice(1 + 64 + idLength, value.indexOf(':')).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
   const pwd = value.slice(value.indexOf(':') + ':'.length).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
   
   return new RTCSessionDescription({
