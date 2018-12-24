@@ -99,10 +99,10 @@ export default function encode(sdp) {
   let value = '';
   // Encode three bits of information into one alphanumeric character to save space
   switch (type + '+' media) {
-    case 'offer+firefox': value += 'O';
-    case 'offer+chrome': value += 'P';
-    case 'answer+firefox': value += 'A';
-    case 'answer+chrome': value += 'B';
+    case 'offer+firefox': value += 'O'; break;
+    case 'offer+chrome': value += 'P'; break;
+    case 'answer+firefox': value += 'A'; break;
+    case 'answer+chrome': value += 'B'; break;
   }
   
   value += ufrag + '.';
