@@ -7,7 +7,6 @@ export default function scan(onMessage) {
   const chunks = [];
   window.requestAnimationFrame(function recognize() {
     if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
-      console.log('have enough data', viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
       if (viewfinderCanvas.width !== viewfinderVideo.videoWidth || viewfinderCanvas.height !== viewfinderVideo.videoHeight) {
         viewfinderCanvas.width = viewfinderVideo.videoWidth;
         viewfinderCanvas.height = viewfinderVideo.videoHeight;
