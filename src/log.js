@@ -15,7 +15,7 @@ export default function log(message) {
         logsP = document.querySelector('#logsP');
       }
 
-      logsP.appendChild(document.createTextNode(message + '\n'));
+      logsP.appendChild(typeof message === 'string' ? document.createTextNode(message + '\n') : message);
       break;
     }
     default: {
