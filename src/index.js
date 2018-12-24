@@ -11,48 +11,29 @@ window.addEventListener('load', async () => {
   const signalingStateP = document.querySelector('#signalingStateP');
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
 
-  scan(message => {
-    // Fire and forget
-    connect(decode(message));
-  });
+  scan(async message => await connect(decode(message)));
   
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
   viewfinderVideo.srcObject = mediaStream;
   // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
   viewfinderVideo.setAttribute('playsinline', true);
-  // Play within the in gesture if needed (Chrome), `autoplay` won't work
-  try {
-    await viewfinderVideo.play();
-    await offer();
-  } catch (error) {
-    alert('Click the page to begin');
-    // Retry in a gesture handler to make Chrome work
-    document.body.addEventListener('pointerdown', async _ => {
-      try {
-        await viewfinderVideo.play();
-        await offer();
-      } catch (error) {
-        alert('Error');
-      }
-    });
-  }
+  // Play through JavaScript, `autoplay` doesn't seem to work
+  await viewfinderVideo.play();
 
-  async function offer() {
-    const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
-    monitor(peerConnection, 'peerConnection');
+  const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+  monitor(peerConnection, 'peerConnection');
 
-    peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += peerConnection.signalingState + '; ');
-    peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ');
+  peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += peerConnection.signalingState + '; ');
+  peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ');
 
-    const dataChannel = peerConnection.createDataChannel(null);
-    monitor(dataChannel, 'dataChannel');
+  const dataChannel = peerConnection.createDataChannel(null);
+  monitor(dataChannel, 'dataChannel');
 
-    const sessionDescription = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(sessionDescription);
+  const sessionDescription = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(sessionDescription);
 
-    // Start rotating now that we have SDP
-    broadcast(peerConnection);
-  }
+  // Start rotating now that we have SDP
+  broadcast(peerConnection);
   
   // TODO: Rewrite this to be able to act on partial messages so that collection of chunks and establishment of the connection do not have to be strictly sequential
   async function connect(sdp) {
