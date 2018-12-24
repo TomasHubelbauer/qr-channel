@@ -182,9 +182,8 @@ function encode(sdp) {
     throw new Error(`Can only handle offer and answer session descriptions`);
   }
   
-  const lines = [];
-  let match;
   const data = { type: sdp.type };
+  let match;
   for (const line of sdp.sdp.split(/\r\n/g)) {
     if ((match = vLineRegex.exec(line)) !== null) {
       // Ignore, no data
@@ -237,36 +236,33 @@ function encode(sdp) {
     }
   }
   
-  console.log(data);
   return data;
 }
 
 // Decodes SDP + ICE candidates from a QR alphanumeric string
 // TODO: Finalize decompressing and unescaping
 function decode(data) {
-  const value = [
-    'v=0',
-    `o=- ${data.id} 0 IN IP4 0.0.0.0`,
-    's=-',
-    't=0 0',
-    `a=fingerprint:sha-256 ${data.hash}`,
-    `a=group:BUNDLE 0`,
-    'a=ice-options:trickle',
-    'a=msid-semantic:WMS',
-    `m=application 9 ${data.media === 'firefox' ? 'UDP/DTLS/SCTP webrtc-datachannel' : ''}${data.media === 'chrome' ? 'DTLS/SCTP 5000' : ''}`,
-    'c=IN IP4 0.0.0.0',
-    `a=ice-ufrag:${data.ufrag}`,
-    `a=ice-pwd:${data.pwd}`,
-    'a=mid:0',
-    `a=setup:${data.type === 'offer' ? 'actpass' : ''}${data.type === 'answer' ? 'active' : ''}`,
-    `a=sctp${data.media === 'firefox' ? '-port:5000' : ''}${data.media === 'chrome' ? 'map:5000 webrtc-datachannel 1024' : ''}`,
-    '',
-  ].join('\r\n');
-  return new RTCSessionDescription({ type: data.type, sdp: value });
-}
-
-function test(sdp) {
-   return decode(encode(sdp));
+  return new RTCSessionDescription({
+    type: data.type,
+    sdp: [
+      'v=0',
+      `o=- ${data.id} 0 IN IP4 0.0.0.0`,
+      's=-',
+      't=0 0',
+      `a=fingerprint:sha-256 ${data.hash}`,
+      `a=group:BUNDLE 0`,
+      'a=ice-options:trickle',
+      'a=msid-semantic:WMS',
+      `m=application 9 ${data.media === 'firefox' ? 'UDP/DTLS/SCTP webrtc-datachannel' : ''}${data.media === 'chrome' ? 'DTLS/SCTP 5000' : ''}`,
+      'c=IN IP4 0.0.0.0',
+      `a=ice-ufrag:${data.ufrag}`,
+      `a=ice-pwd:${data.pwd}`,
+      'a=mid:0',
+      `a=setup:${data.type === 'offer' ? 'actpass' : ''}${data.type === 'answer' ? 'active' : ''}`,
+      `a=sctp${data.media === 'firefox' ? '-port:5000' : ''}${data.media === 'chrome' ? 'map:5000 webrtc-datachannel 1024' : ''}`,
+      '',
+    ].join('\r\n'),
+  });
 }
 
 async function rig() {
@@ -278,14 +274,20 @@ async function rig() {
   const dataChannel = peerConnection1.createDataChannel(null);
   monitor(dataChannel, 'dc 1');
   
-  const offer = test(await peerConnection1.createOffer());
-  const qr = qrcode(0, 'L');
-  qr.addData(JSON.stringify(encode(offer)), 'Byte');
-  qr.make();
-  console.log(qr.createImgTag());
+  const offerData = encode(await peerConnection1.createOffer());
+  const offerCode = qrcode(0, 'L');
+  offerCode.addData(JSON.stringify(offerData), 'Byte');
+  offerCode.make();
+  console.log(offerCode.createDataURL(10, 10));
+  const offer = decode(offerData);
   await peerConnection1.setLocalDescription(offer);
   await peerConnection2.setRemoteDescription(offer);
-  const answer = test(await peerConnection2.createAnswer());
+  const answerData = encode(await peerConnection2.createAnswer());
+  const answerCode = qrcode(0, 'L');
+  answerCode.addData(JSON.stringify(answerData), 'Byte');
+  answerCode.make();
+  console.log(answerCode.createDataURL(10, 10));
+  const answer = decode(answerData);
   await peerConnection2.setLocalDescription(answer);
   await peerConnection1.setRemoteDescription(answer);
   
