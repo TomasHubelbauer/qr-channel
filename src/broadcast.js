@@ -1,6 +1,6 @@
 import encode from './encode.js';
 
-export default async function broadcast() {
+export default async function broadcast(peerConnection) {
   const codeCanvas = document.querySelector('#codeCanvas');
   let codeContext;
   let counter = 0;
