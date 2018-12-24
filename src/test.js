@@ -5,10 +5,9 @@ import decode from './decode.js';
 
 export default async function test() {
   try {
-    // Obtain user media first so that iOS Safari reveals host candidates
+    // Obtain a dummy media stream first so that iOS Safari reveals host candidates (permissions need to be granted for that)
     const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-    log(mediaStream);
-    
+
     const peerConnection1 = new RTCPeerConnection();
     monitor(peerConnection1, '1');
     peerConnection1.addEventListener('signalingstatechange', _ => log('1 signaling state ' + peerConnection1.signalingState));
