@@ -27,9 +27,8 @@ export default async function broadcast(peerConnection) {
       codeContext.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
     }
 
-    const size = Math.min(width, height);
     const moduleCount = qr.getModuleCount();
-    const cellSize = size / moduleCount;
+    const cellSize = Math.min(width, height) / moduleCount;
     const ceilSize = Math.ceil(cellSize);
 
     const x = (width - size) / 2;
