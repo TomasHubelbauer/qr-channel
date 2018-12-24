@@ -53,10 +53,20 @@
   }
   
   #codeCanvas {
+    background: rgba(255, 255, 255, .9);
     height: calc(100vw - 2vh);
     left: 1vh;
     position: fixed;
     top: calc((100vh - 100vw) / 2);
     width: calc(100vw - 2vh);
+  }
+  
+  #debugDiv {
+    padding: 100vh 0 0 0;
+  }
+  
+  #logsP {
+    font-family: monospace;
+    white-space: pre;
   }
 }
