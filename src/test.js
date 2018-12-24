@@ -5,6 +5,10 @@ import decode from './decode.js';
 
 export default async function test() {
   try {
+    // Obtain user media first so that iOS Safari reveals host candidates
+    const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    log(mediaStream);
+    
     const peerConnection1 = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.l.google.com:19302' } ] });
     monitor(peerConnection1, '1');
     peerConnection1.addEventListener('signalingstatechange', _ => log('1 signaling state ' + peerConnection1.signalingState));
