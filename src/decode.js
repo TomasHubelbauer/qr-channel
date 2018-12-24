@@ -1,5 +1,4 @@
 // Decodes SDP + ICE candidates from a QR alphanumeric string
-// TODO: Finalize decompressing and unescaping
 export default function decode(value) {
   let type;
   let media;
