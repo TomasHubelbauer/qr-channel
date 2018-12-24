@@ -279,7 +279,7 @@ class Chunker {
       const qr = qrcode(0, 'L');
       qr.addData(chunk, 'Byte');
       qr.make();
-      this.codeCanvas.title = chunk;
+      this.codeCanvas.title = code;
 
       const { width, height } = this.codeCanvas.getBoundingClientRect();
       if (this.codeCanvas.width !== width || this.codeCanvas.height !== height) {
