@@ -26,9 +26,9 @@ export default async function test() {
 
     const offerData = encode(await peerConnection1.createOffer());
     const offerCode = qrcode(0, 'L');
-    offerCode.addData(JSON.stringify(offerData), 'Byte');
+    offerCode.addData(offerData, 'Alphanumeric');
     offerCode.make();
-    console.log(offerCode.createDataURL(10, 10));
+    console.log(offerData, offerData.length, offerCode, offerCode.createDataURL(10, 10));
     const offer = decode(offerData);
 
     await peerConnection1.setLocalDescription(offer);
@@ -36,9 +36,9 @@ export default async function test() {
 
     const answerData = encode(await peerConnection2.createAnswer());
     const answerCode = qrcode(0, 'L');
-    answerCode.addData(JSON.stringify(answerData), 'Byte');
+    answerCode.addData(answerData, 'Alphanumeric');
     answerCode.make();
-    console.log(answerCode.createDataURL(10, 10));
+    console.log(answerData, answerData.length, answerCode, answerCode.createDataURL(10, 10));
     const answer = decode(answerData);
 
     await peerConnection2.setLocalDescription(answer);
