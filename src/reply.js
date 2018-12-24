@@ -13,6 +13,8 @@ export default async function reply(message) {
       const candidate = null;
       await peerConnection.addIceCandidate();
     }
+    
+    return;
   }
   
   const sessionDescription = decode(message);
