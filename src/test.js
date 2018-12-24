@@ -58,7 +58,7 @@ export default async function test() {
   });
   
   dataChannel.addEventListener('message', event => {
-    alert('2: ' + event.data);
+    log('2: ' + event.data);
   });
   
   peerConnection2.addEventListener('datachannel', event => {
@@ -68,7 +68,7 @@ export default async function test() {
     });
     
     event.channel.addEventListener('message', event => {
-      alert('1: ' + event.data);
+      log('1: ' + event.data);
     });
   });
 }
