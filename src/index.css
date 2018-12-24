@@ -19,8 +19,8 @@
 @media only screen and (orientation : landscape) {
   #codeCanvas {
     height: calc(100vh - 2vw);
-    left: 2vw;
-    top: 2vw;
+    left: 1vw;
+    top: 1vw;
     width: calc(100vw - 2vw);
   }
 }
@@ -29,8 +29,8 @@
 @media only screen and (orientation : portrait) {
   #codeCanvas {
     height: calc(100vh - 2vh);
-    left: 2vh;
-    top: 2vh;
+    left: 1vh;
+    top: 1vh;
     width: calc(100vw - 2vh);
   }
 }
