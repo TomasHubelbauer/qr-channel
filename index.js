@@ -175,7 +175,7 @@ function encode(sdp) {
       // TODO: See if we can get away with sticking to a zero for this (even though Chrome sets it to 2, Firefox to 0)
       data.sessionVersion = sessionVersion;
       // TODO: See if we can get away with sticking to localhost or 0.0.0.0 for this even though Chrome and Firefox differ
-      data.ipv4 = ipv4;
+      //data.ipv4 = ipv4;
     } else if ((match = sLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if ((match = tLineRegex.exec(line)) !== null) {
