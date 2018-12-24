@@ -105,7 +105,7 @@ export default function encode(sdp) {
       // Ignore, we handle ICE candidates separately
       console.log('Ignoring candidate', line);
     } else {
-      console.log(aCandidateLineRegex.match(line));
+      console.log(line, aCandidateLineRegex.exec(line));
       throw new Error(`Unexpected SDP line '${line}'.`);
     }
   }
