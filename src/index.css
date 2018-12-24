@@ -54,7 +54,7 @@
   #codeCanvas {
     display: block;
     height: calc(100vw - 10vh);
-    margin: 0 auto
+    margin: 0 auto;
     width: calc(100vw - 10vh);
   }
     
