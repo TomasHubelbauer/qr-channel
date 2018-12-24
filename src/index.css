@@ -1,63 +1,33 @@
+html {
+  height: 100%;
+}
+
 body {
+  display: flex;
+  height: 100%;
   margin: 0;
 }
 
 #viewfinderVideo {
   opacity: .1;
-  position: fixed;
 }
 
 #viewfinderCanvas {
   display: none;
 }
 
-#codeCanvas {
-  position: fixed;
-}
-
 #logsP {
   font-family: monospace;
-  overflow: auto;
+  overflow: scroll;
   white-space: pre;
 }
 
-/* Use the bigger, horizontal (vw), viewport unit for the QR code spacing */
-/* Place the viewfinder stream to the right of the QR code in the room left due to the width difference of the page and the code */
 @media only screen and (orientation : landscape) {
   #viewfinderVideo {
-    right: 1vw;
-    top: 1vw;
-    width: calc((100vw - 100vh) / 2 - 1vw);
+    flex: 1;
   }
   
   #codeCanvas {
-    height: calc(100vh - 2vw);
-    left: calc((100vw - 100vh) / 2);
-    top: 1vw;
-    width: calc(100vh - 2vw);
-  }
-    
-  #logsP {
-    width: calc((100vw - 100vh) / 2);
-  }
-}
-
-/* Use the bigger, vertical (vh), viewport unit for the QR code spacing */
-/* Place viewfinder stream as full page background as its possible to see the surrounding context on mobile */
-@media only screen and (orientation : portrait) {
-  #viewfinderVideo {
-    height: 100%;
-    left: 0;
-    opacity: .1;
-    position: fixed;
-    top: 0;
-    width: 100%;
-  }
-
-  #codeCanvas {
-    height: calc(100vh - 2vh);
-    left: 1vh;
-    top: 1vh;
-    width: calc(100vw - 2vh);
+    flex: 1;
   }
 }
