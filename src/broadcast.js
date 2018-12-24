@@ -4,7 +4,8 @@ export default async function broadcast() {
   let counter = 0;
   while (true) {
     // TODO: Description + candidates
-    count = 5;
+    // Note that this is updated in any iteration to capture new candidates as they come
+    const count = 5;
     const index = counter % count;
     let message;
     if (index === 0) {
