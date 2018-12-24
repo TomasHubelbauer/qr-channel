@@ -1,24 +1,24 @@
-const vLineRegex = /^v=0$/g;
-const oLineRegex = /^o=.* (\d+) \d+ IN IP4 \d+.\d+.\d+.\d+$/g;
-const sLineRegex = /^s=-$/g;
-const tLineRegex = /^t=0 0$/g;
-const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/g;
-const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
-const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
-const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
+const vLineRegex = /^v=0$/;
+const oLineRegex = /^o=.* (\d+) \d+ IN IP4 \d+.\d+.\d+.\d+$/;
+const sLineRegex = /^s=-$/;
+const tLineRegex = /^t=0 0$/;
+const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/;
+const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/;
+const aIceOptionsLineRegex = /^a=ice-options:trickle$/;
+const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/;
 // TODO: Find out if this number here (\d+) needs to be preserved or not
-const mLineRegex = /^m=application \d+ (UDP\/DTLS\/SCTP webrtc-datachannel|DTLS\/SCTP 5000)$/g;
+const mLineRegex = /^m=application \d+ (UDP\/DTLS\/SCTP webrtc-datachannel|DTLS\/SCTP 5000)$/;
 // TODO: Find out if this IP address (which is 0.0.0.0 pre-ICE and has a value post-ICE) needs to be preserved
-const cLineRegex = /^c=IN IP4 \d+\.\d+\.\d+\.\d+$/g;
+const cLineRegex = /^c=IN IP4 \d+\.\d+\.\d+\.\d+$/;
 const aSendRecvLineRegex = /^a=sendrecv$/;
-const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
-const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
-const aMidLineRegex = /^a=mid:(0|data)$/g;
-const aSetupLineRegex = /^a=setup:(actpass|active)$/g;
-const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/g;
-const aSctpPortLineRegex = /^a=sctp-port:5000$/g;
-const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel 1024$/g;
-const aCandidateLineRegex = /^a=candidate:.*$/g;
+const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/;
+const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/;
+const aMidLineRegex = /^a=mid:(0|data)$/;
+const aSetupLineRegex = /^a=setup:(actpass|active)$/;
+const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/;
+const aSctpPortLineRegex = /^a=sctp-port:5000$/;
+const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel 1024$/;
+const aCandidateLineRegex = /^a=candidate:.*$/;
 
 // Encodes SDP + ICE candidates into a QR alphanumeric string
 // TODO: Finalize compressing and escaping
@@ -35,37 +35,37 @@ export default function encode(sdp) {
   let pwd;
   let match;
   for (const line of sdp.sdp.split(/\r\n/g)) {
-    if ((match = vLineRegex.exec(line)) !== null) {
+    if ((match = line.match(vLineRegex)) !== null) {
       // Ignore, no data
-    } else if ((match = oLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(oLineRegex)) !== null) {
       id = match[1];
       if (id.length !== 19) {
         throw new Error(`TODO: Implement a mechanism for handling IDs that are not 19 digits long: ${id} (${id.length})`);
       }
-    } else if ((match = sLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(sLineRegex)) !== null) {
       // Ignore, no data
-    } else if ((match = tLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(tLineRegex)) !== null) {
       // Ignore, no data
-    } else if ((match = aFingerprintLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aFingerprintLineRegex)) !== null) {
       // TODO: Find out if it is safe to assume there's never mixed case
       hash = match[1].replace(/:/g, '');
-    } else if ((match = aGroupLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aGroupLineRegex)) !== null) {
       // Ignore, we hardcode mid name to dash
-    } else if ((match = aIceOptionsLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aIceOptionsLineRegex)) !== null) {
        // Ignore, no data
-    } else if ((match = aMsidSemanticLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aMsidSemanticLineRegex)) !== null) {
        // Ignore, browsers set different values (Chrome ` WMS`, Firefox `WMS *`), but `WMS` works for both
-    } else if ((match = mLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(mLineRegex)) !== null) {
       switch (match[1]) {
         case 'UDP/DTLS/SCTP webrtc-datachannel': media = 'firefox'; break;
         case 'DTLS/SCTP 5000': media = 'chrome'; break;
         default: throw new Error(`Unexpected media line value '${match[1]}'.`);
       }
-    } else if ((match = cLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(cLineRegex)) !== null) {
        // Ignore, no data
-    } else if ((match = aSendRecvLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aSendRecvLineRegex)) !== null) {
       // Ignore, optional (Firefox only)
-    } else if ((match = aIceUfragLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aIceUfragLineRegex)) !== null) {
       ufrag = match[1];
       if (!/^[a-zA-Z0-9]+$/g.test(ufrag)) {
         throw new Error('TODO: Implement escaping to QR alphanumeric alphabet: ' + ufrag);
@@ -76,7 +76,7 @@ export default function encode(sdp) {
       }
       
       ufrag = ufrag.toUpperCase();
-    } else if ((match = aIcePwdLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aIcePwdLineRegex)) !== null) {
       pwd = match[1];
       if (!/^[a-zA-Z0-9]+$/g.test(pwd)) {
         throw new Error('TODO: Implement escaping to QR alphanumeric alphabet ' + pwd);
@@ -87,24 +87,22 @@ export default function encode(sdp) {
       }
       
       pwd = pwd.toUpperCase();
-    } else if ((match = aMidLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aMidLineRegex)) !== null) {
       // Ignore, we hardcode mid name to dash
-    } else if ((match = aSetupLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aSetupLineRegex)) !== null) {
       // Ignore, deriveable from type
-    } else if ((match = aMaxMessageSizeLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aMaxMessageSizeLineRegex)) !== null) {
       // Ignore, optional (Firefox only)
-    } else if ((match = aSctpPortLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aSctpPortLineRegex)) !== null) {
       // Ignore, deriveable from media
-    } else if ((match = aSctpMapLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aSctpMapLineRegex)) !== null) {
       // Ignore, deriveable from media
     } else if (line === '') {
       // Ignore, no data
     } else if (line === 'b=AS:30') {
       // Ignore, random (Chrome only)
-    } else if ((match = aCandidateLineRegex.exec(line)) !== null) {
+    } else if ((match = line.match(aCandidateLineRegex)) !== null) {
       // Ignore, we handle ICE candidates separately
-      // Reset the regex as there may be multiple candidates
-      match.lastIndex = 0;
     } else {
       throw new Error(`Unexpected SDP line '${line}'.`);
     }
