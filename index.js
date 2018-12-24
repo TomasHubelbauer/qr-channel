@@ -279,6 +279,10 @@ async function rig() {
   monitor(dataChannel, 'dc 1');
   
   const offer = test(await peerConnection1.createOffer());
+  const qr = qrcode(0, 'L');
+  qr.addData(JSON.stringify(encode(offer)), 'Byte');
+  qr.make();
+  console.log(qr.createImgTag());
   await peerConnection1.setLocalDescription(offer);
   await peerConnection2.setRemoteDescription(offer);
   const answer = test(await peerConnection2.createAnswer());
