@@ -11,10 +11,12 @@
   
   #viewfinderDiv {
     flex: 1;
+    overflow: hidden;
   }
 
   #viewfinderVideo {
     opacity: .1;
+    width: 100%;
   }
 
   #viewfinderCanvas {
