@@ -8,17 +8,19 @@ export default async function broadcast() {
     const count = 5;
     const index = counter % count;
     let message;
+    let mode;
     if (index === 0) {
       // TODO: Display encoded description
-      message = 'SDP';
+      message = encode(peerConnection.remoteDescription || peerConnection.localDescription);
+      mode = 'Alphanumeric';
     } else {
-      //const candidate = candidates[index - 1];
-      // TODO: Display encoded candidate
-      message = 'CANDIDATE NO. ' + index;
+      // TODO: Display encoded candidate (get it from SDP or capture it in the callback)
+      message = 'Candidate #' + index;
+      mode = 'Byte';
     }
     
     const qr = qrcode(0, 'L');
-    qr.addData(message, 'Alphanumeric');
+    qr.addData(message, mode);
     qr.make();
     codeCanvas.title = message;
 
