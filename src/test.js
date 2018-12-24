@@ -25,22 +25,22 @@ export default async function test() {
     monitor(dataChannel, 'dc 1');
 
     const offerData = encode(await peerConnection1.createOffer());
-    console.log(offerData, offerData.length);
     const offerCode = qrcode(0, 'L');
     offerCode.addData(offerData, 'Alphanumeric');
     offerCode.make();
-    console.log(offerCode.getModuleCount(), offerCode.createDataURL(10, 10));
+    console.log(offerData, offerData.length, offerCode.getModuleCount());
+    log(offerCode.createImgTag(10, 10));
     const offer = decode(offerData);
 
     await peerConnection1.setLocalDescription(offer);
     await peerConnection2.setRemoteDescription(offer);
 
     const answerData = encode(await peerConnection2.createAnswer());
-    console.log(answerData, answerData.length);
     const answerCode = qrcode(0, 'L');
     answerCode.addData(answerData, 'Alphanumeric');
     answerCode.make();
-    console.log(answerCode.getModuleCount(), answerCode.createDataURL(10, 10));
+    console.log(answerData, answerData.length, answerCode.getModuleCount());
+    log(answerCode.createImgTag(10, 10));
     const answer = decode(answerData);
 
     await peerConnection2.setLocalDescription(answer);
