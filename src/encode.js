@@ -18,6 +18,7 @@ const aSetupLineRegex = /^a=setup:(actpass|active)$/g;
 const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/g;
 const aSctpPortLineRegex = /^a=sctp-port:5000$/g;
 const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel 1024$/g;
+const aCandidateLineRegex = /^a=candidate:*$/g;
 
 // Encodes SDP + ICE candidates into a QR alphanumeric string
 // TODO: Finalize compressing and escaping
@@ -100,6 +101,8 @@ export default function encode(sdp) {
       // Ignore, no data
     } else if (line === 'b=AS:30') {
       // Ignore, random (Chrome only)
+    } else if ((match = aCandidateLineRegex.exec(line)) !== null) {
+      // Ignore, we handle ICE candidates separately
     } else {
       throw new Error(`Unexpected SDP line '${line}'.`);
     }
