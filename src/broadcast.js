@@ -1,3 +1,5 @@
+import encode from './encode.js';
+
 export default async function broadcast() {
   const codeCanvas = document.querySelector('#codeCanvas');
   let codeContext;
