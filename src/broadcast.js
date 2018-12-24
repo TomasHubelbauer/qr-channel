@@ -18,9 +18,9 @@ export default async function broadcast() {
     }
     
     const qr = qrcode(0, 'L');
-    qr.addData(chunk, 'Byte');
+    qr.addData(message, 'Alphanumeric');
     qr.make();
-    codeCanvas.title = code;
+    codeCanvas.title = message;
 
     const { width, height } = codeCanvas.getBoundingClientRect();
     if (codeCanvas.width !== width || codeCanvas.height !== height) {
