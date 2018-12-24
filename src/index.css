@@ -35,7 +35,6 @@
 
   #logsP {
     font-family: monospace;
-    overflow: scroll;
     white-space: pre;
   }
 }
