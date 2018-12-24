@@ -6,7 +6,7 @@ import monitor from './monitor.js';
 import test from './test.js';
 
 window.addEventListener('load', async () => {
-  //await test();
+  await test();
   
   const signalingStateP = document.querySelector('#signalingStateP');
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
