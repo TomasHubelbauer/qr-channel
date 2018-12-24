@@ -29,7 +29,7 @@ export default async function test() {
     offerCode.addData(offerData, 'Alphanumeric');
     offerCode.make();
     console.log(offerData, offerData.length, offerCode.getModuleCount());
-    console.log(offerCode.createImgTag(10, 10));
+    log(offerCode.createImgTag(10, 10));
     const offer = decode(offerData);
 
     await peerConnection1.setLocalDescription(offer);
@@ -40,7 +40,7 @@ export default async function test() {
     answerCode.addData(answerData, 'Alphanumeric');
     answerCode.make();
     console.log(answerData, answerData.length, answerCode.getModuleCount());
-    console.log(answerCode.createImgTag(10, 10));
+    log(answerCode.createImgTag(10, 10));
     const answer = decode(answerData);
 
     await peerConnection2.setLocalDescription(answer);
