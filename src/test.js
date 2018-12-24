@@ -28,7 +28,7 @@ export default async function test() {
     const offerCode = qrcode(0, 'L');
     offerCode.addData(offerData, 'Alphanumeric');
     offerCode.make();
-    console.log(offerData, offerData.length, offerCode.getModuleCount());
+    log(`${offerData} (${offerData.length}, ${offerCode.getModuleCount()})`);
     log(offerCode.createASCII());
     const offer = decode(offerData);
 
@@ -39,7 +39,7 @@ export default async function test() {
     const answerCode = qrcode(0, 'L');
     answerCode.addData(answerData, 'Alphanumeric');
     answerCode.make();
-    console.log(answerData, answerData.length, answerCode.getModuleCount());
+    log(`${answerData} (${answerData.length}, ${answerCode.getModuleCount()})`);
     log(answerCode.createASCII());
     const answer = decode(answerData);
 
