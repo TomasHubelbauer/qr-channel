@@ -156,6 +156,25 @@ window.addEventListener('load', async () => {
 
 window.addEventListener('unhandledrejection', event => alert(event.reason));
 
+const vLineRegex = /^v=0$/g;
+const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 \d+.\d+.\d+.\d+$/g;
+const sLineRegex = /^s=-$/g;
+const tLineRegex = /^t=0 0$/g;
+const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/g;
+const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
+const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
+const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
+const mLineRegex = /^m=application 9 (UDP\/DTLS\/SCTP webrtc-datachannel|DTLS\/SCTP 5000)$/g;
+const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
+const aSendRecvLineRegex = /^a=sendrecv$/;
+const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
+const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
+const aMidLineRegex = /^a=mid:(0|data)$/g;
+const aSetupLineRegex = /^a=setup:(actpass|active)$/g;
+const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/g;
+const aSctpPortLineRegex = /^a=sctp-port:5000$/g;
+const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel 1024$/g;
+
 // Encodes SDP + ICE candidates into a QR alphanumeric string
 // TODO: Finalize compressing and escaping
 function encode(sdp) {
@@ -173,9 +192,7 @@ function encode(sdp) {
       const [_, sessionId, sessionVersion, ipv4] = match;
       data.sessionId = sessionId;
       // TODO: See if we can get away with sticking to a zero for this (even though Chrome sets it to 2, Firefox to 0)
-      data.sessionVersion = sessionVersion;
-      // TODO: See if we can get away with sticking to localhost or 0.0.0.0 for this even though Chrome and Firefox differ
-      //data.ipv4 = ipv4;
+      //data.sessionVersion = sessionVersion;
     } else if ((match = sLineRegex.exec(line)) !== null) {
       // Ignore, no data
     } else if ((match = tLineRegex.exec(line)) !== null) {
@@ -233,7 +250,7 @@ function encode(sdp) {
 function decode(data) {
   const value = [
     'v=0',
-    `o=- ${data.sessionId} ${data.sessionVersion} IN IP4 0.0.0.0`,
+    `o=- ${data.sessionId} 0 IN IP4 0.0.0.0`,
     's=-',
     't=0 0',
     `a=fingerprint:sha-256 ${data.hash}`,
@@ -251,25 +268,6 @@ function decode(data) {
   ].join('\r\n');
   return new RTCSessionDescription({ type: data.type, sdp: value });
 }
-
-const vLineRegex = /^v=0$/g;
-const oLineRegex = /^o=.* (\d+) (\d+) IN IP4 (\d+.\d+.\d+.\d)+$/g;
-const sLineRegex = /^s=-$/g;
-const tLineRegex = /^t=0 0$/g;
-const aFingerprintLineRegex = /^a=fingerprint:sha-256 (([0-9a-fA-F]{2}:){31}[0-9a-fA-F]{2})$/g;
-const aGroupLineRegex = /^a=group:BUNDLE (\w+)$/g;
-const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
-const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
-const mLineRegex = /^m=application 9 (UDP\/DTLS\/SCTP webrtc-datachannel|DTLS\/SCTP 5000)$/g;
-const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
-const aSendRecvLineRegex = /^a=sendrecv$/;
-const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
-const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
-const aMidLineRegex = /^a=mid:(0|data)$/g;
-const aSetupLineRegex = /^a=setup:(actpass|active)$/g;
-const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/g;
-const aSctpPortLineRegex = /^a=sctp-port:5000$/g;
-const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel 1024$/g;
 
 function test(sdp) {
    return decode(encode(sdp));
