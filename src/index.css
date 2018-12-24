@@ -54,16 +54,9 @@
   #codeCanvas {
     background: white;
     height: calc(100vw - 10vh);
-    left: 5vh;
-    position: fixed;
-    top: 5vh;
     width: calc(100vw - 10vh);
   }
-  
-  #debugDiv {
-    padding: 100vw 0 0 0;
-  }
-  
+    
   #logsP {
     font-family: monospace;
     white-space: pre;
