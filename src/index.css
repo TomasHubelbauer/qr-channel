@@ -8,10 +8,14 @@
     height: 100%;
     margin: 0;
   }
+  
+  #viewfinderDiv {
+    flex: 1;
+  }
 
   #viewfinderVideo {
-    flex: 1;
     opacity: .1;
+    width: 100$;
   }
 
   #viewfinderCanvas {
