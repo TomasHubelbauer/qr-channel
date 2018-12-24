@@ -1,6 +1,4 @@
 window.addEventListener('load', async () => {
-  // Bail while we're playing with the SDP rig
-  return;
   const viewfinderVideo = document.querySelector('#viewfinderVideo');
   const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
   const codeCanvas = document.querySelector('#codeCanvas');
