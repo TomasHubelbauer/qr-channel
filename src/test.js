@@ -24,7 +24,7 @@ export default async function test() {
     const dataChannel = peerConnection1.createDataChannel(null);
     monitor(dataChannel, 'dc 1');
 
-    const offerData = encode(await peerConnection1.createOffer());
+    const offerData = encode(await peerConnection1.createOffer()).sdp;
     const offerCode = qrcode(0, 'L');
     offerCode.addData(offerData, 'Alphanumeric');
     offerCode.make();
@@ -35,7 +35,7 @@ export default async function test() {
     await peerConnection1.setLocalDescription(offer);
     await peerConnection2.setRemoteDescription(offer);
 
-    const answerData = encode(await peerConnection2.createAnswer());
+    const answerData = encode(await peerConnection2.createAnswer()).sdp;
     const answerCode = qrcode(0, 'L');
     answerCode.addData(answerData, 'Alphanumeric');
     answerCode.make();
