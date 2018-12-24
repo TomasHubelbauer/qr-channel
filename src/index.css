@@ -12,25 +12,27 @@
 }
 
 #codeCanvas {
-  opacity: .9;
   position: fixed;
-
 }
 
 /* Use the bigger, horizontal (vw), viewport unit for the QR code spacing */
 @media only screen and (orientation : landscape) {
-  height: calc(100vh - 2vw);
-  left: 2vw;
-  top: 2vw;
-  width: calc(100vw - 2vw);
+  #codeCanvas {
+    height: calc(100vh - 2vw);
+    left: 2vw;
+    top: 2vw;
+    width: calc(100vw - 2vw);
+  }
 }
 
 /* Use the bigger, vertical (vh), viewport unit for the QR code spacing */
 @media only screen and (orientation : portrait) {
-  height: calc(100vh - 2vh);
-  left: 2vh;
-  top: 2vh;
-  width: calc(100vw - 2vh);
+  #codeCanvas {
+    height: calc(100vh - 2vh);
+    left: 2vh;
+    top: 2vh;
+    width: calc(100vw - 2vh);
+  }
 }
 
 #logsP {
