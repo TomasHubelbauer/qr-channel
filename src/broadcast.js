@@ -12,7 +12,7 @@ export default async function broadcast() {
       // TODO: Display encoded description
       message = 'SDP';
     } else {
-      const candidate = candidates[index - 1];
+      //const candidate = candidates[index - 1];
       // TODO: Display encoded candidate
       message = 'CANDIDATE NO. ' + index;
     }
