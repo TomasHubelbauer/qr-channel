@@ -36,7 +36,7 @@ In the future I'd like to explore ways of bringing down the time required to est
 Also see the `TODO` comments in the source code and MarkDown checkboxen in the other MarkDown files.
 
 - [ ] Finalize SDP encoding/decoding, particularly using string over JSON escaping and unescaping to QR alphanumeric alphabet
-- [ ] Fix the camera problem in Chrome by calling `play` in an interaction event handler (body pointer?)
+- [ ] Find out if the Chrome camera stream dimensions 2x2 are a problem with my laptop only by testing on a different machine
 - [ ] Fix the SDP rig not working in mobile Safari
 - [ ] Work on ICE candidate encoding/decoding similar to the SDP pipeline
 - [ ] Consider flashing SDP and ICE candidates and individual messages if the sizes work out and chunking is not needed
