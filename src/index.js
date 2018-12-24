@@ -72,8 +72,8 @@ window.addEventListener('load', async () => {
     
     alert('done');
   }
+  
+  await test();
 });
 
 window.addEventListener('unhandledrejection', event => alert(event.reason));
-
-test();
