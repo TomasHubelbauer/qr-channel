@@ -1,4 +1,57 @@
-export default async function broadcast(peerConnection) {
+export default async function broadcast() {
+  const codeCanvas = document.querySelector('#codeCanvas');
+  let codeContext;
+  let counter = 0;
+  while (true) {
+    // TODO: Description + candidates
+    count = 5;
+    const index = counter % count;
+    let message;
+    if (index === 0) {
+      // TODO: Display encoded description
+      message = 'sdp';
+    } else {
+      const candidate = candidates[index - 1];
+      // TODO: Display encoded candidate
+      message = 'candidate #' + index;
+    }
+    
+    const qr = qrcode(0, 'L');
+    qr.addData(chunk, 'Byte');
+    qr.make();
+    codeCanvas.title = code;
+
+    const { width, height } = codeCanvas.getBoundingClientRect();
+    if (codeCanvas.width !== width || codeCanvas.height !== height) {
+      codeCanvas.width = width;
+      codeCanvas.height = height;
+      codeContext = codeCanvas.getContext('2d');
+    } else {
+      codeContext.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
+    }
+
+    const length = Math.min(width, height);
+    const moduleCount = qr.getModuleCount();
+    const cellSize = length / moduleCount;
+    const ceilSize = Math.ceil(cellSize);
+
+    const x = (width - length) / 2;
+    const y = (height - length) / 2;
+    for (let cellX = 0; cellX < moduleCount; cellX++) {
+      for (let cellY = 0; cellY < moduleCount; cellY++) {
+        if (qr.isDark(cellX, cellY)) {
+          codeContext.fillRect(x + cellX * cellSize, y + cellY * cellSize, ceilSize, ceilSize);
+        }
+      }
+    }
+
+    counter++;
+    await new Promise(resolve => window.setTimeout(resolve, 500));
+  }
+}
+
+// TODO: Remove the function if it turns out chunking is not needed
+function _broadcast(peerConnection) {
   const codeCanvas = document.querySelector('#codeCanvas');
   let codeContext;
   let counter = 0;
