@@ -8,7 +8,8 @@ const aIceOptionsLineRegex = /^a=ice-options:trickle$/g;
 const aMsidSemanticLineRegex = /^a=msid-semantic:\s?WMS(\s\*)?$/g;
 // TODO: Find out if this number here (\d+) needs to be preserved or not
 const mLineRegex = /^m=application \d+ (UDP\/DTLS\/SCTP webrtc-datachannel|DTLS\/SCTP 5000)$/g;
-const cLineRegex = /^c=IN IP4 0\.0\.0\.0$/g;
+// TODO: Find out if this IP address (which is 0.0.0.0 pre-ICE and has a value post-ICE) needs to be preserved
+const cLineRegex = /^c=IN IP4 \d+\.\d+\.\d+\.\d+$/g;
 const aSendRecvLineRegex = /^a=sendrecv$/;
 const aIceUfragLineRegex = /^a=ice-ufrag:(.*)$/g;
 const aIcePwdLineRegex = /^a=ice-pwd:(.*)$/g;
