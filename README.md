@@ -41,3 +41,5 @@ Also see the `TODO` comments in the source code and MarkDown checkboxen in the o
 - [ ] Work on ICE candidate encoding/decoding similar to the SDP pipeline
 - [ ] Consider flashing SDP and ICE candidates and individual messages if the sizes work out and chunking is not needed
 - [ ] Use trickle ICE by decoupling SDP processing and ICE candidate processing
+- [ ] Handle receiving both offers and answers by managing the corresponding peer connection
+- [ ] Handle responding to a given message only once (keep track of offers, answers and candidates received)
