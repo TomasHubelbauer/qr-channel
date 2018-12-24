@@ -3,7 +3,8 @@ import monitor from './monitor.js';
 
 export default function reply(message) {
   if (message.startsWith('a=candidate:')) {
-    throw new Error('TODO: Handle candidates');
+    // TODO: Figure out what peer connection the candidate belongs to from the session ID (add it to the candidate QR code)
+    console.log('Candidate', message);
   }
   
   const sessionDescription = decode(message);
