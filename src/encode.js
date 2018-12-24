@@ -71,30 +71,14 @@ export default function encode(sdp) {
         throw new Error('TODO: Implement escaping to QR alphanumeric alphabet: ' + ufrag);
       }
       
-      if (/[A-Z]/g.test(ufrag)) {
-        if (ufrag.includes('/')) {
-          throw new Error('TODO: Implement escaping casing even for values containing slashes: ' + ufrag);
-        }
-            
-        ufrag = ufrag.replace(/[A-Z]/g, m => '/' + m[0]);
-      }
-      
-      ufrag = ufrag.toUpperCase();
+      ufrag = ufrag.replace(/\//g, '//').replace(/[A-Z]/g, m => '/' + m[0]).toUpperCase();
     } else if ((match = line.match(aIcePwdLineRegex)) !== null) {
       pwd = match[1];
       if (!/^[a-zA-Z0-9\+-\/]+$/g.test(pwd)) {
         throw new Error('TODO: Implement escaping to QR alphanumeric alphabet ' + pwd);
       }
       
-      if (/[A-Z]/g.test(pwd)) {
-        if (pwd.includes('/')) {
-          throw new Error('TODO: Implement escaping casing even for values containing slashes: ' + pwd);
-        }
-            
-        pwd = pwd.replace(/[A-Z]/g, m => '/' + m[0]);
-      }
-      
-      pwd = pwd.toUpperCase();
+      pwd = pwd.replace(/\//g, '//').replace(/[A-Z]/g, m => '/' + m[0]).toUpperCase();
     } else if ((match = line.match(aMidLineRegex)) !== null) {
       // Ignore, we hardcode mid name to dash
     } else if ((match = line.match(aSetupLineRegex)) !== null) {
