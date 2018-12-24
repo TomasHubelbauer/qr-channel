@@ -40,14 +40,14 @@ export default async function test() {
   await peerConnection1.setRemoteDescription(answer);
   
   peerConnection1.addEventListener('icecandidate', event => {
-    log('1 ICE candidate ' + event.candidate ? event.candidate.candidate : 'null')
+    log('1 ICE candidate ' + (event.candidate ? event.candidate.candidate : 'null'))
     if (event.candidate !== null) {
       peerConnection2.addIceCandidate(event.candidate);
     }
   });
   
   peerConnection2.addEventListener('icecandidate', event => {
-    log('2 ICE candidate ' + event.candidate ? event.candidate.candidate : 'null')
+    log('2 ICE candidate ' + (event.candidate ? event.candidate.candidate : 'null'))
     if (event.candidate !== null) {
       peerConnection1.addIceCandidate(event.candidate);
     }
