@@ -32,6 +32,7 @@ export default function encode(sdp) {
   let media;
   let ufrag;
   let pwd;
+  let ices = [];
   let match;
   for (const line of sdp.sdp.split(/\r\n/g)) {
     if ((match = line.match(vLineRegex)) !== null) {
@@ -109,7 +110,7 @@ export default function encode(sdp) {
     } else if (line === 'b=AS:30') {
       // Ignore, random (Chrome only)
     } else if ((match = line.match(aCandidateLineRegex)) !== null) {
-      // Ignore, we handle ICE candidates separately
+      ices.push(match[0]);
     } else {
       throw new Error(`Unexpected SDP line '${line}'.`);
     }
@@ -126,5 +127,5 @@ export default function encode(sdp) {
   
   // TODO: Rebase the ID from decimal to QR-alphanumeral (base 43 excluding the colon) if it beats a fixed 19-digit slice
   value += hash + id + ufrag + ':' + pwd;
-  return value;
+  return { sdp: value, ices };
 }
