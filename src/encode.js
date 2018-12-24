@@ -78,5 +78,8 @@ export default function encode(sdp) {
     }
   }
   
+  const encoded = data;
+  console.log(encoded);
+  
   return data;
 }
