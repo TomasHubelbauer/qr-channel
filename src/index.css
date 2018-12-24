@@ -19,3 +19,7 @@
   top: 2.5vh;
   width: calc(100vw - 5vw);
 }
+
+#logsP {
+  white-space: pre;
+}
