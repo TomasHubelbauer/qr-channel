@@ -40,7 +40,7 @@ export default function encode(sdp) {
     } else if ((match = oLineRegex.exec(line)) !== null) {
       id = match[1];
       if (id.length !== 19) {
-        throw new Error('TODO: Implement a mechanism for handling IDs that are not 19 digits long');
+        throw new Error(`TODO: Implement a mechanism for handling IDs that are not 19 digits long: ${id} (${id.length})`);
       }
     } else if ((match = sLineRegex.exec(line)) !== null) {
       // Ignore, no data
