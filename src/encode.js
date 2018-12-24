@@ -104,7 +104,7 @@ export default function encode(sdp) {
     } else if ((match = aCandidateLineRegex.exec(line)) !== null) {
       // Ignore, we handle ICE candidates separately
     } else {
-      throw new Error(`Unexpected SDP line '${line}'.`);
+      throw new Error(`Unexpected SDP line '${line}' ${aCandidateLineRegex.test(line)}.`);
     }
   }
   
