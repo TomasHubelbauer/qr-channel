@@ -43,3 +43,4 @@ Also see the `TODO` comments in the source code and MarkDown checkboxen in the o
 - [ ] Use trickle ICE by decoupling SDP processing and ICE candidate processing
 - [ ] Handle receiving both offers and answers by managing the corresponding peer connection
 - [ ] Handle responding to a given message only once (keep track of offers, answers and candidates received)
+- [ ] Select chunk size based on type number and approximate screen size (bigger on desktop, smaller on mobile screen)
