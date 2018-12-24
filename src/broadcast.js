@@ -27,12 +27,13 @@ export default async function broadcast(peerConnection) {
       codeContext.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
     }
 
+    const length = Math.min(width, height);
     const moduleCount = qr.getModuleCount();
-    const cellSize = Math.min(codeCanvas.width, codeCanvas.height) / moduleCount;
+    const cellSize = length / moduleCount;
     const ceilSize = Math.ceil(cellSize);
 
-    const x = (width - size) / 2;
-    const y = (height - size) / 2;
+    const x = (width - length) / 2;
+    const y = (height - length) / 2;
     for (let cellX = 0; cellX < moduleCount; cellX++) {
       for (let cellY = 0; cellY < moduleCount; cellY++) {
         if (qr.isDark(cellX, cellY)) {
