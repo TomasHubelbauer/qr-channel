@@ -21,7 +21,6 @@ const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel 1024$/;
 const aCandidateLineRegex = /^a=candidate:.*$/;
 
 // Encodes SDP + ICE candidates into a QR alphanumeric string
-// TODO: Finalize compressing and escaping
 export default function encode(sdp) {
   if (sdp.type !== 'offer' && sdp.type !== 'answer') {
     throw new Error(`Can only handle offer and answer session descriptions`);
