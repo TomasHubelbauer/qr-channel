@@ -1,9 +1,8 @@
+impprt scan from './scan.js';
 import encode from './encode.js';
 import decode from './decode.js';
 
 window.addEventListener('load', async () => {
-  const viewfinderVideo = document.querySelector('#viewfinderVideo');
-  const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
   const codeCanvas = document.querySelector('#codeCanvas');
   const signalingStateP = document.querySelector('#signalingStateP');
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
@@ -20,7 +19,7 @@ window.addEventListener('load', async () => {
   await viewfinderVideo.play();
 
   const chunks = [];
-  const scanner = new Scanner(viewfinderVideo, viewfinderCanvas, (index, count, text) => {
+  scan((index, count, text) => {
     chunks[index] = text;
     chunksP.textContent = `Chunks (${Object.keys(chunks).length}/${count}): ` + Object.keys(chunks);
     // Check the number of keys to ignore uninitialized array items
@@ -204,39 +203,3 @@ class Chunker {
 
 // TODO: Use a fixed chunk size derived from a set QR code type number chosen based on the screen size (big desktop, small mobile)
 Chunker.SIZE = 50;
-
-class Scanner {
-  constructor(viewfinderVideo, viewfinderCanvas, onChunk) {
-    this.viewfinderVideo = viewfinderVideo;
-    this.viewfinderCanvas = viewfinderCanvas;
-    this.onChunk = onChunk;
-    this.scan = this.scan.bind(this);
-    window.requestAnimationFrame(this.scan);
-  }
-  
-  scan() {
-    if (this.viewfinderVideo.readyState === this.viewfinderVideo.HAVE_ENOUGH_DATA) {
-      if (this.viewfinderCanvas.width !== this.viewfinderVideo.videoWidth || this.viewfinderCanvas.height !== this.viewfinderVideo.videoHeight) {
-        this.viewfinderCanvas.width = this.viewfinderVideo.videoWidth;
-        this.viewfinderCanvas.height = this.viewfinderVideo.videoHeight;
-        this.viewfinderContext = this.viewfinderCanvas.getContext('2d');
-      }
-
-      this.viewfinderContext.drawImage(this.viewfinderVideo, 0, 0, this.viewfinderVideo.videoWidth, this.viewfinderVideo.videoHeight);
-      const imageData = this.viewfinderContext.getImageData(0, 0, this.viewfinderCanvas.width, this.viewfinderCanvas.height);
-      const code = jsQR(imageData.data, imageData.width, imageData.height);
-      if (code !== null && code.data !== '') {
-        const [index, count, text] = code.data.split('\0', 3);
-        this.onChunk(Number(index), Number(coubt), text);
-      }
-    }
-
-    requestAnimationFrame(this.scan);
-  }
-}
-
-class Coder {
-  // TODO: Move encoding and decoding here, regexes to static class fields
-}
-
-modulate();
