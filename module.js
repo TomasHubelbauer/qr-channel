@@ -1,1 +1,3 @@
-console.log('module');
+export default function modulate() {
+  console.log('module');
+}
