@@ -5,19 +5,17 @@ export default async function broadcast(peerConnection) {
   let codeContext;
   let counter = 0;
   while (true) {
-    // TODO: Description + candidates
     // Note that this is updated in any iteration to capture new candidates as they come
-    const count = 5;
+    const { sdp, ices } = encode(peerConnection.remoteDescription || peerConnection.localDescription);
+    const count = 1 + ices.length;
     const index = counter % count;
     let message;
     let mode;
     if (index === 0) {
-      // TODO: Display encoded description
-      message = encode(peerConnection.remoteDescription || peerConnection.localDescription);
+      message = sdp;
       mode = 'Alphanumeric';
     } else {
-      // TODO: Display encoded candidate (get it from SDP or capture it in the callback)
-      message = 'Candidate #' + index;
+      message = ices[index - 1];
       mode = 'Byte';
     }
     
@@ -39,7 +37,6 @@ export default async function broadcast(peerConnection) {
     const moduleCount = qr.getModuleCount();
     const cellSize = length / moduleCount;
     const ceilSize = Math.ceil(cellSize);
-
     const x = (width - length) / 2;
     const y = (height - length) / 2;
     for (let cellX = 0; cellX < moduleCount; cellX++) {
