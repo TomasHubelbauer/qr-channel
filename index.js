@@ -245,7 +245,7 @@ function decode(data) {
     `a=ice-ufrag:${data.ufrag}`,
     `a=ice-pwd:${data.pwd}`,
     'a=mid:0',
-    `a=setup:${sdp.type === 'offer' ? 'actpass' : ''}${sdp.type === 'answer' ? 'active' : ''}`,
+    `a=setup:${data.type === 'offer' ? 'actpass' : ''}${data.type === 'answer' ? 'active' : ''}`,
     `a=sctp${data.media === 'firefox' ? '-port:5000' : ''}${data.media === 'chrome' ? 'map:5000 webrtc-datachannel 1024' : ''}`,
     '',
   ].join('\r\n');
