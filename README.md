@@ -20,9 +20,8 @@ GitHub issues are closed, use a pull request to start discussion about a patch o
 
 Also see the `TODO` comments in the source code and MarkDown checkboxen in the other MarkDown files.
 
-- [ ] Consider compressing ICE similarly to SDP so they might all fit on 1 QR code (not N) and we'd be rotating only 2 QR codes
-- [ ] Handle receiving both offers and answers by managing the corresponding peer connections
-- [ ] Handle responding to a given message only once (keep track of offers, answers and candidates processed)
+- [ ] Finalize `reply.js` response flow until successful data channel opening
+- [ ] Try encoding ICE like SDP so it might fit on a single QR code and we'd alternate only two QR codes, SDP and ICE
 - [ ] Allow alternating between portrait and environment camera in development
   - The portrait one is production screen to screen workflow where the user ideally doesn't need to watch both screens
   - The environment one is development sequential workflow where screens are watched to aid debugging
