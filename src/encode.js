@@ -95,6 +95,8 @@ export default function encode(sdp) {
       // Ignore, random (Chrome only)
     } else if ((match = line.match(aCandidateLineRegex)) !== null) {
       ices.push(match[0]);
+    } else if (line === 'a=end-of-candidates') {
+      // Ignore, no data
     } else {
       throw new Error(`Unexpected SDP line '${line}'.`);
     }
