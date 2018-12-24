@@ -9,13 +9,13 @@ export default async function test() {
     const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
     log(mediaStream);
     
-    const peerConnection1 = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.l.google.com:19302' } ] });
+    const peerConnection1 = new RTCPeerConnection();
     monitor(peerConnection1, '1');
     peerConnection1.addEventListener('signalingstatechange', _ => log('1 signaling state ' + peerConnection1.signalingState));
     peerConnection1.addEventListener('icegatheringstatechange', _ => log('1 ICE gathering state ' + peerConnection1.iceGatheringState));
     peerConnection1.addEventListener('connectionstatechange', _ => log('1 connection state ' + peerConnection1.connectionState));
 
-    const peerConnection2 = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.l.google.com:19302' } ] });
+    const peerConnection2 = new RTCPeerConnection();
     monitor(peerConnection2, '2');
     peerConnection2.addEventListener('signalingstatechange', _ => log('2 signaling state ' + peerConnection1.signalingState));
     peerConnection2.addEventListener('icegatheringstatechange', _ => log('2 ICE gathering state ' + peerConnection1.iceGatheringState));
