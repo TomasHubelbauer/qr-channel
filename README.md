@@ -10,6 +10,7 @@ exchanging QR codes with offer/answer SDP data and ICE candidate data.
 ## Debugging
 
 - Clear iOS Safari website cache: Settings > Safari > Advanced > Website Data > `tomashubelbauer.github.io` > swipe to clear
+- Make sure you are not using the camera in another browser/tab if Chrome gives you a blank stream (2×2 pixels)
 
 ## Contributing
 
@@ -19,13 +20,9 @@ GitHub issues are closed, use a pull request to start discussion about a patch o
 
 Also see the `TODO` comments in the source code and MarkDown checkboxen in the other MarkDown files.
 
-- [ ] Find out if the Chrome camera stream dimensions 2x2 are a problem with my laptop only by testing on a different machine
-- [ ] Work on ICE candidate encoding/decoding similar to the SDP pipeline
-- [ ] Consider flashing SDP and ICE candidates and individual messages if the sizes work out and chunking is not needed
-- [ ] Use trickle ICE by decoupling SDP processing and ICE candidate processing
-- [ ] Handle receiving both offers and answers by managing the corresponding peer connection
-- [ ] Handle responding to a given message only once (keep track of offers, answers and candidates received)
-- [ ] Select chunk size based on type number and approximate screen size (bigger on desktop, smaller on mobile screen)
+- [ ] Consider compressing ICE similarly to SDP so they might all fit on 1 QR code (not N) and we'd be rotating only 2 QR codes
+- [ ] Handle receiving both offers and answers by managing the corresponding peer connections
+- [ ] Handle responding to a given message only once (keep track of offers, answers and candidates processed)
 
 ## Crediting
 
