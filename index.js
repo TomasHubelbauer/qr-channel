@@ -307,11 +307,19 @@ async function rig() {
     dataChannel.send('message from 1 to 2');
   });
   
+  dataChannel.addEventListener('message', event => {
+    alert('2: ' + event.data);
+  });
+  
   peerConnection2.addEventListener('datachannel', event => {
     monitor(event.channel, 'dc 2');
-      event.channel.addEventListener('open', () => {
-        event.channel.send('message from 2 to 1');
-      });
+    event.channel.addEventListener('open', () => {
+      event.channel.send('message from 2 to 1');
+    });
+    
+    event.channel.addEventListener('message', event => {
+      alert('1: ' + event.data);
+    });
   });
 }
 
