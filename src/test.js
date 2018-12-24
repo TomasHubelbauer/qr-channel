@@ -4,13 +4,13 @@ import encode from './encode.js';
 import decode from './decode.js';
 
 export default async function test() {
-  const peerConnection1 = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+  const peerConnection1 = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.l.google.com:19302' } ] });
   monitor(peerConnection1, '1');
   peerConnection1.addEventListener('signalingstatechange', _ => log('1 signaling state ' + peerConnection1.signalingState));
   peerConnection1.addEventListener('icegatheringstatechange', _ => log('1 ICE gathering state ' + peerConnection1.iceGatheringState));
   peerConnection1.addEventListener('connectionstatechange', _ => log('1 connection state ' + peerConnection1.connectionState));
   
-  const peerConnection2 = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+  const peerConnection2 = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.l.google.com:19302' } ] });
   monitor(peerConnection2, '2');
   peerConnection2.addEventListener('signalingstatechange', _ => log('2 signaling state ' + peerConnection1.signalingState));
   peerConnection2.addEventListener('icegatheringstatechange', _ => log('2 ICE gathering state ' + peerConnection1.iceGatheringState));
