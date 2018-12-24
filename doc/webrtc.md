@@ -12,6 +12,8 @@
 - Firefox sets the session ID in the `o` line, but it can be changed to dash at no harm to functionality
 - The `a=mid` line name can be hardcoded to any value as long as it matched the value in the `a=group` line
 - Chrome sometimes emits a `b` line message which is safe to ignore, didn't track it down much, pretty random
+- Safari requires `navigator.mediaDevices.getUserMedia` permission to be given before it provides the host candidates, see:
+  [WebKit bug](https://bugs.webkit.org/show_bug.cgi?id=189503)
 
 ## Example SDP
 
