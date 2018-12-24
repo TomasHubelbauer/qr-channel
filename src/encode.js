@@ -61,8 +61,8 @@ export default function encode(sdp) {
       // Ignore, optional (Firefox only)
     } else if ((match = aIceUfragLineRegex.exec(line)) !== null) {
       ufrag = match[1];
-      if (!/^[a-zA-Z0-9]$/g.test(ufrag)) {
-        throw new Error('TODO: Implement escaping to QR alphanumeric alphabet');
+      if (!/^[a-zA-Z0-9]+$/g.test(ufrag)) {
+        throw new Error('TODO: Implement escaping to QR alphanumeric alphabet: ' + ufrag);
       }
       
       if (/[A-Z]/g.test(ufrag)) {
@@ -70,8 +70,8 @@ export default function encode(sdp) {
       }
     } else if ((match = aIcePwdLineRegex.exec(line)) !== null) {
       pwd = match[1];
-      if (!/^[a-zA-Z0-9]$/g.test(pwd)) {
-        throw new Error('TODO: Implement escaping to QR alphanumeric alphabet');
+      if (!/^[a-zA-Z0-9]+$/g.test(pwd)) {
+        throw new Error('TODO: Implement escaping to QR alphanumeric alphabet ' + pwd);
       }
       
       if (/[A-Z]/g.test(pwd)) {
