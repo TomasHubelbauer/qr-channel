@@ -2,6 +2,17 @@
 
 > Some notes on WebRTC
 
+## Learning Resources
+
+- [Anatomy of a WebRTC SDP](https://webrtchacks.com/sdp-anatomy/)
+- [The Minimum Viable SDP](https://webrtchacks.com/the-minimum-viable-sdp/) (with respect to the QR alphanumeric alphabet)
+
+## Browser Specific Findings
+
+- Firefox sets the session ID in the `o` line, but it can be changed to dash at no harm to functionality
+- The `a=mid` line name can be hardcoded to any value as long as it matched the value in the `a=group` line
+- Chrome sometimes emits a `b` line message which is safe to ignore, didn't track it down much, pretty random
+
 ## Example SDP
 
 - [ ] Add Safari SDP here
