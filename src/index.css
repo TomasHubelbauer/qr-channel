@@ -51,4 +51,12 @@
   #viewfinderCanvas {
     display: none;
   }
+  
+  #codeCanvas {
+    height: calc(100vw - 2vh);
+    left: 1vh;
+    position: fixed;
+    top: calc((100vh - 100vw) / 2);
+    width: calc(100vw - 2vh);
+  }
 }
