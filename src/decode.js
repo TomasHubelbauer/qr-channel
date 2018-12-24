@@ -18,8 +18,8 @@ export default function decode(value) {
 
   hash = hash.slice(0, -1);
   const id = value.slice(1 + 64, 1 + 64 + 19);
-  const ufrag = value.slice(1 + 64 + 19, value.indexOf(':')).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase());
-  const pwd = value.slice(value.indexOf(':') + ':'.length).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase());
+  const ufrag = value.slice(1 + 64 + 19, value.indexOf(':')).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
+  const pwd = value.slice(value.indexOf(':') + ':'.length).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
   
   return new RTCSessionDescription({
     type: type,
