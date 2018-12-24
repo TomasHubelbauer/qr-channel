@@ -72,7 +72,7 @@ export default function encode(sdp) {
       }
       
       if (/[A-Z]/g.test(ufrag)) {
-        throw new Error('TODO: Implement escaping casing and make casing information a part of the message');
+        throw new Error('TODO: Implement escaping casing and make casing information a part of the message: ' + ufrag);
       }
       
       ufrag = ufrag.toUpperCase();
@@ -83,7 +83,7 @@ export default function encode(sdp) {
       }
       
       if (/[A-Z]/g.test(pwd)) {
-        throw new Error('TODO: Implement escaping casing and make casing information a part of the message');
+        throw new Error('TODO: Implement escaping casing and make casing information a part of the message: ' + pwd);
       }
       
       pwd = pwd.toUpperCase();
