@@ -19,7 +19,6 @@ GitHub issues are closed, use a pull request to start discussion about a patch o
 
 Also see the `TODO` comments in the source code and MarkDown checkboxen in the other MarkDown files.
 
-- [ ] Finalize SDP encoding/decoding, particularly using string over JSON escaping and unescaping to QR alphanumeric alphabet
 - [ ] Find out if the Chrome camera stream dimensions 2x2 are a problem with my laptop only by testing on a different machine
 - [ ] Work on ICE candidate encoding/decoding similar to the SDP pipeline
 - [ ] Consider flashing SDP and ICE candidates and individual messages if the sizes work out and chunking is not needed
