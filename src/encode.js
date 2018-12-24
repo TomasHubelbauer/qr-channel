@@ -103,8 +103,10 @@ export default function encode(sdp) {
       // Ignore, random (Chrome only)
     } else if ((match = aCandidateLineRegex.exec(line)) !== null) {
       // Ignore, we handle ICE candidates separately
+      console.log('Ignoring candidate', line);
     } else {
-      throw new Error(`Unexpected SDP line '${line}' ${aCandidateLineRegex.test(line)}.`);
+      console.log(aCandidateLineRegex.match(line));
+      throw new Error(`Unexpected SDP line '${line}'.`);
     }
   }
   
