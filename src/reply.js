@@ -9,6 +9,7 @@ export default async function reply(message) {
     const sessionId = 'todo';
     const peerConnection = peerConnections[sessionId];
     // Ignore the candidate if we do not yet have the connection it belongs to
+    // TODO: Also ignore the candidate if it already has been added unless it is safe to add duplicate candidates
     if (peerConnection !== undefined) {
       const candidate = null;
       await peerConnection.addIceCandidate();
