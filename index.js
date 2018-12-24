@@ -319,7 +319,7 @@ class Scanner {
     window.requestAnimationFrame(this.scan);
   }
   
-  scan() {
+  scan = () => {
     if (this.viewfinderVideo.readyState === this.viewfinderVideo.HAVE_ENOUGH_DATA) {
       if (this.viewfinderCanvas.width !== this.viewfinderVideo.videoWidth || this.viewfinderCanvas.height !== this.viewfinderVideo.videoHeight) {
         this.viewfinderCanvas.width = this.viewfinderVideo.videoWidth;
