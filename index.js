@@ -316,10 +316,11 @@ class Scanner {
     this.viewfinderVideo = viewfinderVideo;
     this.viewfinderCanvas = viewfinderCanvas;
     this.onChunk = onChunk;
+    this.scan = this.scan.bind(this);
     window.requestAnimationFrame(this.scan);
   }
   
-  scan = () => {
+  scan() {
     if (this.viewfinderVideo.readyState === this.viewfinderVideo.HAVE_ENOUGH_DATA) {
       if (this.viewfinderCanvas.width !== this.viewfinderVideo.videoWidth || this.viewfinderCanvas.height !== this.viewfinderVideo.videoHeight) {
         this.viewfinderCanvas.width = this.viewfinderVideo.videoWidth;
