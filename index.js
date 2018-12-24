@@ -9,8 +9,6 @@ window.addEventListener('load', async () => {
    // Remember the context and refresh it when dimensions change
   let codeContext;
   
-  const chunks = [];
-  
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
   viewfinderVideo.srcObject = mediaStream;
   // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
@@ -18,64 +16,31 @@ window.addEventListener('load', async () => {
   // Play within the `getUserMedia` gesture, `autoplay` won't work
   await viewfinderVideo.play();
 
-  // Remember the context and refresh it when dimensions change
-  let viewfinderContext;
-  requestAnimationFrame(function tick() {
-    if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
-      if (viewfinderCanvas.width !== viewfinderVideo.videoWidth || viewfinderCanvas.height !== viewfinderVideo.videoHeight) {
-        viewfinderCanvas.width = viewfinderVideo.videoWidth;
-        viewfinderCanvas.height = viewfinderVideo.videoHeight;
-        viewfinderContext = viewfinderCanvas.getContext('2d');
-      }
-
-      viewfinderContext.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
-      const imageData = viewfinderContext.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
-      const code = jsQR(imageData.data, imageData.width, imageData.height);
-      if (code !== null && code.data !== '') {
-        const [index, count, text] = code.data.split('\0', 3);
-        chunks[index] = text;
-        chunksP.textContent = `Chunks (${Object.keys(chunks).length}/${count}): ` + Object.keys(chunks);
-        // Check the number of keys to ignore uninitialized array items
-        if (Object.keys(chunks).length === Number(count)) {
-          // Fire and forget
-          connect();
-        }
-      }
+  const chunks = [];
+  const scanner = new Scanner(viewfinderVideo, viewfinderCanvas, (index, count, text) => {
+    chunks[index] = text;
+    chunksP.textContent = `Chunks (${Object.keys(chunks).length}/${count}): ` + Object.keys(chunks);
+    // Check the number of keys to ignore uninitialized array items
+    if (Object.keys(chunks).length === count) {
+      // Fire and forget
+      connect();
     }
-
-    requestAnimationFrame(tick);
   });
   
   const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
   monitor(peerConnection, 'peerConnection');
   
-  peerConnection.addEventListener('signalingstatechange', () => {
-    signalingStateP.textContent += peerConnection.signalingState + '; ';
-  });
-  
-  peerConnection.addEventListener('icegatheringstatechange', () => {
-    iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ';
-  });
+  peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += peerConnection.signalingState + '; ');
+  peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ');
   
   const dataChannel = peerConnection.createDataChannel(null);
   monitor(dataChannel, 'dataChannel');
-  
-  // Start from -1 so that 0 falls on the non-empty message value (with SDP or ICE candidate SDP in it)
-  let counter = -1;
-  // TODO: Derive this not from char length but from the type number (have it not be automatic)
-  const size = 50;
-  
-  // Fire and forget now that we have all candidates
-  rotate();
-  
-  // Fire and forget so that we can keep looping messages
-  broadcast();
-  
-  async function broadcast() {
-    const sessionDescription = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(sessionDescription);
-    message += sessionDescription.type + '\0' + sessionDescription.sdp + '\0';
-  }
+      
+  const sessionDescription = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(sessionDescription);
+
+  // Start rotating now that we have SDP
+  const chunker = new Chunker(peerConnection, codeCanvas);
   
   // TODO: Handle both offer and answer cases
   // TODO: Rewrite this to be able to act on partial messages so that collection of chunks and establishment of the connection do not have to be strictly sequential
@@ -105,50 +70,6 @@ window.addEventListener('load', async () => {
     //await peerConnection.setLocalDescription(answer);
     
     alert('done');
-  }
-  
-  async function rotate() {
-    const message = peerConnection.getLocalDescription().sdp;
-    while (true) {
-      const count = Math.ceil(message.length / size);
-      const index = counter % count;
-      const code = message.substr(index * size, size);
-      //console.log({ counter, count, index, message, messageLength: message.length, code, codeLength: code.length });
-      displayMessage(`${index}\0${count}\0${code}`);
-      await new Promise((resolve, reject) => window.setTimeout(resolve, 100));
-      counter++;
-    }
-  }
-    
-  function displayMessage(message) {
-    const qr = qrcode(0, 'L');
-    qr.addData(message, 'Byte');
-    qr.make();
-    codeCanvas.title = message;
-
-    const { width, height } = codeCanvas.getBoundingClientRect();
-    if (codeCanvas.width !== width || codeCanvas.height !== height) {
-      codeCanvas.width = width;
-      codeCanvas.height = height;
-      codeContext = codeCanvas.getContext('2d');
-    } else {
-      codeContext.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
-    }
-
-    const size = Math.min(codeCanvas.width, codeCanvas.height);
-    const moduleCount = qr.getModuleCount();
-    const cellSize = size / moduleCount;
-    const ceilSize = Math.ceil(cellSize);
-
-    const x = (width - size) / 2;
-    const y = (height - size) / 2;
-    for (let cellX = 0; cellX < moduleCount; cellX++) {
-      for (let cellY = 0; cellY < moduleCount; cellY++) {
-        if (qr.isDark(cellX, cellY)) {
-          codeContext.fillRect(x + cellX * cellSize, y + cellY * cellSize, ceilSize, ceilSize);
-        }
-      }
-    }
   }
 });
 
@@ -332,3 +253,93 @@ function monitor(obj, label) {
 }
 
 rig();
+
+class Chunker {
+  constructor(peerConnection, codeCanvas) {
+    this.peerConnection = peerConnection;
+    this.codeCanvas = codeCanvas;
+    this.counter = 0;
+    // Fire and forget
+    this.rotate();
+  }
+  
+  async rotate() {
+    // TODO: Wait only until the class exists, we'll `delete` it once we have established the peer connection
+    while (true) {
+      // Show local first and remove last to ensure correct flow order
+      const message = (this.peerConnection.remoteDescription || this.peerConnection.localDescription).sdp;
+      const count = Math.ceil(this.message.length / Chunker.SIZE);
+      const index = this.counter % count;
+      const code = this.message.substr(index * Chunker.SIZE, Chunker.SIZE);
+      const chunk = `${index}\0${count}\0${code}`;
+      this.counter++;
+
+      const qr = qrcode(0, 'L');
+      qr.addData(chunk, 'Byte');
+      qr.make();
+      this.codeCanvas.title = chunk;
+
+      const { width, height } = this.codeCanvas.getBoundingClientRect();
+      if (this.codeCanvas.width !== width || this.codeCanvas.height !== height) {
+        this.codeCanvas.width = width;
+        this.codeCanvas.height = height;
+        this.codeContext = this.codeCanvas.getContext('2d');
+      } else {
+        this.codeContext.clearRect(0, 0, this.codeCanvas.width, this.codeCanvas.height);
+      }
+
+      const size = Math.min(this.codeCanvas.width, this.codeCanvas.height);
+      const moduleCount = qr.getModuleCount();
+      const cellSize = size / moduleCount;
+      const ceilSize = Math.ceil(cellSize);
+
+      const x = (width - size) / 2;
+      const y = (height - size) / 2;
+      for (let cellX = 0; cellX < moduleCount; cellX++) {
+        for (let cellY = 0; cellY < moduleCount; cellY++) {
+          if (qr.isDark(cellX, cellY)) {
+            this.codeContext.fillRect(x + cellX * cellSize, y + cellY * cellSize, ceilSize, ceilSize);
+          }
+        }
+      }
+      
+      await new Promise(resolve => window.setTimeout(resolve, 100));
+    }
+  }
+}
+
+// TODO: Use a fixed chunk size derived from a set QR code type number chosen based on the screen size (big desktop, small mobile)
+Chunker.SIZE = 50;
+
+class Scanner {
+  constructor(viewfinderVideo, viewfinderCanvas, onChunk) {
+    this.viewfinderVideo = viewfinderVideo;
+    this.viewfinderCanvas = viewfinderCanvas;
+    this.onChunk = onChunk;
+    window.requestAnimationFrame(this.scan);
+  }
+  
+  scan() {
+    if (this.viewfinderVideo.readyState === this.viewfinderVideo.HAVE_ENOUGH_DATA) {
+      if (this.viewfinderCanvas.width !== this.viewfinderVideo.videoWidth || this.viewfinderCanvas.height !== this.viewfinderVideo.videoHeight) {
+        this.viewfinderCanvas.width = this.viewfinderVideo.videoWidth;
+        this.viewfinderCanvas.height = this.viewfinderVideo.videoHeight;
+        this.viewfinderContext = this.viewfinderCanvas.getContext('2d');
+      }
+
+      this.viewfinderContext.drawImage(this.viewfinderVideo, 0, 0, this.viewfinderVideo.videoWidth, this.viewfinderVideo.videoHeight);
+      const imageData = this.viewfinderContext.getImageData(0, 0, this.viewfinderCanvas.width, this.viewfinderCanvas.height);
+      const code = jsQR(imageData.data, imageData.width, imageData.height);
+      if (code !== null && code.data !== '') {
+        const [index, count, text] = code.data.split('\0', 3);
+        this.onChunk(Number(index), Number(coubt), text);
+      }
+    }
+
+    requestAnimationFrame(this.scan);
+  }
+}
+
+class Coder {
+  // TODO: Move encoding and decoding here, regexes to static class fields
+}
