@@ -72,7 +72,11 @@ export default function encode(sdp) {
       }
       
       if (/[A-Z]/g.test(ufrag)) {
-        throw new Error('TODO: Implement escaping casing and make casing information a part of the message: ' + ufrag);
+        if (ufrag.includes('/')) {
+          throw new Error('TODO: Implement escaping casing even for values containing slashes: ' + ufrag);
+        }
+            
+        ufrag = ufrag.replace(/[A-Z]/g, m => '/' + m[0]);
       }
       
       ufrag = ufrag.toUpperCase();
@@ -83,7 +87,11 @@ export default function encode(sdp) {
       }
       
       if (/[A-Z]/g.test(pwd)) {
-        throw new Error('TODO: Implement escaping casing and make casing information a part of the message: ' + pwd);
+        if (pwd.includes('/')) {
+          throw new Error('TODO: Implement escaping casing even for values containing slashes: ' + pwd);
+        }
+            
+        pwd = pwd.replace(/[A-Z]/g, m => '/' + m[0]);
       }
       
       pwd = pwd.toUpperCase();
