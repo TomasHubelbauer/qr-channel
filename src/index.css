@@ -27,7 +27,7 @@ body {
   #viewfinderVideo {
     right: 1vw;
     top: 1vw;
-    width: calc((100vw - 100vh) / 2 - 2vw);
+    width: calc((100vw - 100vh) / 2 - 1vw);
   }
   
   #codeCanvas {
