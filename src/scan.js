@@ -32,7 +32,7 @@ export default function scan(onMessage) {
           chunks = [];
         }
         
-        chunksP.textContent = `Chunks (${Object.keys(chunks).length}/${count}): ` + Object.keys(chunks);
+        chunksP.innerHTML = Array(count).map(i => `<input type='checkbox' disabled${chunks[i] !== undefined ? 'checked' : ''} />`).join('');
       }
     }
 
