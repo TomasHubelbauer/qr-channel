@@ -1,37 +1,36 @@
-html {
-  height: 100%;
-}
-
-body {
-  display: flex;
-  height: 100%;
-  margin: 0;
-}
-
-#viewfinderVideo {
-  opacity: .1;
-}
-
-#viewfinderCanvas {
-  display: none;
-}
-
-#logsP {
-  font-family: monospace;
-  overflow: scroll;
-  white-space: pre;
-}
-
 @media only screen and (orientation : landscape) {
+  html {
+    height: 100%;
+  }
+
+  body {
+    display: flex;
+    height: 100%;
+    margin: 0;
+  }
+
   #viewfinderVideo {
     flex: 1;
+    opacity: .1;
+  }
+
+  #viewfinderCanvas {
+    display: none;
   }
   
   #codeCanvas {
-    width: 100vh;
+    margin: 1vw;
+    width: calc(100vh - 2vw);
   }
   
   #debugDiv {
     flex: 1;
+    overflow: scroll;
+  }
+
+  #logsP {
+    font-family: monospace;
+    overflow: scroll;
+    white-space: pre;
   }
 }
