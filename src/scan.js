@@ -14,6 +14,7 @@ export default function scan(onChunk) {
       viewfinderContext.drawImage(viewfinderVideo, 0, 0, viewfinderVideo.videoWidth, viewfinderVideo.videoHeight);
       const imageData = viewfinderContext.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
       const code = jsQR(imageData.data, imageData.width, imageData.height);
+      document.title = code;
       if (code !== null && code.data !== '') {
         const [index, count, text] = code.data.split('\0', 3);
         onChunk(Number(index), Number(coubt), text);
