@@ -1,4 +1,4 @@
-impprt scan from './scan.js';
+import scan from './scan.js';
 import encode from './encode.js';
 import decode from './decode.js';
 
