@@ -98,7 +98,7 @@ export default function encode(sdp) {
   
   let value = '';
   // Encode three bits of information into one alphanumeric character to save space
-  switch (type + '+' media) {
+  switch (type + '+' + media) {
     case 'offer+firefox': value += 'O'; break;
     case 'offer+chrome': value += 'P'; break;
     case 'answer+firefox': value += 'A'; break;
