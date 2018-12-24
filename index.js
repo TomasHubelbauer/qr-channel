@@ -233,7 +233,7 @@ function encode(sdp) {
 function decode(data) {
   const value = [
     'v=0',
-    `o=- ${data.sessionId} ${data.sessionVersion} IN IP4 ${data.ipv4}`,
+    `o=- ${data.sessionId} ${data.sessionVersion} IN IP4 0.0.0.0`,
     's=-',
     't=0 0',
     `a=fingerprint:sha-256 ${data.hash}`,
