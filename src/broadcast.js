@@ -51,7 +51,7 @@ export default async function broadcast() {
 }
 
 // TODO: Remove the function if it turns out chunking is not needed
-function _broadcast(peerConnection) {
+async function _broadcast(peerConnection) {
   const codeCanvas = document.querySelector('#codeCanvas');
   let codeContext;
   let counter = 0;
