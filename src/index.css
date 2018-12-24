@@ -28,6 +28,10 @@ body {
   }
   
   #codeCanvas {
+    width: 100vh;
+  }
+  
+  #debugDiv {
     flex: 1;
   }
 }
