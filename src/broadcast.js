@@ -5,7 +5,7 @@ export default async function broadcast(peerConnection) {
   const signalingStateP = document.querySelector('#signalingStateP');
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
 
-  typeP.textContent = peerConnection.type;
+  typeP.textContent = peerConnection.localDescription.type;
   peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += peerConnection.signalingState + '; ');
   peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ');
   
@@ -14,7 +14,7 @@ export default async function broadcast(peerConnection) {
   let counter = 0;
   while (true) {
     // Note that this is updated in any iteration to capture new candidates as they come
-    const { sdp, ices } = encode(peerConnection.remoteDescription || peerConnection.localDescription);
+    const { sdp, ices } = encode(peerConnection.localDescription);
     const count = 1 + ices.length;
     const index = counter % count;
     let message;
