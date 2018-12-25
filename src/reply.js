@@ -39,7 +39,7 @@ export default async function reply(message) {
   const sessionDescription = decode(message);
   switch (sessionDescription.type) {
     case 'offer': {
-      // Decode the session ID separately to avoid parsing the SDP
+      // Decode the session ID separately to avoid parsing the SDP again
       const idLength = Number(message[1]) + 10;
       const id = message.slice(2 + 64, 2 + 64 + idLength);
       
@@ -60,6 +60,11 @@ export default async function reply(message) {
       break;
     }
     case 'answer': {
+      // Ignore the answer if it has already been set and we're seeing it again
+      if (me.remoteDescription !== null) {
+        break;
+      }
+      
       await me.setRemoteDescription(sessionDescription);
       // TODO: Ensure answer candidates are added my the `me` offering connection
       break;
