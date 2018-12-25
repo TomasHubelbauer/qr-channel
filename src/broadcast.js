@@ -12,9 +12,6 @@ export default function broadcast(connection) {
   const signalingStateP = document.querySelector('#signalingStateP');
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
 
-  typeP.textContent += ' → ' + peerConnection.localDescription.type;
-  peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += ' → ' + peerConnection.signalingState);
-  peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += ' → ' + peerConnection.iceGatheringState);
   if (peerConnection === undefined) {
     peerConnection = connection;
     // Fire and forget a rotation in an independent flow
@@ -23,6 +20,10 @@ export default function broadcast(connection) {
     // Replace and reuse the existing rotation
     peerConnection = connection;
   }
+  
+  typeP.textContent += ' → ' + peerConnection.localDescription.type;
+  peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += ' → ' + peerConnection.signalingState);
+  peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += ' → ' + peerConnection.iceGatheringState);
 }
 
 async function rotate() {
