@@ -3,6 +3,8 @@
 This is an experiment in establishing WebRTC peer connection with a data channel between two devices equipped with web cams by
 exchanging QR codes with offer/answer SDP data and ICE candidate data.
 
+I also have a Web Bluetooth based solution in the works, [BT Channel](https://github.com/TomasHubelbauer/bt-channel).
+
 ## Running
 
 [
