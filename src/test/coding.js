@@ -3,7 +3,7 @@ import log from '../log.js';
 import encode from '../encode.js';
 import decode from '../decode.js';
 
-export default async function test() {
+export default async function coding() {
   try {
     // Obtain a dummy media stream first so that iOS Safari reveals host candidates (permissions need to be granted for that)
     const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
