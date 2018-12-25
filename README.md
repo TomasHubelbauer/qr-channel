@@ -28,6 +28,7 @@ Also see the `TODO` comments in the source code and MarkDown checkboxen in the o
   - [ ] Document this in the Debugging section above once added
 - [ ] Set up Azure Pipelines build which runs TypeScript over the solution and does JavaScript checking on the repository
 - [ ] Fix `broadcast.js` so that it only ever loops one thing at once, break out if the previous loop before starting the next
+- [ ] Consider changing the format to `(ID)(O/A)(hash)(ufrag):(pwd)` so that we can drop the session ID length character
 
 ## Crediting
 
