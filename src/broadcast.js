@@ -5,9 +5,9 @@ export default async function broadcast(peerConnection) {
   const signalingStateP = document.querySelector('#signalingStateP');
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
 
-  typeP.textContent += peerConnection.localDescription.type + '; ';
-  peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += peerConnection.signalingState + '; ');
-  peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ');
+  typeP.textContent += ' → ' + peerConnection.localDescription.type;
+  peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += ' → ' + peerConnection.signalingState);
+  peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += ' → ' + peerConnection.iceGatheringState);
   
   const codeCanvas = document.querySelector('#codeCanvas');
   let codeContext;
