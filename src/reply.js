@@ -3,10 +3,12 @@ import monitor from './monitor.js';
 import broadcast from './broadcast.js';
 
 const peerConnections = {};
+let me;
 export default async function reply(message) {
   // Display the initial welcome offer which either will be replied to or replaced with a peer's offer
   if (message === undefined) {
     const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+    me = peerConnection;
     monitor(peerConnection, 'peerConnection');
     
     const dataChannel = peerConnection.createDataChannel(null);
@@ -21,7 +23,6 @@ export default async function reply(message) {
   
   if (message.startsWith('a=candidate:')) {
     const [sdp, id] = message.split('\n');
-    console.log('ice', id, sdp);
     const peerConnection = peerConnections[id];
     if (peerConnection !== undefined) {
       // Avoid adding the candidate multiple times
@@ -46,8 +47,7 @@ export default async function reply(message) {
       if (peerConnections[id] !== undefined) {
         break;
       }
-      
-      console.log('sdp', id);
+
       const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
       peerConnections[id] = peerConnection;
       monitor(peerConnection, 'peerConnection');
@@ -60,7 +60,8 @@ export default async function reply(message) {
       break;
     }
     case 'answer': {
-      throw new Error('TODO: Implement handling answer to my own offer');
+      await me.setRemoteDescription(sessionDescription);
+      // TODO: Ensure answer candidates are added my the `me` offering connection
       break;
     }
     default: {
