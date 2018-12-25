@@ -35,7 +35,7 @@ async function rotate() {
     const { sdp, ices } = encode(sessionDescription);
     const count = 1 + ices.length;
     const index = counter % count;
-    console.log('stepping', count, index);
+    console.log('stepping', count, index, sdp, ices);
     let message;
     let mode;
     if (index === 0) {
