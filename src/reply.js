@@ -3,8 +3,7 @@ import monitor from './monitor.js';
 import broadcast from './broadcast.js';
 import identify from './identify.js';
 
-// TODO: Fix the A candidates never reaching B because we fight over one QR code not two, the test should simulate 2 or use a frame
-// TODO: Find a way to make sure the candidates reach the right peer connection
+// TODO: Finalize a mechanism for candidates reaching the right peer connection
 
 let me;
 let peerId;
@@ -24,7 +23,7 @@ export default async function reply(message) {
     
     broadcast(me);
     
-    log('Creates a welcome peer connection with a data channel, an offer, sets if as its local description and displays its SDP and ICE');
+    log('create welcome PC with DC, create O, sets O to LD, display O SDP&ICE, O-LD ID:', me.id);
     
     return;
   }
@@ -37,7 +36,7 @@ export default async function reply(message) {
       return;
     }
 
-    log(`Notices candidate from', id, 'own ID is', me.id, 'peer ID is', peerId, 'and adds the ICE candidate to its peer connection maybe`, me.remoteDescription);
+    log(`notice C from', id, 'md ID:', me.id, 'peer ID:', peerId, ', add C to PC, has RD:`, !!me.remoteDescription);
     
     // TODO: me.remoteDescription / peerId
     if (undefined !== undefined) {
@@ -76,7 +75,7 @@ export default async function reply(message) {
       
       broadcast(me);
       
-      log('Notices the offer SDP, abandons the welcome peer connection with a data channel, creates a peer connection without a data channel, ets the noticed offer as its remote description, creates an answer and sets it to its local description, displays the answer SDP and its ICE candidate SDPs. Peer ID', peerId, 'me ID', me.id);
+      log('otices O, abandon welcome PC with DC, create OC without DC, set O to RC, create A, set A to LD, display A SDP&ICE, peer ID:', peerId, 'me ID:', me.id);
 
       break;
     }
@@ -90,7 +89,7 @@ export default async function reply(message) {
             
       await me.setRemoteDescription(sessionDescription);
       
-      log('Notices the answer SDP, sets the noticed answer as its remote description', id);
+      log('notice A, set A to RD, me ID:', id);
       
       break;
     }
