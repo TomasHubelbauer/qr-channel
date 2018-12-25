@@ -16,12 +16,12 @@ export default function broadcast(connection) {
   peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += ' → ' + peerConnection.signalingState);
   peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += ' → ' + peerConnection.iceGatheringState);
   if (peerConnection === undefined) {
-    peerConnection = pc;
+    peerConnection = connection;
     // Fire and forget a rotation in an independent flow
     rotate();
   } else {
     // Replace and reuse the existing rotation
-    peerConnection = pc;
+    peerConnection = connection;
   }
 }
 
