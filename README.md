@@ -37,7 +37,7 @@ Also see the `TODO` comments in the source code and MarkDown checkboxen in the o
 - [ ] Try encoding ICE like SDP so it might fit on a single QR code and we'd alternate only two QR codes, SDP and ICE
 - [ ] Consider changing the format to `(ID)(O/A)(hash)(ufrag):(pwd)` so that we can drop the session ID length character
 - [ ] Consider using JSDoc to aid TypeScript with type checking
-- [ ] Revisit how typings are added, `types` seems to only support `@types`, so maybe `npm install` will need to be used
+- [ ] Add `npm install` of packages used to the CI definition or introduce `package.json` with TypeScript and them for typings
 
 ## Crediting
 
