@@ -3,7 +3,7 @@ import scan from './scan.js';
 import reply from './reply.js';
 
 window.addEventListener('load', async () => {
-  await test();
+  //await test();
   
   // Fire and forget infinite scanning for QR codes
   scan(reply);
