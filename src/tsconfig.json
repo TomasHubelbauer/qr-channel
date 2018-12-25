@@ -10,6 +10,7 @@
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
     "extendedDiagnostics": true,
-    "noEmit": true
+    "noEmit": true,
+    "target": "esnext"
   }
 }
