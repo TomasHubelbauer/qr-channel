@@ -94,7 +94,8 @@ export default function encode(sdp) {
     } else if (line === 'b=AS:30') {
       // Ignore, random (Chrome only)
     } else if ((match = line.match(aCandidateLineRegex)) !== null) {
-      ices.push(match[0]);
+      // Link the candidate with the connection by the session ID so that response can assign it correctly
+      ices.push(match[0] + '\n' + id);
     } else if (line === 'a=end-of-candidates') {
       // Ignore, no data
     } else {
