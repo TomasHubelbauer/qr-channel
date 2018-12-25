@@ -1,4 +1,4 @@
-export default function replying(onReply) {
+export default async function replying(onReply) {
   const codeCanvas = document.querySelector('#codeCanvas');
   while (true) {
     const context = codeCanvas.getContext('2d');
@@ -8,5 +8,7 @@ export default function replying(onReply) {
       console.log(code.data);
       // TODO: Interpret the code given own state and reply using `onReply`
     }
+    
+    await new Promise(resolve => window.setTimeout(resolve, 1000));
   }
 }
