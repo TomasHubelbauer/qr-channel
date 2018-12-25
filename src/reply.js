@@ -9,7 +9,11 @@ export default async function reply(message) {
     const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
     monitor(peerConnection, 'peerConnection');
     
-    peerConnection.addEventListener('icecandidate', event => console.log(event.candidate, peerConnection.localDescription));
+    // TODO: Find out why this is needed when it was not before, the candidates were being added to the description automatically
+    peerConnection.addEventListener('icecandidate', event => {
+      peerConnection.addIceCandidate(event.candidate);
+      console.log(event.candidate, peerConnection.localDescription);
+    });
 
     const dataChannel = peerConnection.createDataChannel(null);
     monitor(dataChannel, 'dataChannel');
