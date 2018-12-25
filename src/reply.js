@@ -8,6 +8,8 @@ export default async function reply(message) {
   if (message === undefined) {
     const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
     monitor(peerConnection, 'peerConnection');
+    
+    peerConnection.addEventListener('icecandidate', event => console.log(event.candidate, peerConnection.localDescription));
 
     const dataChannel = peerConnection.createDataChannel(null);
     monitor(dataChannel, 'dataChannel');
