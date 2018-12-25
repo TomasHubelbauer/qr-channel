@@ -1,7 +1,7 @@
-export default async function replying(onReply) {
+export default async function replying(onMessage) {
   const codeCanvas = document.querySelector('#codeCanvas');
   while (true) {
-    console.log(codeCanvas.title);
+    onMessage(codeCanvas.title);
     
     await new Promise(resolve => window.setTimeout(resolve, 1000));
   }
