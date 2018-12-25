@@ -24,15 +24,16 @@ export default async function scan(onMessage) {
     requestAnimationFrame(recognize);
   });
   
-  // Note that duplicate handlers will be discarded so it's okay to add this every time
-  facingModeSelect.addEventListener(onFacingModeSelectChange);
+  await obtain(localStorage['facingMode'] || 'environment');
   
-  // TODO: Read the initial value from local storage
-  await obtain('environment');
+  // Note that duplicate handlers will be discarded so it's okay to add this every time
+  facingModeSelect.addEventListener('change', onFacingModeSelectChange);
 }
 
 function onFacingModeSelectChange(event) {
-  console.log(event);
+  const facingMode = event.currentTarget.value;
+  localStorage['facingMode'] = facingMode;
+  obtain(facingMode);
 }
 
 function obtain(facingMode) {
