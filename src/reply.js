@@ -18,18 +18,18 @@ export default async function reply(message) {
     const dataChannel = me.createDataChannel(null);
     monitor(dataChannel, 'dataChannel');
     
-    console.log('Peer A creates a peer connection with a data channel');
+    console.log('Creates a peer connection with a data channel');
 
     const sessionDescription = await me.createOffer();
     await me.setLocalDescription(sessionDescription);
     
     me.id = identify(me.localDescription);
     
-    console.log('Peer A creates an offer and sets it as its local description', identify(me.localDescription));
+    console.log('Creates an offer and sets it as its local description', identify(me.localDescription));
     
     broadcast(me);
     
-    console.log('Peer A displays the offer SDP and its ICE candidate SDPs', identify(me.localDescription));
+    console.log('Displays the offer SDP and its ICE candidate SDPs', identify(me.localDescription));
     
     return;
   }
@@ -37,14 +37,15 @@ export default async function reply(message) {
   if (message.startsWith('a=candidate:')) {
     const [sdp, id] = message.split('\n');
     
+    console.log('Receives candidate from connection with offer/answer', id);
+    
     // Ignore candidates from self, they belong to the peer
     if (id === me.id) {
-      console.log('Ignore own candidate');
+      console.log('Ignores own candidate');
       return;
     }
 
-    console.log('Candidate from connection with offer/answer', id);
-    console.log(`Peer ? notices peer ? candidate SDP and adds the ICE candidate to its peer connection`);
+    console.log(`Notices candidate SDP and adds the ICE candidate to its peer connection`);
     
     if (undefined !== undefined) {
       // Avoid adding the candidate multiple times
@@ -68,27 +69,27 @@ export default async function reply(message) {
         break;
       }
       
-      console.log('Peer B notices the offer SDP', id);
+      console.log('Notices the offer SDP', id);
 
       peer = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
       monitor(peer, 'peerConnection');
       
-      console.log('Peer B creates a peer connection without a data channel');
+      console.log('Creates a peer connection without a data channel');
       
       await peer.setRemoteDescription(sessionDescription);
       
-      console.log('Peer B sets the noticed offer as its remote description', id);
+      console.log('Sets the noticed offer as its remote description', id);
       
       const answer = await peer.createAnswer();
       await peer.setLocalDescription(answer);
       
       peer.id = identify(peer.localDescription);
       
-      console.log('Peer B creates an answer and sets it to its local description', identify(peer.localDescription));
+      console.log('Creates an answer and sets it to its local description', identify(peer.localDescription));
       
       broadcast(peerConnection);
       
-      console.log('Peer B displays the answer SDP and its ICE candidate SDPs', identify(peer.localDescription));
+      console.log('Displays the answer SDP and its ICE candidate SDPs', identify(peer.localDescription));
       
       break;
     }
@@ -100,11 +101,11 @@ export default async function reply(message) {
       
       const id = identify(sessionDescription);
       
-      console.log('Peer A notices the answer SDP', id);
+      console.log('Notices the answer SDP', id);
             
       await me.setRemoteDescription(sessionDescription);
       
-      console.log('Peer A sets the noticed answer as its remote description', id);
+      console.log('Sets the noticed answer as its remote description', id);
       
       // TODO: Ensure answer candidates are added my the `me` offering connection
       break;
