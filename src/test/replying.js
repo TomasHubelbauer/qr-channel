@@ -6,6 +6,7 @@ export default async function replying(onMessage) {
     if (message === '') {
       continue;
     }
+    
     onMessage(codeCanvas.title);
   }
 }
