@@ -75,7 +75,7 @@ export default async function reply(message) {
       
       broadcast(me);
       
-      log('otices O, abandon welcome PC with DC, create OC without DC, set O to RC, create A, set A to LD, display A SDP&ICE, peer ID:', peerId, 'me ID:', me.id);
+      log('notice O, abandon welcome PC with DC, create PC without DC, set O to RC, create A, set A to LD, display A SDP&ICE, peer ID:', peerId, 'me ID:', me.id);
 
       break;
     }
