@@ -64,7 +64,7 @@ export default async function reply(message) {
       const id = identify(sessionDescription);
       
       // Ignore an offer in case we're already answering to any
-      if (peer !== undefined) {
+      if (peerId !== undefined) {
         break;
       }
       
