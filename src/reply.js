@@ -23,6 +23,8 @@ export default async function reply(message) {
     const sessionDescription = await me.createOffer();
     await me.setLocalDescription(sessionDescription);
     
+    me.id = identify(me.localDescription);
+    
     console.log('Peer A creates an offer and sets it as its local description', identify(me.localDescription));
     
     broadcast(me);
@@ -34,6 +36,12 @@ export default async function reply(message) {
   
   if (message.startsWith('a=candidate:')) {
     const [sdp, id] = message.split('\n');
+    
+    // Ignore candidates from self, they belong to the peer
+    if (id === me.id) {
+      console.log('Ignore own candidate');
+      return;
+    }
 
     console.log('Candidate from connection with offer/answer', id);
     console.log(`Peer ? notices peer ? candidate SDP and adds the ICE candidate to its peer connection`);
@@ -73,6 +81,8 @@ export default async function reply(message) {
       
       const answer = await peer.createAnswer();
       await peer.setLocalDescription(answer);
+      
+      peer.id = identify(peer.localDescription);
       
       console.log('Peer B creates an answer and sets it to its local description', identify(peer.localDescription));
       
