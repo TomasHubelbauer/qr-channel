@@ -39,8 +39,8 @@ export default function encode(sdp) {
       // Ignore, no data
     } else if ((match = line.match(oLineRegex)) !== null) {
       id = match[1];
-      if (id.length !== 19 && id.length !== 18) {
-        throw new Error(`TODO: Implement a mechanism for handling IDs that are not 18-19 digits long: ${id} (${id.length})`);
+      if (id.length < 10 && id.length > 19) {
+        throw new Error(`TODO: Implement a mechanism for handling IDs that are not 10-19 digits long: ${id} (${id.length})`);
       }
     } else if ((match = line.match(sLineRegex)) !== null) {
       // Ignore, no data
@@ -104,18 +104,14 @@ export default function encode(sdp) {
   
   let value = '';
   // Encode multiple bits of information into one alphanumeric character to save space
-  switch (type + '+' + media + '+' + id.length) {
+  switch (type + '+' + media) {
     case 'offer+firefox+19': value += 'O'; break;
     case 'offer+chrome+19': value += 'P'; break;
-    case 'offer+firefox+18': value += 'Q'; break;
-    case 'offer+chrome+18': value += 'R'; break;
     case 'answer+firefox+19': value += 'A'; break;
     case 'answer+chrome+19': value += 'B'; break;
-    case 'answer+firefox+18': value += 'C'; break;
-    case 'answer+chrome+18': value += 'D'; break;
   }
   
-  // TODO: Rebase the ID from decimal to QR-alphanumeral (base 43 excluding the colon) if it beats a fixed 18-19 digit slice
-  value += hash + id + ufrag + ':' + pwd;
+  // TODO: Rebase the ID from decimal to QR-alphanumeral (base 43 excluding the colon) if it beats a fixed 10-19 digit slice
+  value += hash + (id.length / 10).toString() + id + ufrag + ':' + pwd;
   return { sdp: value, ices };
 }
