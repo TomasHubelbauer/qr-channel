@@ -34,7 +34,15 @@ export default async function reply(message) {
     const [sdp, id] = message.split('\n');
     const peerConnection = peerConnections[id];
     
-    console.log(`Peer ? notices peer ? candidate SDP and adds the ICE candidate to its peer connection`, identify(peerConnection.localDescription), identify(peerConnection.remoteDescription));
+    console.log('Candidate from connection with ID:', id);
+    if (peerConnection !== undefined) {
+      console.log('Local description:', identify(peerConnection.localDescription));
+      console.log('Remote description:', identify(peerConnection.remoteDescription));
+    } else {
+      console.log('The connection was not found');
+    }
+
+    console.log(`Peer ? notices peer ? candidate SDP and adds the ICE candidate to its peer connection`);
     
     if (peerConnection !== undefined) {
       // Avoid adding the candidate multiple times
