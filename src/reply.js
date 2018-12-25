@@ -3,7 +3,6 @@ import monitor from './monitor.js';
 import broadcast from './broadcast.js';
 
 const peerConnections = {};
-
 export default async function reply(message) {
   // Display the initial welcome offer which either will be replied to or replaced with a peer's offer
   if (message === undefined) {
@@ -27,12 +26,14 @@ export default async function reply(message) {
     if (peerConnection !== undefined) {
       // Avoid adding the candidate multiple times
       if (!peerConnection.remoteDescription.split(/\r\n/g).includes(sdp)) {
+        console.log('adding', sdp, peerConnection.remoteDescription.sdp);
         await peerConnection.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
         console.log('added', sdp, peerConnection.remoteDescription.sdp);
       } else {
         console.log('ignored', sdp);
       }
     } else {
+      console.log('stored');
       // TODO: Store the canndidate for if the connection comes later
     }
     
@@ -45,6 +46,12 @@ export default async function reply(message) {
       // Decode the session ID separately to avoid parsing the SDP
       const idLength = Number(message[1]) + 10;
       const id = message.slice(2 + 64, 2 + 64 + idLength);
+      
+      // Ignore the offer in case we're already answering to it
+      if (peerConnections[id] !== undefined) {
+        break;
+      }
+      
       console.log('sdp', id);
       const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
       peerConnections[id] = peerConnection;
