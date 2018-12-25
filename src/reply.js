@@ -4,6 +4,9 @@ import broadcast from './broadcast.js';
 import log from './log.js';
 import identify from './identify.js';
 
+// TODO: Fix the A candidates never reaching B because we fight over one QR code not two, the test should simulate 2 or use a frame
+// TODO: Fix the candidates bundling the ID of their originating connection, they should have the destination one's or we keep a map
+
 const peerConnections = {};
 let me;
 export default async function reply(message) {
