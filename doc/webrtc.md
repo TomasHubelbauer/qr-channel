@@ -7,6 +7,37 @@
 - [Anatomy of a WebRTC SDP](https://webrtchacks.com/sdp-anatomy/)
 - [The Minimum Viable SDP](https://webrtchacks.com/the-minimum-viable-sdp/) (with respect to the QR alphanumeric alphabet)
 
+## Flow
+
+- Peer A creates a peer connection with a data channel
+- Peer A creates an offer and sets it as its local description
+- Peer A displays the offer SDP and its ICE candidate SDPs
+
+---
+
+- Peer B notices the offer SDP
+- Peer B creates a peer connection without a data channel
+- Peer B sets the noticed offer as its remote description
+- Peer B creates an answer and sets it to its local description
+- Peer B displays the answer SDP and its ICE candidate SDPs
+
+---
+
+- Peer B notices peer A candidate SDP and adds the ICE candidate
+
+---
+
+- Peer A notices the answer SDP
+- Peer A sets the noticed answer as its remote description
+
+---
+
+- Peer A notices peer B candidate SDP and adds the ICE candidate
+
+---
+
+- At some point the data channel opens for both
+
 ## Browser Specific Findings
 
 - Firefox sets the session ID in the `o` line, but it can be changed to dash at no harm to functionality
