@@ -17,7 +17,10 @@ export default async function replying(onReply) {
       imageData.data[i] = imageData.data[i + 4 * intensity];
     }
     
+    const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
+    const viewfinderContext = viewfinderCanvas.getContext('2d');
     context.putImageData(imageData, 0, 0);
+    viewfinderContext.putImageData(imageData, 0, 0);
     
     const code = jsQR(imageData.data, imageData.width, imageData.height);
     console.log(canvas.toDataURL(), code);
