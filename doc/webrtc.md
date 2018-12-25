@@ -14,6 +14,8 @@
 - Chrome sometimes emits a `b` line message which is safe to ignore, didn't track it down much, pretty random
 - Safari requires `navigator.mediaDevices.getUserMedia` permission to be given before it provides the host candidates, see:
   [WebKit bug](https://bugs.webkit.org/show_bug.cgi?id=189503)
+- `RTCPeerConnection`, upon gathering an ICE candidate, will replace (not update) the `localDescription` object
+  (so any references to the old session description will always contain SDP without the ICE candidate lines)
 
 ## Example SDP
 
