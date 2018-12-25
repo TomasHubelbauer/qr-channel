@@ -26,7 +26,9 @@ export default async function reply(message) {
     const peerConnection = peerConnections[id];
     if (peerConnection !== undefined) {
       // TODO: Ignore the candidate if it already has been added unless it is safe to add duplicate candidate
-      await peerConnection.addIceCandidate(new RTCIceCandidate({ candidate: sdp }));
+      // Note that we're using the SDP line here not the init dict because I don't know how to populate sdpMid and sdpMLineIndex from it
+      // https://developer.mozilla.org/en-US/docs/Web/API/RTCIceCandidate#Constructor
+      await peerConnection.addIceCandidate(new RTCIceCandidate(sdp));
     } else {
       // TODO: Store the canndidate for if the connection comes later
     }
