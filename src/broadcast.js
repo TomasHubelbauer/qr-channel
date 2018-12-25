@@ -1,6 +1,14 @@
 import encode from './encode.js';
 
-export default async function broadcast(peerConnection) {
+export default async function broadcast(peerConnection, label) {
+  const typeP = document.querySelector('#typeP');
+  const signalingStateP = document.querySelector('#signalingStateP');
+  const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
+
+  typeP.textContent = label;
+  peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += peerConnection.signalingState + '; ');
+  peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ');
+  
   const codeCanvas = document.querySelector('#codeCanvas');
   let codeContext;
   let counter = 0;
