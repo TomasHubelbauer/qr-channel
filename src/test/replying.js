@@ -8,7 +8,7 @@ export default async function replying(onReply) {
     context.drawImage(codeCanvas, 5, 5);
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     const code = jsQR(imageData.data, imageData.width, imageData.height);
-    console.log(canvas.toBaseURI(), code);
+    console.log(canvas.toDataURL(), code);
     if (code !== null && code.data !== '') {
       // TODO: Interpret the code given own state and reply using `onReply`
     }
