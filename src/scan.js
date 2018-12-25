@@ -30,13 +30,13 @@ export default async function scan(onMessage) {
   facingModeSelect.addEventListener('change', onFacingModeSelectChange);
 }
 
-function onFacingModeSelectChange(event) {
+async function onFacingModeSelectChange(event) {
   const facingMode = event.currentTarget.value;
   localStorage['facingMode'] = facingMode;
-  obtain(facingMode);
+  await obtain(facingMode);
 }
 
-function obtain(facingMode) {
+async function obtain(facingMode) {
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode } });
   viewfinderVideo.srcObject = mediaStream;
   // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
