@@ -23,7 +23,7 @@ export default async function reply(message) {
     
     broadcast(me);
     
-    log('create welcome PC with DC, create O, sets O to LD, display O SDP&ICE, O-LD ID:', me.id);
+    log('create welcome PC with DC, create O, sets O to LD, display O SDP&ICE, me O-LD ID:', me.id);
     
     return;
   }
@@ -36,7 +36,7 @@ export default async function reply(message) {
       return;
     }
 
-    log(`notice C from', id, 'md ID:', me.id, 'peer ID:', peerId, ', add C to PC, has RD:`, !!me.remoteDescription);
+    log('notice C from', id, 'me ID:', me.id, 'peer ID:', peerId, ', add C to PC, has RD:', !!me.remoteDescription);
     
     // TODO: me.remoteDescription / peerId
     if (undefined !== undefined) {
@@ -75,7 +75,7 @@ export default async function reply(message) {
       
       broadcast(me);
       
-      log('notice O, abandon welcome PC with DC, create PC without DC, set O to RC, create A, set A to LD, display A SDP&ICE, peer ID:', peerId, 'me ID:', me.id);
+      log('notice O, abandon welcome PC with DC, create PC without DC, set O to RC, create A, set A to LD, display A SDP&ICE, peer ID:', peerId, 'me A-LD ID:', me.id);
 
       break;
     }
