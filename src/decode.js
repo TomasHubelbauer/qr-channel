@@ -17,7 +17,7 @@ export default function decode(value) {
   }
 
   hash = hash.slice(0, -1);
-  const idLength = Number(value[1]) * 10;
+  const idLength = Number(value[1]) + 10;
   const id = value.slice(2 + 64, 2 + 64 + idLength);
   const ufrag = value.slice(2 + 64 + idLength, value.indexOf(':')).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
   const pwd = value.slice(value.indexOf(':') + ':'.length).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
