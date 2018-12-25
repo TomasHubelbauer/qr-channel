@@ -42,9 +42,10 @@
 @media only screen and (orientation: portrait) {
   #viewfinderVideo {
     bottom: 1vw;
+    max-height: 25%;
+    max-width: 25%;
     position: fixed;
     right: 1vw;
-    width: 25vw;
   }
   
   #viewfinderCanvas {
