@@ -1,5 +1,6 @@
 export default async function replying(onMessage) {
   const codeCanvas = document.querySelector('#codeCanvas');
+  await new Promise(resolve => window.setTimeout(resolve, 1000));
   while (true) {
     await new Promise(resolve => window.setTimeout(resolve, 100));
     const message = codeCanvas.title;
