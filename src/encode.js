@@ -36,6 +36,7 @@ export default function encode(sdp) {
   let ices = [];
   let match;
   for (const line of sdp.sdp.split(/\r\n/g)) {
+    console.log(line);
     if ((match = line.match(vLineRegex)) !== null) {
       // Ignore, no data
     } else if ((match = line.match(oLineRegex)) !== null) {
