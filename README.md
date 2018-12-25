@@ -26,6 +26,7 @@ Also see the `TODO` comments in the source code and MarkDown checkboxen in the o
   - The portrait one is production screen to screen workflow where the user ideally doesn't need to watch both screens
   - The environment one is development sequential workflow where screens are watched to aid debugging
   - [ ] Document this in the Debugging section above once added
+- [ ] Set up Azure Pipelines build which runs TypeScript over the solution and does JavaScript checking on the repository
 
 ## Crediting
 
