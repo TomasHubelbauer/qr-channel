@@ -21,14 +21,22 @@
     </style>
     <script>
       window.addEventListener('message', event => {
-        console.log(event.data);
+        let counterpartyName;
+        switch (event.data.name) {
+          case 'A': counterpartyName = 'B'; break;
+          case 'B': counterpartyName = 'A'; break;
+          default: throw new Error(`Unexpected counterparty name '${event.data.name}'.`);
+        }
+        
+        console.log(event.data.name, '→', counterpartyName, ':', event.data.message);
+        document.querySelector('#peer' + counterpartyName).postMessage(event.data.message);
       });
     </script>
   </head>
   <body>
     <div id="splitDiv">
-      <iframe src="../../../index.html#A"></iframe>
-      <iframe src="../../../index.html#B"></iframe>    
+      <iframe id="peerA" src="../../../index.html#A"></iframe>
+      <iframe id="peerB" src="../../../index.html#B"></iframe>    
     </div>
     <p id="logsP"></p>
   </body>
