@@ -34,19 +34,11 @@ export default async function reply(message) {
   
   if (message.startsWith('a=candidate:')) {
     const [sdp, id] = message.split('\n');
-    const peerConnection = peerConnections[id];
-    
-    console.log('Candidate from connection with ID:', id);
-    if (peerConnection !== undefined) {
-      console.log('Local description:', identify(peerConnection.localDescription));
-      console.log('Remote description:', identify(peerConnection.remoteDescription));
-    } else {
-      console.log('The connection was not found');
-    }
 
+    console.log('Candidate from connection with offer/answer', id);
     console.log(`Peer ? notices peer ? candidate SDP and adds the ICE candidate to its peer connection`);
     
-    if (peerConnection !== undefined) {
+    if (undefined !== undefined) {
       // Avoid adding the candidate multiple times
       if (!peerConnection.remoteDescription.sdp.split(/\r\n/g).includes(sdp)) {
         await peerConnection.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
