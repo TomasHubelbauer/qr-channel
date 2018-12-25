@@ -9,7 +9,9 @@ exchanging QR codes with offer/answer SDP data and ICE candidate data.
   ![](https://dev.azure.com/tomashubelbauer/QR%20Channel/_apis/build/status/QR%20Channel-CI?branchName=master)
 ](https://dev.azure.com/tomashubelbauer/QR%20Channel/_build/latest?definitionId=7?branchName=master)
 
-[Demo](https://tomashubelbauer.github.io/qr-channel/)
+Please note that the above badge corresponds to a strict TypeScript type check status.
+There is no build per se as this is a static file JavaScript project hosted using GitHub Pages
+at [tomashubelbauer.github.io/qr-channel](https://tomashubelbauer.github.io/qr-channel/).
 
 ## Debugging
 
