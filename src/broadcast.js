@@ -35,7 +35,7 @@ async function rotate() {
   let codeContext;
   let counter = 0;
   while (sessionDescription !== undefined) {
-    console.log('stepping');
+    console.log('stepping', counter, sessionDescription.sdp);
     // Note that this is updated in any iteration to capture new candidates as they come
     const { sdp, ices } = encode(sessionDescription);
     const count = 1 + ices.length;
