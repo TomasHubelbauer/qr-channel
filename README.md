@@ -11,7 +11,9 @@ exchanging QR codes with offer/answer SDP data and ICE candidate data.
 
 Please note that the above badge corresponds to a strict TypeScript type check status.
 There is no build per se as this is a static file JavaScript project hosted using GitHub Pages
-at [tomashubelbauer.github.io/qr-channel](https://tomashubelbauer.github.io/qr-channel/).
+with an [**online demo** at tomashubelbauer.github.io/qr-channel](https://tomashubelbauer.github.io/qr-channel/).
+
+`start index.html`
 
 ## Debugging
 
