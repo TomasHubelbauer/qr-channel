@@ -11,6 +11,10 @@
     "strictPropertyInitialization": true,
     "extendedDiagnostics": true,
     "noEmit": true,
-    "target": "esnext"
+    "target": "esnext",
+    "types": [
+      "qrcode-generator",
+      "jsqr"
+    ]
   }
 }
