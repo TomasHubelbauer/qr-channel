@@ -3,9 +3,30 @@
   <head>
     <meta charset="utf-8" />
     <title>Replying test</title>
+    <style>
+      #splitDiv {
+        display: flex;
+      }
+      
+      iframe {
+        flex: 1;
+        height: 50vh;
+      }
+      
+      #logsP {
+        font-family: monospace;
+        overflow: scroll;
+        white-space: pre;
+      }
+    </style>
+    <script>
+      window.addEventListener('message', event => {
+        console.log(event.data);
+      });
+    </script>
   </head>
   <body>
-    <div>
+    <div id="splitDiv">
       <iframe src="../../../index.html#A"></iframe>
       <iframe src="../../../index.html#B"></iframe>    
     </div>
