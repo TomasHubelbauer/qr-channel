@@ -1,5 +1,5 @@
 // TODO: Change this to an async iterator once browser support is there https://github.com/Fyrd/caniuse/issues/3690
-export default function scan(onMessage) {
+export default async function scan(onMessage) {
   const viewfinderVideo = document.querySelector('#viewfinderVideo');
   const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
   let viewfinderContext;
@@ -21,4 +21,11 @@ export default function scan(onMessage) {
 
     requestAnimationFrame(recognize);
   });
+  
+  const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+  viewfinderVideo.srcObject = mediaStream;
+  // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
+  viewfinderVideo.setAttribute('playsinline', true);
+  // Play through JavaScript, `autoplay` doesn't seem to work
+  await viewfinderVideo.play();
 }
