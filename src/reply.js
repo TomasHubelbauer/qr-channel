@@ -4,6 +4,28 @@ import monitor from './monitor.js';
 const peerConnections = {};
 
 export default async function reply(message) {
+  const typeP = document.querySelector('#typeP');
+  const signalingStateP = document.querySelector('#signalingStateP');
+  const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
+
+  // Display the initial welcome offer which either will be replied to or replaced with a peer's offer
+  if (message === undefined) {
+    const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+    monitor(peerConnection, 'peerConnection');
+
+    peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += peerConnection.signalingState + '; ');
+    peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += peerConnection.iceGatheringState + '; ');
+
+    const dataChannel = peerConnection.createDataChannel(null);
+    monitor(dataChannel, 'dataChannel');
+
+    const sessionDescription = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(sessionDescription);
+
+    // Start rotating now that we have SDP
+    broadcast(peerConnection);
+  }
+  
   if (message.startsWith('a=candidate:')) {
     // TODO: Figure out what peer connection the candidate belongs to from the session ID (add it to the candidate QR code)
     const sessionId = 'todo';
