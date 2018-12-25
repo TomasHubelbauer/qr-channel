@@ -21,9 +21,9 @@ export default async function reply(message) {
   }
   
   if (message.startsWith('a=candidate:')) {
-    const [sdp, sessionId] = message.split('\n');
-    console.log(sdp, sessionId);
-    const peerConnection = peerConnections[sessionId];
+    const [sdp, id] = message.split('\n');
+    console.log('ice', id, sdp);
+    const peerConnection = peerConnections[id];
     if (peerConnection !== undefined) {
       // TODO: Ignore the candidate if it already has been added unless it is safe to add duplicate candidate
       await peerConnection.addIceCandidate(new RTCIceCandidate({ candidate: sdp }));
@@ -37,9 +37,12 @@ export default async function reply(message) {
   const sessionDescription = decode(message);
   switch (sessionDescription.type) {
     case 'offer': {
+      // Decode the session ID separately to avoid parsing the SDP
+      const idLength = Number(message[1]) + 10;
+      const id = message.slice(2 + 64, 2 + 64 + idLength);
+      console.log('sdp', id);
       const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
-      const sessionId = 'todo';
-      peerConnections[sessionId] = peerConnection;
+      peerConnections[id] = peerConnection;
       monitor(peerConnection, 'peerConnection');
       
       await peerConnection.setRemoteDescription(sessionDescription);
