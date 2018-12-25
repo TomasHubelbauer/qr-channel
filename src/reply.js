@@ -21,13 +21,12 @@ export default async function reply(message) {
   }
   
   if (message.startsWith('a=candidate:')) {
-    // TODO: Figure out what peer connection the candidate belongs to from the session ID (add it to the candidate QR code)
-    const sessionId = 'todo';
+    const [sdp, sessionId] = message.split('\n');
+    console.log(sdp, sessionId);
     const peerConnection = peerConnections[sessionId];
     if (peerConnection !== undefined) {
-      // TODO: Ignore the candidate if it already has been added unless it is safe to add duplicate candidates
-      const candidate = null;
-      await peerConnection.addIceCandidate();
+      // TODO: Ignore the candidate if it already has been added unless it is safe to add duplicate candidate
+      await peerConnection.addIceCandidate(new RTCIceCandidate({ candidate: sdp }));
     } else {
       // TODO: Store the canndidate for if the connection comes later
     }
