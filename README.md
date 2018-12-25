@@ -40,6 +40,7 @@ Also see the `TODO` comments in the source code and MarkDown checkboxen in the o
 - [ ] Consider changing the format to `(ID)(O/A)(hash)(ufrag):(pwd)` so that we can drop the session ID length character
 - [ ] Consider using JSDoc to aid TypeScript with type checking
 - [ ] Add `npm install` of packages used to the CI definition or introduce `package.json` with TypeScript and them for typings
+- [ ] Move `test.js` to `test/coding.js` and introduce a new rig `test/scanning.js` which mocks the iPhone side for easy debug
 
 ## Crediting
 
