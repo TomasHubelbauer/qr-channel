@@ -29,6 +29,8 @@ export default async function reply(message) {
       // Note that we're using the SDP line here not the init dict because I don't know how to populate sdpMid and sdpMLineIndex from it
       // https://developer.mozilla.org/en-US/docs/Web/API/RTCIceCandidate#Constructor
       await peerConnection.addIceCandidate(new RTCIceCandidate(sdp));
+      console.log('local', peerConnection.localDescription.sdp);
+      console.log('remote', peerConnection.remoteDescription.sdp);
     } else {
       // TODO: Store the canndidate for if the connection comes later
     }
