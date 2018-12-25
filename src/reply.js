@@ -25,7 +25,7 @@ export default async function reply(message) {
     const peerConnection = peerConnections[id];
     if (peerConnection !== undefined) {
       // Avoid adding the candidate multiple times
-      if (!peerConnection.remoteDescription.split(/\r\n/g).includes(sdp)) {
+      if (!peerConnection.remoteDescription.sdp.split(/\r\n/g).includes(sdp)) {
         console.log('adding', sdp, peerConnection.remoteDescription.sdp);
         await peerConnection.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
         console.log('added', sdp, peerConnection.remoteDescription.sdp);
