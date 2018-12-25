@@ -65,6 +65,9 @@ export default async function reply(message) {
         break;
       }
       
+      log(me.localDescription);
+      log(sessionDescription);
+      
       await me.setRemoteDescription(sessionDescription);
       // TODO: Ensure answer candidates are added my the `me` offering connection
       break;
