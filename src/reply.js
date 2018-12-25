@@ -8,11 +8,12 @@ export default async function reply(message) {
     // TODO: Figure out what peer connection the candidate belongs to from the session ID (add it to the candidate QR code)
     const sessionId = 'todo';
     const peerConnection = peerConnections[sessionId];
-    // Ignore the candidate if we do not yet have the connection it belongs to
-    // TODO: Also ignore the candidate if it already has been added unless it is safe to add duplicate candidates
     if (peerConnection !== undefined) {
+      // TODO: Ignore the candidate if it already has been added unless it is safe to add duplicate candidates
       const candidate = null;
       await peerConnection.addIceCandidate();
+    } else {
+      // TODO: Store the canndidate for if the connection comes later
     }
     
     return;
