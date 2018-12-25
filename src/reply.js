@@ -5,30 +5,29 @@ import log from './log.js';
 import identify from './identify.js';
 
 // TODO: Fix the A candidates never reaching B because we fight over one QR code not two, the test should simulate 2 or use a frame
-// TODO: Fix the candidates bundling the ID of their originating connection, they should have the destination one's or we keep a map
+// TODO: Find a way to make sure the candidates reach the right peer connection
 
-const peerConnections = {};
 let me;
+let peer;
 export default async function reply(message) {
   // Display the initial welcome offer which either will be replied to or replaced with a peer's offer
   if (message === undefined) {
-    const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
-    me = peerConnection;
-    monitor(peerConnection, 'peerConnection');
+    me = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+    monitor(me, 'peerConnection');
     
-    const dataChannel = peerConnection.createDataChannel(null);
+    const dataChannel = me.createDataChannel(null);
     monitor(dataChannel, 'dataChannel');
     
     console.log('Peer A creates a peer connection with a data channel');
 
-    const sessionDescription = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(sessionDescription);
+    const sessionDescription = await me.createOffer();
+    await me.setLocalDescription(sessionDescription);
     
-    console.log('Peer A creates an offer and sets it as its local description', identify(peerConnection.localDescription));
+    console.log('Peer A creates an offer and sets it as its local description', identify(me.localDescription));
     
-    broadcast(peerConnection);
+    broadcast(me);
     
-    console.log('Peer A displays the offer SDP and its ICE candidate SDPs', identify(peerConnection.localDescription));
+    console.log('Peer A displays the offer SDP and its ICE candidate SDPs', identify(me.localDescription));
     
     return;
   }
@@ -64,36 +63,35 @@ export default async function reply(message) {
     case 'offer': {
       const id = identify(sessionDescription);
       
-      // Ignore the offer in case we're already answering to it
-      if (peerConnections[id] !== undefined) {
+      // Ignore an offer in case we're already answering to any
+      if (peer !== undefined) {
         break;
       }
       
       console.log('Peer B notices the offer SDP', id);
 
-      const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
-      peerConnections[id] = peerConnection;
-      monitor(peerConnection, 'peerConnection');
+      peer = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+      monitor(peer, 'peerConnection');
       
       console.log('Peer B creates a peer connection without a data channel');
       
-      await peerConnection.setRemoteDescription(sessionDescription);
+      await peer.setRemoteDescription(sessionDescription);
       
       console.log('Peer B sets the noticed offer as its remote description', id);
       
-      const answer = await peerConnection.createAnswer();
-      await peerConnection.setLocalDescription(answer);
+      const answer = await peer.createAnswer();
+      await peer.setLocalDescription(answer);
       
-      console.log('Peer B creates an answer and sets it to its local description', identify(peerConnection.localDescription));
+      console.log('Peer B creates an answer and sets it to its local description', identify(peer.localDescription));
       
       broadcast(peerConnection);
       
-      console.log('Peer B displays the answer SDP and its ICE candidate SDPs', identify(peerConnection.localDescription));
+      console.log('Peer B displays the answer SDP and its ICE candidate SDPs', identify(peer.localDescription));
       
       break;
     }
     case 'answer': {
-      // Ignore the answer if it has already been set and we're seeing it again
+      // Ignore an answer if we already have one
       if (me.remoteDescription !== null) {
         break;
       }
