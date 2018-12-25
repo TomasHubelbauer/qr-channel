@@ -1,4 +1,4 @@
-@media only screen and (orientation : landscape) {
+@media only screen and (orientation: landscape) {
   html {
     height: 100%;
   }
@@ -39,12 +39,12 @@
   }
 }
 
-@media only screen and (orientation : portrait) {
+@media only screen and (orientation: portrait) {
   #viewfinderVideo {
     bottom: 1vw;
     position: fixed;
     right: 1vw;
-    width: 10vw;
+    width: 25vw;
   }
   
   #viewfinderCanvas {
