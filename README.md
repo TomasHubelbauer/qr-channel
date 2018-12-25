@@ -33,6 +33,8 @@ GitHub issues are closed, use a pull request to start discussion about a patch o
 
 Also see the `TODO` comments in the source code and MarkDown checkboxen in the other MarkDown files.
 
+- [ ] Fix the error  thrown in Safari in the flow: phone offers, laptop sees and answers, phone sees and throws on remote SDP
+      `OperationError: Failed to set remote answer sdp: The order of m-lines in answer doesn't match order in offer.`
 - [ ] Finalize `reply.js` response flow until successful data channel opening
 - [ ] Try encoding ICE like SDP so it might fit on a single QR code and we'd alternate only two QR codes, SDP and ICE
 - [ ] Consider changing the format to `(ID)(O/A)(hash)(ufrag):(pwd)` so that we can drop the session ID length character
