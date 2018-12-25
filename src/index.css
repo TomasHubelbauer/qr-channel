@@ -49,7 +49,11 @@
   }
   
   #viewfinderCanvas {
-    display: none;
+    bottom: 1vw;
+    left: 1vw;
+    max-height: 25%;
+    max-width: 25%;
+    position: fixed;
   }
   
   #codeCanvas {
