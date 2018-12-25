@@ -105,10 +105,11 @@ export default function encode(sdp) {
   let value = '';
   // Encode multiple bits of information into one alphanumeric character to save space
   switch (type + '+' + media) {
-    case 'offer+firefox+19': value += 'O'; break;
-    case 'offer+chrome+19': value += 'P'; break;
-    case 'answer+firefox+19': value += 'A'; break;
-    case 'answer+chrome+19': value += 'B'; break;
+    case 'offer+firefox': value += 'O'; break;
+    case 'offer+chrome': value += 'P'; break;
+    case 'answer+firefox': value += 'A'; break;
+    case 'answer+chrome': value += 'B'; break;
+    default: throw new Error(`Unexpected type and media combination '${type}+${media}'.`);
   }
   
   // TODO: Rebase the ID from decimal to QR-alphanumeral (base 43 excluding the colon) if it beats a fixed 10-19 digit slice
