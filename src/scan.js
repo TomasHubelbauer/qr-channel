@@ -2,6 +2,8 @@
 export default async function scan(onMessage) {
   const viewfinderVideo = document.querySelector('#viewfinderVideo');
   const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
+  const facingModeSelect = document.querySelector('#facingModeSelect');
+  
   let viewfinderContext;
   window.requestAnimationFrame(function recognize() {
     if (viewfinderVideo.readyState === viewfinderVideo.HAVE_ENOUGH_DATA) {
@@ -22,7 +24,19 @@ export default async function scan(onMessage) {
     requestAnimationFrame(recognize);
   });
   
-  const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+  // Note that duplicate handlers will be discarded so it's okay to add this every time
+  facingModeSelect.addEventListener(onFacingModeSelectChange);
+  
+  // TODO: Read the initial value from local storage
+  await obtain('environment');
+}
+
+function onFacingModeSelectChange(event) {
+  console.log(event);
+}
+
+function obtain(facingMode) {
+  const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode } });
   viewfinderVideo.srcObject = mediaStream;
   // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
   viewfinderVideo.setAttribute('playsinline', true);
