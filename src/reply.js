@@ -18,7 +18,7 @@ export default async function reply(message) {
     // TODO: Find out why this is needed when it was not before, the candidates were being added to the description automatically
     peerConnection.addEventListener('icecandidate', event => {
       peerConnection.setLocalDescription(sessionDescription);
-      console.log(event.candidate, sessionDescription, peerConnection.localDescription);
+      console.log(event.candidate, peerConnection.localDescription);
     });
     
     broadcast(peerConnection);
