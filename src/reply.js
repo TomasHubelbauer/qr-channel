@@ -17,18 +17,14 @@ export default async function reply(message) {
     const dataChannel = me.createDataChannel(null);
     monitor(dataChannel, 'dataChannel');
     
-    log('Creates a peer connection with a data channel');
-
     const sessionDescription = await me.createOffer();
     await me.setLocalDescription(sessionDescription);
     
     me.id = identify(me.localDescription);
     
-    log('Creates an offer and sets it as its local description', identify(me.localDescription));
-    
     broadcast(me);
     
-    log('Displays the offer SDP and its ICE candidate SDPs', identify(me.localDescription));
+    log('Creates a welcome peer connection with a data channel, an offer, sets if as its local description and displays its SDP and ICE');
     
     return;
   }
@@ -36,23 +32,21 @@ export default async function reply(message) {
   if (message.startsWith('a=candidate:')) {
     const [sdp, id] = message.split('\n');
     
-    log('Receives candidate from connection with offer/answer', id);
-    
     // Ignore candidates from self, they belong to the peer
     if (id === me.id) {
-      log('Ignores own candidate');
       return;
     }
 
-    log(`Notices candidate SDP and adds the ICE candidate to its peer connection`);
+    log(`Notices candidate from', id, 'own ID is', me.id, 'peer ID is', peerId, 'and adds the ICE candidate to its peer connection maybe`, me.remoteDescription);
     
+    // TODO: me.remoteDescription / peerId
     if (undefined !== undefined) {
       // Avoid adding the candidate multiple times
-      if (!undefined.remoteDescription.sdp.split(/\r\n/g).includes(sdp)) {
-        await undefined.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
+      if (!me.remoteDescription.sdp.split(/\r\n/g).includes(sdp)) {
+        await me.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
       }
     } else {
-      // TODO: Store the candidate for if later its associated peer connection comes
+      // TODO: Store the candidate for if later its associated peer connection comes so we don't have to scan it again
     }
     
     return;
@@ -70,29 +64,20 @@ export default async function reply(message) {
       
       peerId = id;
       
-      log('Notices the offer SDP', id);
-      log('Abandons the peer connection with a data channel');
-
       me = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
       monitor(me, 'peerConnection');
       
-      log('Creates a peer connection without a data channel');
-      
       await me.setRemoteDescription(sessionDescription);
-      
-      log('Sets the noticed offer as its remote description', id);
       
       const answer = await me.createAnswer();
       await me.setLocalDescription(answer);
       
       me.id = identify(me.localDescription);
       
-      log('Creates an answer and sets it to its local description', me.id);
-      
       broadcast(me);
       
-      log('Displays the answer SDP and its ICE candidate SDPs', me.id);
-      
+      log('Notices the offer SDP, abandons the welcome peer connection with a data channel, creates a peer connection without a data channel, ets the noticed offer as its remote description, creates an answer and sets it to its local description, displays the answer SDP and its ICE candidate SDPs. Peer ID', peerId, 'me ID', me.id);
+
       break;
     }
     case 'answer': {
@@ -102,14 +87,11 @@ export default async function reply(message) {
       }
       
       const id = identify(sessionDescription);
-      
-      log('Notices the answer SDP', id);
             
       await me.setRemoteDescription(sessionDescription);
       
-      log('Sets the noticed answer as its remote description', id);
+      log('Notices the answer SDP, sets the noticed answer as its remote description', id);
       
-      // TODO: Ensure answer candidates are added my the `me` offering connection
       break;
     }
     default: {
