@@ -8,8 +8,7 @@ export default async function broadcast(peerConnection) {
   typeP.textContent += ' → ' + peerConnection.localDescription.type;
   peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += ' → ' + peerConnection.signalingState);
   peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += ' → ' + peerConnection.iceGatheringState);
-  peerConnection.addEventListener('icecandidate', event => console.log(event.candidate));
-  
+
   const codeCanvas = document.querySelector('#codeCanvas');
   let codeContext;
   let counter = 0;
