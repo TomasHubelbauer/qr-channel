@@ -21,8 +21,7 @@ export default function decode(value) {
   const id = value.slice(2 + 64, 2 + 64 + idLength);
   const ufrag = value.slice(2 + 64 + idLength, value.indexOf(':')).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
   const pwd = value.slice(value.indexOf(':') + ':'.length).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
-  console.log({ type, media, hashRaw, hash, idLength, id, ufrag, pwd });
-  
+
   return new RTCSessionDescription({
     type: type,
     sdp: [
