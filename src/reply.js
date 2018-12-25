@@ -66,8 +66,10 @@ export default async function reply(message) {
         break;
       }
       
-      log(me.localDescription);
-      log(sessionDescription);
+      log('local ' + me.localDescription.type);
+      log(me.localDescription.sdp);
+      log('remote' + sessionDescription.type);
+      log(sessionDescription.sdp);
       
       await me.setRemoteDescription(sessionDescription);
       // TODO: Ensure answer candidates are added my the `me` offering connection
