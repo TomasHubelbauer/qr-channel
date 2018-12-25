@@ -113,6 +113,6 @@ export default function encode(sdp) {
   }
   
   // TODO: Rebase the ID from decimal to QR-alphanumeral (base 43 excluding the colon) if it beats a fixed 10-19 digit slice
-  value += (id.length / 10).toString() + hash + id + ufrag + ':' + pwd;
+  value += (id.length - 10).toString() + hash + id + ufrag + ':' + pwd;
   return { sdp: value, ices };
 }
