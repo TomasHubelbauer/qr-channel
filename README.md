@@ -9,6 +9,10 @@ exchanging QR codes with offer/answer SDP data and ICE candidate data.
 
 ## Debugging
 
+- Use the video and canvas views in portrait to be able to verify that video to canvas drawing works correctly
+- Use the facing mode selector in portrait to switch between environment and use facing modes
+  - The user mode is production screen-to-screen workflow where the user faces the phone to the laptop and the devices connect
+  - The environment mode is debugging sequential workflow where the developer alternates the screens to guide the flow and debug
 - Clear iOS Safari website cache: Settings > Safari > Advanced > Website Data > `tomashubelbauer.github.io` > swipe
 - Make sure your iPhone is not in the power saver mode, otherwise camera access won't be granted to the page
 - Make sure you are not using the camera in another browser/tab if Chrome gives you a blank stream (2×2 pixels)
@@ -23,10 +27,6 @@ Also see the `TODO` comments in the source code and MarkDown checkboxen in the o
 
 - [ ] Finalize `reply.js` response flow until successful data channel opening
 - [ ] Try encoding ICE like SDP so it might fit on a single QR code and we'd alternate only two QR codes, SDP and ICE
-- [ ] Allow alternating between portrait and environment camera in development
-  - The portrait one is production screen to screen workflow where the user ideally doesn't need to watch both screens
-  - The environment one is development sequential workflow where screens are watched to aid debugging
-  - [ ] Document this in the Debugging section above once added
 - [ ] Set up Azure Pipelines build which runs TypeScript over the solution and does JavaScript checking on the repository
 - [ ] Consider changing the format to `(ID)(O/A)(hash)(ufrag):(pwd)` so that we can drop the session ID length character
 
