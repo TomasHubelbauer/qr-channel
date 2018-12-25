@@ -7,15 +7,10 @@ import reply from './reply.js';
 window.addEventListener('load', async () => {
   await test();
   
+  // Fire and forget infinite scanning for QR codes
   scan(async message => await reply(message));
   
-  const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-  viewfinderVideo.srcObject = mediaStream;
-  // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
-  viewfinderVideo.setAttribute('playsinline', true);
-  // Play through JavaScript, `autoplay` doesn't seem to work
-  await viewfinderVideo.play();
-
+  // Start broadcasting my own welcome offer
   reply();
 });
 
