@@ -9,7 +9,8 @@ exchanging QR codes with offer/answer SDP data and ICE candidate data.
 
 ## Debugging
 
-- Clear iOS Safari website cache: Settings > Safari > Advanced > Website Data > `tomashubelbauer.github.io` > swipe to clear
+- Clear iOS Safari website cache: Settings > Safari > Advanced > Website Data > `tomashubelbauer.github.io` > swipe
+- Make sure your iPhone is not in the power saver mode, otherwise camera access won't be granted to the page
 - Make sure you are not using the camera in another browser/tab if Chrome gives you a blank stream (2×2 pixels)
 
 ## Contributing
