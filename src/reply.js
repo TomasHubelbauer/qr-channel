@@ -17,6 +17,7 @@ export default async function reply(message) {
     await peerConnection.setLocalDescription(sessionDescription);
 
     broadcast(peerConnection);
+    return;
   }
   
   if (message.startsWith('a=candidate:')) {
