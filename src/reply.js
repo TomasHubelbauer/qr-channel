@@ -2,6 +2,7 @@ import decode from './decode.js';
 import monitor from './monitor.js';
 import broadcast from './broadcast.js';
 import log from './log.js';
+import identify from './identify.js';
 
 const peerConnections = {};
 let me;
@@ -20,11 +21,11 @@ export default async function reply(message) {
     const sessionDescription = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(sessionDescription);
     
-    console.log('Peer A creates an offer and sets it as its local description');
+    console.log('Peer A creates an offer and sets it as its local description', identify(peerConnection.localDescription));
     
     broadcast(peerConnection);
     
-    console.log('Peer A displays the offer SDP and its ICE candidate SDPs');
+    console.log('Peer A displays the offer SDP and its ICE candidate SDPs', identify(peerConnection.localDescription));
     
     return;
   }
@@ -33,7 +34,7 @@ export default async function reply(message) {
     const [sdp, id] = message.split('\n');
     const peerConnection = peerConnections[id];
     
-    console.log('Peer ? notices peer ? candidate SDP and adds the ICE candidate to its peer connection', peerConnection);
+    console.log(`Peer ? notices peer ? candidate SDP and adds the ICE candidate to its peer connection`, identify(peerConnection.localDescription), identify(peerConnection.remoteDescription));
     
     if (peerConnection !== undefined) {
       // Avoid adding the candidate multiple times
@@ -50,16 +51,14 @@ export default async function reply(message) {
   const sessionDescription = decode(message);
   switch (sessionDescription.type) {
     case 'offer': {
-      // Decode the session ID separately to avoid parsing the SDP again
-      const idLength = Number(message[1]) + 10;
-      const id = message.slice(2 + 64, 2 + 64 + idLength);
+      const id = identify(sessionDescription);
       
       // Ignore the offer in case we're already answering to it
       if (peerConnections[id] !== undefined) {
         break;
       }
       
-      console.log('Peer B notices the offer SDP');
+      console.log('Peer B notices the offer SDP', id);
 
       const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
       peerConnections[id] = peerConnection;
@@ -69,16 +68,16 @@ export default async function reply(message) {
       
       await peerConnection.setRemoteDescription(sessionDescription);
       
-      console.log('Peer B sets the noticed offer as its remote description');
+      console.log('Peer B sets the noticed offer as its remote description', id);
       
       const answer = await peerConnection.createAnswer();
       await peerConnection.setLocalDescription(answer);
       
-      console.log('Peer B creates an answer and sets it to its local description');
+      console.log('Peer B creates an answer and sets it to its local description', identify(peerConnection.localDescription));
       
       broadcast(peerConnection);
       
-      console.log('Peer B displays the answer SDP and its ICE candidate SDPs');
+      console.log('Peer B displays the answer SDP and its ICE candidate SDPs', identify(peerConnection.localDescription));
       
       break;
     }
@@ -88,16 +87,13 @@ export default async function reply(message) {
         break;
       }
       
-      console.log('Peer A notices the answer SDP');
+      const id = identify(sessionDescription);
       
-      log('local ' + me.localDescription.type);
-      log(me.localDescription.sdp);
-      log('remote' + sessionDescription.type);
-      log(sessionDescription.sdp);
-      
+      console.log('Peer A notices the answer SDP', id);
+            
       await me.setRemoteDescription(sessionDescription);
       
-      console.log('Peer A sets the noticed answer as its remote description');
+      console.log('Peer A sets the noticed answer as its remote description', id);
       
       // TODO: Ensure answer candidates are added my the `me` offering connection
       break;
