@@ -7,7 +7,7 @@ import identify from './identify.js';
 // TODO: Find a way to make sure the candidates reach the right peer connection
 
 let me;
-let peer;
+let peerId;
 export default async function reply(message) {
   // Display the initial welcome offer which either will be replied to or replaced with a peer's offer
   if (message === undefined) {
@@ -48,8 +48,8 @@ export default async function reply(message) {
     
     if (undefined !== undefined) {
       // Avoid adding the candidate multiple times
-      if (!peerConnection.remoteDescription.sdp.split(/\r\n/g).includes(sdp)) {
-        await peerConnection.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
+      if (!undefined.remoteDescription.sdp.split(/\r\n/g).includes(sdp)) {
+        await undefined.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
       }
     } else {
       // TODO: Store the candidate for if later its associated peer connection comes
@@ -68,27 +68,30 @@ export default async function reply(message) {
         break;
       }
       
+      peerId = id;
+      
       log('Notices the offer SDP', id);
+      log('Abandons the peer connection without a data channel');
 
-      peer = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
-      monitor(peer, 'peerConnection');
+      me = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+      monitor(me, 'peerConnection');
       
       log('Creates a peer connection without a data channel');
       
-      await peer.setRemoteDescription(sessionDescription);
+      await me.setRemoteDescription(sessionDescription);
       
       log('Sets the noticed offer as its remote description', id);
       
-      const answer = await peer.createAnswer();
-      await peer.setLocalDescription(answer);
+      const answer = await me.createAnswer();
+      await me.setLocalDescription(answer);
       
-      peer.id = identify(peer.localDescription);
+      me.id = identify(me.localDescription);
       
-      log('Creates an answer and sets it to its local description', identify(peer.localDescription));
+      log('Creates an answer and sets it to its local description', me.id);
       
       broadcast(peerConnection);
       
-      log('Displays the answer SDP and its ICE candidate SDPs', identify(peer.localDescription));
+      log('Displays the answer SDP and its ICE candidate SDPs', me.id);
       
       break;
     }
