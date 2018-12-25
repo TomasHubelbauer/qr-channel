@@ -24,10 +24,12 @@ export default async function scan(onMessage) {
     requestAnimationFrame(recognize);
   });
   
-  await obtain(localStorage['facingMode'] || 'environment');
+  const facingMode = localStorage['facingMode'] || 'user';
+  await obtain(facingMode);
   
   // Note that duplicate handlers will be discarded so it's okay to add this every time
   facingModeSelect.addEventListener('change', onFacingModeSelectChange);
+  facingModeSelect.value = facingMode;
 }
 
 async function onFacingModeSelectChange(event) {
