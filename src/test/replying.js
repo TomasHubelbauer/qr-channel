@@ -1,4 +1,5 @@
 export default async function replying(onMessage) {
+  console.log('Starting replying test');
   const codeCanvas = document.querySelector('#codeCanvas');
   await new Promise(resolve => window.setTimeout(resolve, 1000));
   while (true) {
