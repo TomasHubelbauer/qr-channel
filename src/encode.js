@@ -17,8 +17,9 @@ const aMidLineRegex = /^a=mid:(0|data)$/;
 const aSetupLineRegex = /^a=setup:(actpass|active)$/;
 const aMaxMessageSizeLineRegex = /^a=max-message-size:\d+$/;
 const aSctpPortLineRegex = /^a=sctp-port:5000$/;
-const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel 1024$/;
+const aSctpMapLineRegex = /^a=sctpmap:5000 webrtc-datachannel (1024|256)$/;
 const aCandidateLineRegex = /^a=candidate:.*$/;
+// TODO: Consider this https://blog.mozilla.org/webrtc/how-to-avoid-data-channel-breaking/
 
 // Encodes SDP + ICE candidates into a QR alphanumeric string
 export default function encode(sdp) {
