@@ -7,6 +7,6 @@ export default async function replying() {
       continue;
     }
     
-    window.parent.postMessage({ name: window.location.hash, message }, '*');
+    window.parent.postMessage({ name: window.location.hash.slice(1), message }, '*');
   }
 }
