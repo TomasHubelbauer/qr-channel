@@ -71,7 +71,7 @@ export default async function reply(message) {
       peerId = id;
       
       log('Notices the offer SDP', id);
-      log('Abandons the peer connection without a data channel');
+      log('Abandons the peer connection with a data channel');
 
       me = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
       monitor(me, 'peerConnection');
@@ -89,7 +89,7 @@ export default async function reply(message) {
       
       log('Creates an answer and sets it to its local description', me.id);
       
-      broadcast(peerConnection);
+      broadcast(me);
       
       log('Displays the answer SDP and its ICE candidate SDPs', me.id);
       
