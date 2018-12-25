@@ -1,11 +1,10 @@
 import encode from './encode.js';
 
-let sessionDescription;
-export default function broadcast(peerConnection) {
+let peerConnection;
+export default function broadcast(connection) {
   // Stop the existing rotation by clearing the session description
-  if (peerConnection === undefined) {
-    // TODO: See if I can use `delete` here
-    sessionDescription = undefined;
+  if (connection === undefined) {
+    peerConnection = undefined;
     return;
   }
   
@@ -16,13 +15,13 @@ export default function broadcast(peerConnection) {
   typeP.textContent += ' → ' + peerConnection.localDescription.type;
   peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += ' → ' + peerConnection.signalingState);
   peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += ' → ' + peerConnection.iceGatheringState);
-  if (sessionDescription === undefined) {
-    sessionDescription = peerConnection.localDescription;
+  if (peerConnection === undefined) {
+    peerConnection = pc;
     // Fire and forget a rotation in an independent flow
     rotate();
   } else {
     // Replace and reuse the existing rotation
-    sessionDescription = peerConnection.localDescription;
+    peerConnection = pc;
   }
 }
 
@@ -30,9 +29,9 @@ async function rotate() {
   const codeCanvas = document.querySelector('#codeCanvas');
   let codeContext;
   let counter = 0;
-  while (sessionDescription !== undefined) {
+  while (peerConnection !== undefined) {
     // Note that this is updated in any iteration to capture new candidates as they come
-    const { sdp, ices } = encode(sessionDescription);
+    const { sdp, ices } = encode(peerConnection.localDescription); // Use local description always (offer or answer)
     const count = 1 + ices.length;
     const index = counter % count;
     let message;
