@@ -1,6 +1,14 @@
 import encode from './encode.js';
 
-export default async function broadcast(peerConnection) {
+let sessionDescription;
+export default function broadcast(peerConnection) {
+  // Stop the existing rotation by clearing the session description
+  if (peerConnection === undefined) {
+    // TODO: See if I can use `delete` here
+    sessionDescription = undefined;
+    return;
+  }
+  
   const typeP = document.querySelector('#typeP');
   const signalingStateP = document.querySelector('#signalingStateP');
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
@@ -8,13 +16,23 @@ export default async function broadcast(peerConnection) {
   typeP.textContent += ' → ' + peerConnection.localDescription.type;
   peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += ' → ' + peerConnection.signalingState);
   peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += ' → ' + peerConnection.iceGatheringState);
+  if (sessionDescription === undefined) {
+    sessionDescription = peerConnection.localDescription;
+    // Fire and forget a rotation in an independent flow
+    rotate();
+  } else {
+    // Replace and reuse the existing rotation
+    sessionDescription = peerConnection.localDescription;
+  }
+}
 
+async function rotate() {
   const codeCanvas = document.querySelector('#codeCanvas');
   let codeContext;
   let counter = 0;
-  while (true) {
+  while (sessionDescription !== undefined) {
     // Note that this is updated in any iteration to capture new candidates as they come
-    const { sdp, ices } = encode(peerConnection.localDescription);
+    const { sdp, ices } = encode(sessionDescription);
     const count = 1 + ices.length;
     const index = counter % count;
     let message;
