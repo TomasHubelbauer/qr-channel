@@ -74,6 +74,6 @@ async function rotate() {
     }
 
     counter++;
-    await new Promise(resolve => window.setTimeout(resolve, 500));
+    await new Promise(resolve => window.setTimeout(resolve, 250));
   }
 }
