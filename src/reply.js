@@ -14,17 +14,27 @@ export default async function reply(message) {
     
     const dataChannel = peerConnection.createDataChannel(null);
     monitor(dataChannel, 'dataChannel');
+    
+    console.log('Peer A creates a peer connection with a data channel');
 
     const sessionDescription = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(sessionDescription);
     
+    console.log('Peer A creates an offer and sets it as its local description');
+    
     broadcast(peerConnection);
+    
+    console.log('Peer A displays the offer SDP and its ICE candidate SDPs');
+    
     return;
   }
   
   if (message.startsWith('a=candidate:')) {
     const [sdp, id] = message.split('\n');
     const peerConnection = peerConnections[id];
+    
+    console.log('Peer ? notices peer ? candidate SDP and adds the ICE candidate to its peer connection', peerConnection);
+    
     if (peerConnection !== undefined) {
       // Avoid adding the candidate multiple times
       if (!peerConnection.remoteDescription.sdp.split(/\r\n/g).includes(sdp)) {
@@ -48,16 +58,28 @@ export default async function reply(message) {
       if (peerConnections[id] !== undefined) {
         break;
       }
+      
+      console.log('Peer B notices the offer SDP');
 
       const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
       peerConnections[id] = peerConnection;
       monitor(peerConnection, 'peerConnection');
       
+      console.log('Peer B creates a peer connection without a data channel');
+      
       await peerConnection.setRemoteDescription(sessionDescription);
+      
+      console.log('Peer B sets the noticed offer as its remote description');
+      
       const answer = await peerConnection.createAnswer();
       await peerConnection.setLocalDescription(answer);
       
+      console.log('Peer B creates an answer and sets it to its local description');
+      
       broadcast(peerConnection);
+      
+      console.log('Peer B displays the answer SDP and its ICE candidate SDPs');
+      
       break;
     }
     case 'answer': {
@@ -66,12 +88,17 @@ export default async function reply(message) {
         break;
       }
       
+      console.log('Peer A notices the answer SDP');
+      
       log('local ' + me.localDescription.type);
       log(me.localDescription.sdp);
       log('remote' + sessionDescription.type);
       log(sessionDescription.sdp);
       
       await me.setRemoteDescription(sessionDescription);
+      
+      console.log('Peer A sets the noticed answer as its remote description');
+      
       // TODO: Ensure answer candidates are added my the `me` offering connection
       break;
     }
