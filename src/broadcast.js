@@ -6,6 +6,7 @@ export default function broadcast(peerConnection) {
   if (peerConnection === undefined) {
     // TODO: See if I can use `delete` here
     sessionDescription = undefined;
+    console.log('stopped');
     return;
   }
   
@@ -19,10 +20,13 @@ export default function broadcast(peerConnection) {
   if (sessionDescription === undefined) {
     sessionDescription = peerConnection.localDescription;
     // Fire and forget a rotation in an independent flow
+    console.log('starting');
     rotate();
+    console.log('started');
   } else {
     // Replace and reuse the existing rotation
     sessionDescription = peerConnection.localDescription;
+    console.log('replaced');
   }
 }
 
@@ -31,6 +35,7 @@ async function rotate() {
   let codeContext;
   let counter = 0;
   while (sessionDescription !== undefined) {
+    console.log('stepping');
     // Note that this is updated in any iteration to capture new candidates as they come
     const { sdp, ices } = encode(sessionDescription);
     const count = 1 + ices.length;
