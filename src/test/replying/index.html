@@ -28,7 +28,7 @@
           default: throw new Error(`Unexpected counterparty name '${event.data.name}'.`);
         }
         
-        console.log(event.data.name, '→', counterpartyName, ':', event.data.message);
+        console.log(event.data.name, '→', counterpartyName, ':', JSON.stringify(event.data.message));
         document.querySelector('#peer' + counterpartyName).contentWindow.postMessage(event.data.message, '*');
       });
     </script>
