@@ -1,6 +1,7 @@
 import decode from './decode.js';
 import monitor from './monitor.js';
 import broadcast from './broadcast.js';
+import log from './log.js';
 
 const peerConnections = {};
 let me;
