@@ -25,11 +25,13 @@ export default async function reply(message) {
     console.log('ice', id, sdp);
     const peerConnection = peerConnections[id];
     if (peerConnection !== undefined) {
-      // TODO: Ignore the candidate if it already has been added unless it is safe to add duplicate candidate
-      await peerConnection.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
-      console.log('candidate', sdp);
-      console.log('local', peerConnection.localDescription.sdp);
-      console.log('remote', peerConnection.remoteDescription.sdp);
+      // Avoid adding the candidate multiple times
+      if (!peerConnection.remoteDescription.split(/\r\n/g).includes(sdp)) {
+        await peerConnection.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
+        console.log('added', sdp, peerConnection.remoteDescription.sdp);
+      } else {
+        console.log('ignored', sdp);
+      }
     } else {
       // TODO: Store the canndidate for if the connection comes later
     }
