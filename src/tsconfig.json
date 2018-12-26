@@ -9,6 +9,7 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
+    "diagnostics": true,
     "extendedDiagnostics": true,
     "noEmit": true,
     "target": "esnext",
