@@ -39,9 +39,10 @@ The PR will be type checked before it can be merged. This is a JavaScript projec
 
 Also see `TODO` comments in the source code and MarkDown checkboxen in all MarkDown files.
 
+- [ ] Test that the candidate `melt` function works in the coding test laying ground for the ICE compression/decompression
 - [ ] Finalize `reply.js` using [the test rig](https://github.com/TomasHubelbauer/qr-channel/src/test/replying)
       and verify with real devices
-- [ ] Process ICE in `encode` & `decode`, fit multiple into a QR code (limit to type number 5), use in the `coding` test
+- [ ] Compress and decompress ICE in `encode` & `melt`, fit multiple into a QR code (limit to type number 5)
 - [ ] Figure out how to
       [make TypeScript await of packages the JavaScript uses through `script`](https://stackoverflow.com/q/53929582/2715716)
       and remove the badge note
