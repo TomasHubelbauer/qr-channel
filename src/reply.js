@@ -56,7 +56,12 @@ export default async function reply(message) {
     case 'offer': {
       const id = identify(sessionDescription);
       
-      // Ignore an offer in case we're already answering to any
+      // Ignore the same offer scanned again
+      if (peerId === id) {
+        break;
+      }
+      
+      // Ignore a new peer's offer in case we already have one
       if (peerId !== undefined) {
         break;
       }
