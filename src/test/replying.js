@@ -1,5 +1,10 @@
 export default async function replying(onMessage) {
+  /** @type {HTMLCanvasElement|null} */
   const codeCanvas = document.querySelector('#codeCanvas');
+  if (codeCanvas === null) {
+    throw new Error('The #codeCanvas element was not found.');
+  }
+  
   window.addEventListener('message', event => {
     onMessage(event.data);
   });
