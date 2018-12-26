@@ -13,6 +13,7 @@
     "extendedDiagnostics": true,
     "noEmit": true,
     "target": "esnext",
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "disableSizeLimit": true,
   }
 }
