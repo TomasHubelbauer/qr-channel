@@ -74,6 +74,8 @@ async function rotate() {
       if (codeContext === null) {
         throw new Error('Failed to obtain canvas context');
       }
+    } else if (codeContext === undefined) {
+      throw new Error('Context was not set');
     } else {
       codeContext.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
     }
