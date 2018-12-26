@@ -2,6 +2,7 @@ import monitor from '../monitor.js';
 import log from '../log.js';
 import encode from '../encode.js';
 import decode from '../decode.js';
+import melt from '../melt.js';
 
 export default async function coding() {
   try {
@@ -48,14 +49,20 @@ export default async function coding() {
     peerConnection1.addEventListener('icecandidate', event => {
       log('1 ICE candidate ' + (event.candidate ? event.candidate.candidate : 'null'))
       if (event.candidate !== null) {
-        peerConnection2.addIceCandidate(event.candidate);
+        const ices = encode(peerConnection1.localDescription).ices;
+        const ice = ices[ices.length - 1];
+        const { sdp, id } = melt(ice, peerConnection2.localDescription);
+        peerConnection2.addIceCandidate(sdp);
       }
     });
 
     peerConnection2.addEventListener('icecandidate', event => {
       log('2 ICE candidate ' + (event.candidate ? event.candidate.candidate : 'null'))
       if (event.candidate !== null) {
-        peerConnection1.addIceCandidate(event.candidate);
+        const ices = encode(peerConnection2.localDescription).ices;
+        const ice = ices[ices.length - 1];
+        const { sdp, id } = melt(ice, peerConnection1.localDescription);
+        peerConnection1.addIceCandidate(sdp);
       }
     });
 
