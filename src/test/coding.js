@@ -20,7 +20,7 @@ export default async function coding() {
     peerConnection2.addEventListener('icegatheringstatechange', _ => log('2 ICE gathering state ' + peerConnection1.iceGatheringState));
     peerConnection2.addEventListener('connectionstatechange', _ => log('2 connection state ' + peerConnection1.connectionState));
 
-    const dataChannel = peerConnection1.createDataChannel(null);
+    const dataChannel = peerConnection1.createDataChannel('');
     monitor(dataChannel, 'dc 1');
 
     const offerData = encode(await peerConnection1.createOffer()).sdp;
