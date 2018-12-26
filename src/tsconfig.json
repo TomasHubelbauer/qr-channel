@@ -20,9 +20,13 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "showConfig": true,
-    "skipLibCheck": true,
-    "typeRoots": [
-      "node_modules"
+    "skipLibCheck": true
+  },
+  "typeAcquisition": {
+    "enable": true,
+    "include": [
+      "jsqr",
+      "qrcode-generator"
     ]
   }
 }
