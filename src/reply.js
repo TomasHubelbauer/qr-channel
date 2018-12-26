@@ -47,7 +47,7 @@ export default async function reply(message) {
     // - A does not know what to do with the candidate from an unknown peer
     //   but also can't acdept the answer #4 because it has RD - the offer #2
     // Maybe the answer #4 should communicate it replaces the offer #2 or something?
-    // Or the check in the answer branch could be extended to just discard answers not new offers?
+    // For now the check in the answer branch could is set to discard just if there is an answer already, not an offer
     log('notice C from', id, 'me ID:', me.id, 'peer ID:', peerId, ', add C to PC, has RD:', !!me.remoteDescription);
     
     // TODO: me.remoteDescription / peerId
@@ -98,7 +98,7 @@ export default async function reply(message) {
     }
     case 'answer': {
       // Ignore an answer if we already have one
-      if (me.remoteDescription !== null) {
+      if (me.remoteDescription.type === 'answer') {
         break;
       }
       
