@@ -22,8 +22,7 @@
     "showConfig": true,
     "skipLibCheck": true,
     "typeRoots": [
-      "node_modules/jsqr",
-      "node_modules/qrcode-generator"
+      "node_modules"
     ]
   }
 }
