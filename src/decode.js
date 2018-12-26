@@ -1,14 +1,14 @@
 // Decodes SDP + ICE candidates from a QR alphanumeric string
 export default function decode(value) {
   const bitIndices = [value.indexOf('O'), value.indexOf('P'), value.indexOf('A'), value.indexOf('B')].filter(i => i !== -1);
-  const bitIndex = Math.min(bitIndices);
+  const bitIndex = Math.min(...bitIndices);
   if (bitIndex === -1) {
     throw new Error('The differentiation character (OPAB) was not found.');
   }
   
-  const id = value.slice(0, bitIndex);
+  const id = value.substring(0, bitIndex);
   if (!/^\d+$/.test(id)) {
-    throw new Error('The session ID is not numeric: ' + id);
+    throw new Error(`The session ID (0-${bitIndex}) is not numeric: '${id}'`);
   }
   
   /** @type {RTCSdpType} */
@@ -19,10 +19,10 @@ export default function decode(value) {
     case 'P': type = 'offer'; media = 'chrome'; break;
     case 'A': type = 'answer'; media = 'firefox'; break;
     case 'B': type = 'answer'; media = 'chrome'; break;
-    default: throw new Error(`Unexpected differentiation character '${value[0]}'.`);
+    default: throw new Error(`Unexpected differentiation character at ${bitIndex}: '${value[bitIndex]}', expected OPAB.`);
   }
 
-  const hashRaw = value.slice(bitIndex + 1, bitIndex + 1 + 64);
+  const hashRaw = value.substr(bitIndex + 1, 64);
   let hash = '';
   for (let index = 0; index < hashRaw.length / 2; index++) {
     hash += hashRaw.slice(index * 2, index * 2 + 2) + ':';
@@ -31,9 +31,9 @@ export default function decode(value) {
   // Remote the trailing colon
   hash = hash.slice(0, -1);
   
-  const separatorIndex = value.indexOf(':', bitIndex + 1 /* OPBA bit */ + 64 /* hash */);
-  const ufrag = value.slice(bitIndex + 1 /* OPBA bit */ + 64 /* hash */, separatorIndex).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
-  const pwd = value.slice(separatorIndex + 1 /* colon */).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
+  const separatorIndex = value.indexOf(':', bitIndex + 1 /* OPAB bit */ + 64 /* hash */);
+  const ufrag = value.substring(bitIndex + 1 /* OPAB bit */ + 64 /* hash */, separatorIndex).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
+  const pwd = value.substr(separatorIndex + 1 /* colon */).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
 
   return new RTCSessionDescription({
     type: type,
