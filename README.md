@@ -37,7 +37,10 @@ The PR will be type checked before it can be merged. This is a JavaScript projec
 
 ### Roadmap
 
-Also see `TODO` comments in the source code and MarkDown checkboxen in all MarkDown files.
+Also see
+[`TODO` comments](https://github.com/TomasHubelbauer/qr-channel/search?q=todo&unscoped_q=todo)
+in the source code and MarkDown checkboxen ([GitHub can't find these](https://stackoverflow.com/a/33237640/2715716))
+in all MarkDown files.
 
 - [ ] Test that the candidate `melt` function works in the coding test laying ground for the ICE compression/decompression
 - [ ] Finalize `reply.js` using [the test rig](https://github.com/TomasHubelbauer/qr-channel/src/test/replying)
