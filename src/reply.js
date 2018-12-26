@@ -13,7 +13,7 @@ export default async function reply(message) {
     me = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
     monitor(me, 'peerConnection');
     
-    const dataChannel = me.createDataChannel(null);
+    const dataChannel = me.createDataChannel('');
     monitor(dataChannel, 'dataChannel');
     
     const sessionDescription = await me.createOffer();
