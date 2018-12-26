@@ -6,6 +6,6 @@ export default function monitor(obj, label) {
       continue;
     }
 
-    obj.addEventListener(key.slice(2), event => log(label + ' ' +key));
+    obj.addEventListener(key.slice(2), _ => log(label + ' ' + key));
   }
 }
