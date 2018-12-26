@@ -19,6 +19,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "showConfig": true
+    "showConfig": true,
+    "skipLibCheck": true
   }
 }
