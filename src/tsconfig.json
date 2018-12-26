@@ -15,5 +15,10 @@
     "target": "esnext",
     "alwaysStrict": true,
     "disableSizeLimit": true,
+    "listFiles": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "showConfig": true
   }
 }
