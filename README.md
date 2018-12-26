@@ -35,8 +35,9 @@ GitHub issues are closed, use a pull request to start discussion about a patch o
 
 Also see the `TODO` comments in the source code and MarkDown checkboxen in the other MarkDown files.
 
-- [ ] Finalize `reply.js` using the test rig and verify with real devices
-- [ ] Encode ICE to fit all sole QR code (expand as they come) and alternate the pair of SDP and ICE QR codes
+- [ ] Finalize `reply.js` using [the test rig](https://github.com/TomasHubelbauer/qr-channel/src/test/replying)
+      and verify with real devices
+- [ ] Encode ICE to all fit into a sole QR code (as they come) and alternate the pair of SDP and ICE QR codes
 - [ ] Change the SDP format to `(ID)(O/A/P/B)(hash)(ufrag):(pwd)` to drop the session ID length character
 - [ ] Finalize the missing JSDoc annotations to clear out the TypeScript errors and remove the badge note above
 - [ ] Find a way to make TypeScript see the packages even though I don't `import` them (ambient typings somehow)
