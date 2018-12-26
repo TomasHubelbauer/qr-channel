@@ -7,7 +7,7 @@ import melt from '../melt.js';
 export default async function coding() {
   try {
     // Obtain a dummy media stream first so that iOS Safari reveals host candidates (permissions need to be granted for that)
-    const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const _ = await navigator.mediaDevices.getUserMedia({ video: true });
 
     const peerConnection1 = new RTCPeerConnection();
     monitor(peerConnection1, '1');
@@ -51,8 +51,12 @@ export default async function coding() {
       if (event.candidate !== null) {
         const ices = encode(peerConnection1.localDescription).ices;
         const ice = ices[ices.length - 1];
-        const { sdp, id } = melt(ice, peerConnection2.localDescription);
-        peerConnection2.addIceCandidate(sdp);
+        const candidate = melt(ice, peerConnection2.localDescription);
+        if (candidate === undefined) {
+          throw new Error('TODO: Handle this case');
+        }
+        
+        peerConnection2.addIceCandidate(candidate.sdp);
       }
     });
 
@@ -61,8 +65,12 @@ export default async function coding() {
       if (event.candidate !== null) {
         const ices = encode(peerConnection2.localDescription).ices;
         const ice = ices[ices.length - 1];
-        const { sdp, id } = melt(ice, peerConnection1.localDescription);
-        peerConnection1.addIceCandidate(sdp);
+        const candidate = melt(ice, peerConnection1.localDescription);
+        if (candidate === undefined) {
+          throw new Error('TODO: Handle this case');
+        }
+        
+        peerConnection1.addIceCandidate(candidate.sdp);
       }
     });
 
