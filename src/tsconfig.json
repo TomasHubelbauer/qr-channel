@@ -11,6 +11,7 @@
     "strictPropertyInitialization": true,
     "extendedDiagnostics": true,
     "noEmit": true,
-    "target": "esnext"
+    "target": "esnext",
+    "alwaysStrict": true
   }
 }
