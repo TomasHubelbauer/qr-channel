@@ -53,6 +53,12 @@ async function onFacingModeSelectChange(event) {
 }
 
 async function obtain(facingMode) {
+  /** @type {HTMLVideoElement|null} */
+  const viewfinderVideo = document.querySelector('#viewfinderVideo');
+  if (viewfinderVideo === null) {
+    throw new Error('The #viewfinderVideo element was not found.');
+  }
+  
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode } });
   viewfinderVideo.srcObject = mediaStream;
   // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
