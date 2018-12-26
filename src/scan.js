@@ -1,15 +1,18 @@
 // TODO: Change this to an async iterator once browser support is there https://github.com/Fyrd/caniuse/issues/3690
 export default async function scan(onMessage) {
+  /** @type {HTMLVideoElement|null} */
   const viewfinderVideo = document.querySelector('#viewfinderVideo');
   if (viewfinderVideo === null) {
     throw new Error('The #viewfinderVideo element was not found.');
   }
   
+  /** @type {HTMLCanvasElement|null} */
   const viewfinderCanvas = document.querySelector('#viewfinderCanvas');
   if (viewfinderCanvas === null) {
     throw new Error('The #viewfinderCanvas element was not found.');
   }
   
+  /** @type {HTMLSelectElement|null} */
   const facingModeSelect = document.querySelector('#facingModeSelect');
   if (facingModeSelect === null) {
     throw new Error('The #facingModeSelect element was not found.');
