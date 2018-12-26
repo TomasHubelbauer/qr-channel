@@ -35,7 +35,19 @@ export default async function reply(message) {
     if (id === me.id) {
       return;
     }
-
+    
+    // TODO: Handle this case:
+    // - A created a welcome offer #1
+    // - B created a welcome offer #2
+    // - A noticed B's welcome offer #2
+    // - B noticed A's welcome offer #1
+    // - A abandoned welcome offer #1 and created an answer for B #3
+    // - B abandoned welcome offer #2 and creared an answer for A #4
+    // - A notices a candidate from the answer #4 but it remembers the peer to be #2
+    // - A does not know what to do with the candidate from an unknown peer
+    //   but also can't acdept the answer #4 because it has RD - the offer #2
+    // Maybe the answer #4 should communicate it replaces the offer #2 or something?
+    // Or the check in the answer branch could be extended to just discard answers not new offers?
     log('notice C from', id, 'me ID:', me.id, 'peer ID:', peerId, ', add C to PC, has RD:', !!me.remoteDescription);
     
     // TODO: me.remoteDescription / peerId
