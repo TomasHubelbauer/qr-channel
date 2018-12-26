@@ -50,7 +50,6 @@ in all MarkDown files.
 - [ ] Figure out how to
       [make TypeScript aware of packages the JavaScript uses through `script`](https://stackoverflow.com/q/53929582/2715716)
       and remove the badge note
-  - [ ] Check if `typeRoots` does this
 - [ ] Figure out why TypeScript `.d.ts` file in `node_modules` still get checked despite `skipLibCheck`
 
 ## Crediting
