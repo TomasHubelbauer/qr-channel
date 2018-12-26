@@ -1,5 +1,6 @@
 // Decodes SDP + ICE candidates from a QR alphanumeric string
 export default function decode(value) {
+  /** @type {RTCSdpType} */
   let type;
   let media;
   switch (value[0]) {
