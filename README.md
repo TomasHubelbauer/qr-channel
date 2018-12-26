@@ -39,7 +39,8 @@ The PR will be type checked before it can be merged. This is a JavaScript projec
 
 Also see
 [`TODO` comments](https://github.com/TomasHubelbauer/qr-channel/search?q=todo&unscoped_q=todo)
-in the source code and MarkDown checkboxen ([GitHub can't find these](https://stackoverflow.com/a/33237640/2715716))
+in the source code and MarkDown checkboxen
+([GitHub can't find these](https://help.github.com/articles/searching-code/#considerations-for-code-search))
 in all MarkDown files.
 
 - [ ] Finalize `reply.js` using [the test rig](https://github.com/TomasHubelbauer/qr-channel/src/test/replying)
