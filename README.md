@@ -31,6 +31,10 @@ with an [**online demo** at tomashubelbauer.github.io/qr-channel](https://tomash
 
 GitHub issues are closed, use a pull request to start discussion about a patch or email me at tomas@hubelbauer.net.
 
+The PR will be type checked before it can be merged. This is a JavaScript project which uses JSDoc through TypeScript.
+
+- [ ] Finalize PR blocking using Azure Pipelines
+
 ### Roadmap
 
 Also see the `TODO` comments in the source code and MarkDown checkboxen in the other MarkDown files.
