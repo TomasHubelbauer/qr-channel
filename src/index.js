@@ -1,7 +1,7 @@
 import codingTest from './test/coding.js';
-import replyingTest from './test/replying.js';
-import scan from './scan.js';
-import reply from './reply.js';
+//import replyingTest from './test/replying.js';
+//import scan from './scan.js';
+//import reply from './reply.js';
 
 window.addEventListener('load', async () => {
   await codingTest();
