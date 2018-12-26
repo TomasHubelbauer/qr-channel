@@ -28,7 +28,12 @@ export default async function reply(message) {
   }
   
   if (message.startsWith('a=candidate:')) {
-    const { sdp, id } = melt(message, me.remoteDescription);
+    const candidate = melt(message, me.remoteDescription);
+    if (candidate === undefined) {
+      throw new Error('TODO: Handle this case');
+    }
+    
+    const { sdp, id } = candidate;
     
     // Ignore candidates from self, they belong to the peer
     if (id === me.id) {
