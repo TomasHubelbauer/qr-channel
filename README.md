@@ -42,12 +42,12 @@ Also see
 in the source code and MarkDown checkboxen ([GitHub can't find these](https://stackoverflow.com/a/33237640/2715716))
 in all MarkDown files.
 
-- [ ] Test that the candidate `melt` function works in the coding test laying ground for the ICE compression/decompression
 - [ ] Finalize `reply.js` using [the test rig](https://github.com/TomasHubelbauer/qr-channel/src/test/replying)
       and verify with real devices
+- [ ] Test that the candidate `melt` function works in the coding test laying ground for the ICE compression/decompression
 - [ ] Compress and decompress ICE in `encode` & `melt`, fit multiple into a QR code (limit to type number 5)
 - [ ] Figure out how to
-      [make TypeScript await of packages the JavaScript uses through `script`](https://stackoverflow.com/q/53929582/2715716)
+      [make TypeScript aware of packages the JavaScript uses through `script`](https://stackoverflow.com/q/53929582/2715716)
       and remove the badge note
 
 ## Crediting
