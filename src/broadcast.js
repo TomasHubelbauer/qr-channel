@@ -8,13 +8,21 @@ export default function broadcast(connection) {
     return;
   }
   
-  /** @type {!HTMLParagraphElement} */
   const typeP = document.querySelector('#typeP');
-  /** @type {!HTMLParagraphElement} */
+  if (typeP === null) {
+    throw new Error('The #typeP element was not found.');
+  }
+  
   const signalingStateP = document.querySelector('#signalingStateP');
-  /** @type {!HTMLParagraphElement} */
+  if (signalingStateP === null) {
+    throw new Error('The #signalingStateP element was not found.');
+  }
+  
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
-
+  if (iceGatheringStateP === null) {
+    throw new Error('The #iceGatheringStateP element was not found.');
+  }
+  
   if (peerConnection === undefined) {
     peerConnection = connection;
     // Fire and forget a rotation in an independent flow
