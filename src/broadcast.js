@@ -8,11 +8,11 @@ export default function broadcast(connection) {
     return;
   }
   
-  /** @type {!HTMLPElement} */
+  /** @type {!HTMLParagraphElement} */
   const typeP = document.querySelector('#typeP');
-  /** @type {!HTMLPElement} */
+  /** @type {!HTMLParagraphElement} */
   const signalingStateP = document.querySelector('#signalingStateP');
-  /** @type {!HTMLPElement} */
+  /** @type {!HTMLParagraphElement} */
   const iceGatheringStateP = document.querySelector('#iceGatheringStateP');
 
   if (peerConnection === undefined) {
