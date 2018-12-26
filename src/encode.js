@@ -104,7 +104,8 @@ export default function encode(sdp) {
     }
   }
   
-  let value = '';
+  // TODO: Rebase the ID from decimal to QR-alphanumeral (base 40 excluding `OPAB`) to have shorter code
+  let value = id;
   // Encode multiple bits of information into one alphanumeric character to save space
   switch (type + '+' + media) {
     case 'offer+firefox': value += 'O'; break;
@@ -114,7 +115,6 @@ export default function encode(sdp) {
     default: throw new Error(`Unexpected type and media combination '${type}+${media}'.`);
   }
   
-  // TODO: Rebase the ID from decimal to QR-alphanumeral (base 43 excluding the colon) if it beats a fixed 10-19 digit slice
-  value += (id.length - 10).toString() + hash + id + ufrag + ':' + pwd;
+  value += hash + id + ufrag + ':' + pwd;
   return { sdp: value, ices };
 }
