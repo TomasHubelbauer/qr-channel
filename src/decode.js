@@ -1,9 +1,20 @@
 // Decodes SDP + ICE candidates from a QR alphanumeric string
 export default function decode(value) {
+  const bitIndices = [value.indexOf('O'), value.indexOf('P'), value.indexOf('A'), value.indexOf('B')].filter(i => i !== -1);
+  const bitIndex = Math.min(bitIndices);
+  if (bitIndex === -1) {
+    throw new Error('The differentiation character (OPAB) was not found.');
+  }
+  
+  const id = value.slice(0, bitIndex);
+  if (!id.test(/^\d+$/)) {
+    throw new Error('The session ID is not numeric: ' + id);
+  }
+  
   /** @type {RTCSdpType} */
   let type;
   let media;
-  switch (value[0]) {
+  switch (value[bitIndex]) {
     case 'O': type = 'offer'; media = 'firefox'; break;
     case 'P': type = 'offer'; media = 'chrome'; break;
     case 'A': type = 'answer'; media = 'firefox'; break;
@@ -11,17 +22,18 @@ export default function decode(value) {
     default: throw new Error(`Unexpected differentiation character '${value[0]}'.`);
   }
 
-  const hashRaw = value.slice(2, 2 + 64);
+  const hashRaw = value.slice(bitIndex + 1, bitIndex + 1 + 64);
   let hash = '';
   for (let index = 0; index < hashRaw.length / 2; index++) {
     hash += hashRaw.slice(index * 2, index * 2 + 2) + ':';
   }
 
+  // Remote the trailing colon
   hash = hash.slice(0, -1);
-  const idLength = Number(value[1]) + 10;
-  const id = value.slice(2 + 64, 2 + 64 + idLength);
-  const ufrag = value.slice(2 + 64 + idLength, value.indexOf(':')).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
-  const pwd = value.slice(value.indexOf(':') + ':'.length).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
+  
+  const separatorIndex = value.indexOf(':', bitIndex + 1 /* OPBA bit */ + 64 /* hash */);
+  const ufrag = value.slice(bitIndex + 1 /* OPBA bit */ + 64 /* hash */, separatorIndex).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
+  const pwd = value.slice(separatorIndex + 1 /* colon */).toLowerCase().replace(/\/([a-z])/g, m => m[1].toUpperCase()).replace(/\/\//g, '/');
 
   return new RTCSessionDescription({
     type: type,
