@@ -48,6 +48,8 @@ export default async function reply(message) {
     //   but also can't acdept the answer #4 because it has RD - the offer #2
     // Maybe the answer #4 should communicate it replaces the offer #2 or something?
     // For now the check in the answer branch could is set to discard just if there is an answer already, not an offer
+    // This uses an error to be thrown: `InvalidStateError: Cannot set remote answer in state stable`
+    // The reason for that is that the answer received there should be for the welcome PC, not the other one (I think)
     log('notice C from', id, 'me ID:', me.id, 'peer ID:', peerId, ', add C to PC, has RD:', !!me.remoteDescription);
     
     // TODO: me.remoteDescription / peerId
