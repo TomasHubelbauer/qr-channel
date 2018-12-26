@@ -21,12 +21,5 @@
     "noUnusedParameters": true,
     "showConfig": true,
     "skipLibCheck": true
-  },
-  "typeAcquisition": {
-    "enable": true,
-    "include": [
-      "jsqr",
-      "qrcode-generator"
-    ]
   }
 }
