@@ -38,8 +38,12 @@ export default function broadcast(connection) {
 }
 
 async function rotate() {
-  /** @type {HTMLCanvasElement} */
+  /** @type {HTMLCanvasElement|null} */
   const codeCanvas = document.querySelector('#codeCanvas');
+  if (codeCanvas === null) {
+    throw new Error('The #codeCanvas element was not found.');
+  }
+  
   let codeContext;
   let counter = 0;
   while (peerConnection !== undefined) {
