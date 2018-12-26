@@ -71,6 +71,9 @@ async function rotate() {
       codeCanvas.width = width;
       codeCanvas.height = height;
       codeContext = codeCanvas.getContext('2d');
+      if (codeContext === null) {
+        throw new Error('Failed to obtain canvas context');
+      }
     } else {
       codeContext.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
     }
