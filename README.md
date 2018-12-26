@@ -51,6 +51,9 @@ in all MarkDown files.
       [make TypeScript aware of packages the JavaScript uses through `script`](https://stackoverflow.com/q/53929582/2715716)
       and remove the badge note
 - [ ] Figure out why TypeScript `.d.ts` file in `node_modules` still get checked despite `skipLibCheck`
+- [ ] See if it could be possible to pull the dependencies as ES native modules
+  - https://github.com/kazuhikoarase/qrcode-generator/issues/65
+  - https://github.com/cozmo/jsQR/issues/107
 
 ## Crediting
 
