@@ -4,16 +4,16 @@ import scan from './scan.js';
 import reply from './reply.js';
 
 window.addEventListener('load', async () => {
-  //await codingTest();
+  await codingTest();
   
   // Fire and forget infinite scanning for QR codes
   //scan(reply);
   
   // Start broadcasting my own welcome offer
-  reply();
+  //reply();
   
   // Run the replying test
-  replyingTest(reply);
+  //replyingTest(reply);
 });
 
 window.addEventListener('unhandledrejection', event => alert(event.reason));
