@@ -2,8 +2,7 @@ import decode from './decode.js';
 import monitor from './monitor.js';
 import broadcast from './broadcast.js';
 import identify from './identify.js';
-
-// TODO: Finalize a mechanism for candidates reaching the right peer connection
+import melt from './melt.js';
 
 let me;
 let peerId;
@@ -29,7 +28,7 @@ export default async function reply(message) {
   }
   
   if (message.startsWith('a=candidate:')) {
-    const [sdp, id] = message.split('\n');
+    const { sdp, id } = melt(message, me.remoteDescription);
     
     // Ignore candidates from self, they belong to the peer
     if (id === me.id) {
@@ -54,12 +53,9 @@ export default async function reply(message) {
     
     // TODO: me.remoteDescription / peerId
     if (undefined !== undefined) {
-      // Avoid adding the candidate multiple times
-      if (!me.remoteDescription.sdp.split(/\r\n/g).includes(sdp)) {
-        await me.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
-      }
+      await me.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
     } else {
-      // TODO: Store the candidate for if later its associated peer connection comes so we don't have to scan it again
+      // TODO: Store the candidate for to associate later if peer connection comes to avoid scanning it again (optimization)
     }
     
     return;
