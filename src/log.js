@@ -1,3 +1,4 @@
+/** @type {'body'|'log'|'alert'} */
 const mode = 'body';
 let logsP;
 export default function log(message) {
