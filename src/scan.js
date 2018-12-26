@@ -62,7 +62,7 @@ async function obtain(facingMode) {
   const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode } });
   viewfinderVideo.srcObject = mediaStream;
   // Set this attribute (not class member) through JavaScript (not HTML) to make iOS Safari work
-  viewfinderVideo.setAttribute('playsinline', true);
+  viewfinderVideo.setAttribute('playsinline', '');
   // Play through JavaScript, `autoplay` doesn't seem to work
   await viewfinderVideo.play();
 }
