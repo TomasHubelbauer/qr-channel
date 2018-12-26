@@ -7,7 +7,7 @@ export default function decode(value) {
   }
   
   const id = value.slice(0, bitIndex);
-  if (!id.test(/^\d+$/)) {
+  if (!/^\d+$/.test(id)) {
     throw new Error('The session ID is not numeric: ' + id);
   }
   
