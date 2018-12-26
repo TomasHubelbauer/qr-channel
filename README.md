@@ -35,14 +35,11 @@ GitHub issues are closed, use a pull request to start discussion about a patch o
 
 Also see the `TODO` comments in the source code and MarkDown checkboxen in the other MarkDown files.
 
-- [ ] Fix the error  thrown in Safari in the flow: phone offers, laptop sees and answers, phone sees and throws on remote SDP
-      `OperationError: Failed to set remote answer sdp: The order of m-lines in answer doesn't match order in offer.`
-- [ ] Finalize `reply.js` response flow until successful data channel opening
-- [ ] Try encoding ICE like SDP so it might fit on a single QR code and we'd alternate only two QR codes, SDP and ICE
-- [ ] Consider changing the format to `(ID)(O/A)(hash)(ufrag):(pwd)` so that we can drop the session ID length character
-- [ ] Consider using JSDoc to aid TypeScript with type checking
-- [ ] Add `npm install` of packages used to the CI definition or introduce `package.json` with TypeScript and them for typings
-- [ ] Move `test.js` to `test/coding.js` and introduce a new rig `test/scanning.js` which mocks the iPhone side for easy debug
+- [ ] Finalize `reply.js` using the test rig and verify with real devices
+- [ ] Encode ICE to fit all sole QR code (expand as they come) and alternate the pair of SDP and ICE QR codes
+- [ ] Change the SDP format to `(ID)(O/A/P/B)(hash)(ufrag):(pwd)` to drop the session ID length character
+- [ ] Finalize the missing JSDoc annotations to clear out the TypeScript errors and remove the badge note above
+- [ ] Find a way to make TypeScript see the packages even though I don't `import` them (ambient typings somehow)
 
 ## Crediting
 
