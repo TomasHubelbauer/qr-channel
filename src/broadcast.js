@@ -38,6 +38,7 @@ export default function broadcast(connection) {
 }
 
 async function rotate() {
+  /** @type {HTMLCanvasElement} */
   const codeCanvas = document.querySelector('#codeCanvas');
   let codeContext;
   let counter = 0;
