@@ -42,7 +42,6 @@ Also see `TODO` comments in the source code and MarkDown checkboxen in all MarkD
 - [ ] Finalize `reply.js` using [the test rig](https://github.com/TomasHubelbauer/qr-channel/src/test/replying)
       and verify with real devices
 - [ ] Encode ICE to all fit into a sole QR code (as they come) and alternate the pair of SDP and ICE QR codes
-- [ ] Change the SDP format to `(ID)(O/A/P/B)(hash)(ufrag):(pwd)` to drop the session ID length character
 - [ ] Figure out how to
       [make TypeScript await of packages the JavaScript uses through `script`](https://stackoverflow.com/q/53929582/2715716)
       and remove the badge note
