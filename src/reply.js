@@ -58,7 +58,7 @@ export default async function reply(message) {
     
     // TODO: me.remoteDescription / peerId
     if (undefined !== undefined) {
-      await me.addIceCandidate(new RTCIceCandidate({ candidate: sdp, sdpMid: "0", sdpMLineIndex: 0 }));
+      await me.addIceCandidate(sdp);
     } else {
       // TODO: Store the candidate for to associate later if peer connection comes to avoid scanning it again (optimization)
     }
