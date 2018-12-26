@@ -43,8 +43,9 @@ Also see the `TODO` comments in the source code and MarkDown checkboxen in the o
       and verify with real devices
 - [ ] Encode ICE to all fit into a sole QR code (as they come) and alternate the pair of SDP and ICE QR codes
 - [ ] Change the SDP format to `(ID)(O/A/P/B)(hash)(ufrag):(pwd)` to drop the session ID length character
-- [ ] Finalize the missing JSDoc annotations to clear out the TypeScript errors and remove the badge note above
-- [ ] Find a way to make TypeScript see the packages even though I don't `import` them (ambient typings somehow)
+- [ ] Figure out how to
+      [make TypeScript await of packages the JavaScript uses through `script`](https://stackoverflow.com/q/53929582/2715716)
+      and remove the badge note
 
 ## Crediting
 
