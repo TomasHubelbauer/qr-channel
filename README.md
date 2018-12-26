@@ -37,7 +37,7 @@ The PR will be type checked before it can be merged. This is a JavaScript projec
 
 ### Roadmap
 
-Also see the `TODO` comments in the source code and MarkDown checkboxen in the other MarkDown files.
+Also see `TODO` comments in the source code and MarkDown checkboxen in all MarkDown files.
 
 - [ ] Finalize `reply.js` using [the test rig](https://github.com/TomasHubelbauer/qr-channel/src/test/replying)
       and verify with real devices
