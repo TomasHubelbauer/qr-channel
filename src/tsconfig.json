@@ -20,6 +20,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "showConfig": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": [
+      "jsqr",
+      "qrcode-generator"
+    ]
   }
 }
