@@ -54,13 +54,12 @@ async function rotate() {
     const qr = qrcode(0, 'L');
     if (index === 0) {
       qr.addData(sdp, 'Alphanumeric');
+      codeCanvas.title = sdp;
     } else {
       qr.addData(ices[index - 1], 'Byte');
+      codeCanvas.title = ices[index - 1];
     }
     
-    qr.make();
-    codeCanvas.title = message;
-
     const { width, height } = codeCanvas.getBoundingClientRect();
     if (codeCanvas.width !== width || codeCanvas.height !== height) {
       codeCanvas.width = width;
@@ -75,6 +74,7 @@ async function rotate() {
       codeContext.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
     }
 
+    qr.make();
     const length = Math.min(width, height);
     const moduleCount = qr.getModuleCount();
     const cellSize = length / moduleCount;
