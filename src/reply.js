@@ -5,6 +5,7 @@ import identify from './identify.js';
 import melt from './melt.js';
 
 let me;
+let meId;
 let peerId;
 export default async function reply(message) {
   // Display the initial welcome offer which either will be replied to or replaced with a peer's offer
@@ -18,11 +19,11 @@ export default async function reply(message) {
     const sessionDescription = await me.createOffer();
     await me.setLocalDescription(sessionDescription);
     
-    me.id = identify(me.localDescription);
+    meId = identify(me.localDescription);
     
     broadcast(me);
     
-    log('create welcome PC with DC, create O, sets O to LD, display O SDP&ICE, me O-LD ID:', me.id);
+    log('create welcome PC with DC, create O, sets O to LD, display O SDP&ICE, me O-LD ID:', meId);
     
     return;
   }
@@ -36,7 +37,7 @@ export default async function reply(message) {
     const { sdp, id } = candidate;
     
     // Ignore candidates from self, they belong to the peer
-    if (id === me.id) {
+    if (id === meId) {
       return;
     }
     
@@ -54,7 +55,7 @@ export default async function reply(message) {
     // For now the check in the answer branch could is set to discard just if there is an answer already, not an offer
     // This uses an error to be thrown: `InvalidStateError: Cannot set remote answer in state stable`
     // The reason for that is that the answer received there should be for the welcome PC, not the other one (I think)
-    log('notice C from', id, 'me ID:', me.id, 'peer ID:', peerId, ', add C to PC, has RD:', !!me.remoteDescription);
+    log('notice C from', id, 'me ID:', meId, 'peer ID:', peerId, ', add C to PC, has RD:', !!me.remoteDescription);
     
     // TODO: me.remoteDescription / peerId
     if (undefined !== undefined) {
@@ -91,11 +92,11 @@ export default async function reply(message) {
       const answer = await me.createAnswer();
       await me.setLocalDescription(answer);
       
-      me.id = identify(me.localDescription);
+      meId = identify(me.localDescription);
       
       broadcast(me);
       
-      log('notice O, abandon welcome PC with DC, create PC without DC, set O to RD, create A, set A to LD, display A SDP&ICE, peer ID:', peerId, 'me A-LD ID:', me.id);
+      log('notice O, abandon welcome PC with DC, create PC without DC, set O to RD, create A, set A to LD, display A SDP&ICE, peer ID:', peerId, 'me A-LD ID:', meId);
 
       break;
     }
