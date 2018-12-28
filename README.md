@@ -47,7 +47,7 @@ in all MarkDown files.
       and verify with real devices
 - [ ] Test that the candidate `melt` function works in the coding test laying ground for the ICE compression/decompression
 - [ ] Compress and decompress ICE in `encode` & `melt`, fit multiple into a QR code (limit to type number 5)
-- [ ] Figure out (this problem)[https://github.com/TomasHubelbauer/ts-types-module] and fix `jsQR` not being seen by TypeScript
+- [ ] Figure out [this problem](https://github.com/TomasHubelbauer/ts-types-module) and fix `jsQR` not being seen by TypeScript
 - [ ] Figure out why TypeScript `.d.ts` file in `node_modules` still get checked despite `skipLibCheck`
 - [ ] See if it could be possible to pull the dependencies as ES native modules
   - https://github.com/kazuhikoarase/qrcode-generator/issues/65
