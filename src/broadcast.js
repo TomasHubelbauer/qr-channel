@@ -52,6 +52,7 @@ async function rotate() {
     const count = 1 + ices.length;
     const index = counter % count;
     let message;
+    /** @type {'Alphanumeric'|'Byte'|undefined} */
     let mode;
     if (index === 0) {
       message = sdp;
@@ -59,6 +60,10 @@ async function rotate() {
     } else {
       message = ices[index - 1];
       mode = 'Byte';
+    }
+    
+    if (mode === undefined) {
+      throw new Error('The mode has not been set.');
     }
     
     const qr = qrcode(0, 'L');
