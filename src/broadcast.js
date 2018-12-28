@@ -51,23 +51,13 @@ async function rotate() {
     const { sdp, ices } = encode(peerConnection.localDescription); // Use local description always (offer or answer)
     const count = 1 + ices.length;
     const index = counter % count;
-    let message;
-    /** @type {'Alphanumeric'|'Byte'|undefined} */
-    let mode;
-    if (index === 0) {
-      message = sdp;
-      mode = 'Alphanumeric';
-    } else {
-      message = ices[index - 1];
-      mode = 'Byte';
-    }
-    
-    if (mode === undefined) {
-      throw new Error('The mode has not been set.');
-    }
-    
     const qr = qrcode(0, 'L');
-    qr.addData(message, mode);
+    if (index === 0) {
+      qr.addData(sdp, 'Alphanumeric');
+    } else {
+      qr.addData(ices[index - 1], 'Byte');
+    }
+    
     qr.make();
     codeCanvas.title = message;
 
