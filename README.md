@@ -8,8 +8,8 @@ I also have a Web Bluetooth based solution in the works, [BT Channel](https://gi
 ## Running
 
 [
-  ![](https://dev.azure.com/tomashubelbauer/QR%20Channel/_apis/build/status/QR%20Channel-CI?branchName=master)
-](https://dev.azure.com/tomashubelbauer/QR%20Channel/_build/latest?definitionId=7?branchName=master)
+  ![](https://dev.azure.com/tomashubelbauer/QR%20Channel/_apis/build/status/QR%20Channel?branchName=master)
+](https://dev.azure.com/tomashubelbauer/QR%20Channel/_build/latest?definitionId=10?branchName=master)
 
 Please note that the above badge corresponds to a strict TypeScript type check status.
 There is no build per se as this is a static file JavaScript project hosted using GitHub Pages
