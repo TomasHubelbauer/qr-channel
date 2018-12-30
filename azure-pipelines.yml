@@ -1,0 +1,12 @@
+steps:
+- task: Npm@1
+  displayName: 'Install TypeScript and NPM packages for typings'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: 'install typescript jsqr qrcode-generator'
+- powershell: |
+   # https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=vsts#build-variables
+   # https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=vsts&tabs=yaml%2Cbatch#working-with-variables
+   npx tsc -p src
+  displayName: 'Run type check'
