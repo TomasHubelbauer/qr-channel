@@ -25,7 +25,7 @@
       "qrcode-generator"
     ]
   },
-  "exclude": [
-    "../node_modules"
+  "files": [
+    "src/*.js"
   ]
 }
