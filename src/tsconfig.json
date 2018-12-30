@@ -20,10 +20,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "showConfig": true,
-    "skipLibCheck": true,
     "types": [
       "jsqr",
       "qrcode-generator"
     ]
-  }
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }
