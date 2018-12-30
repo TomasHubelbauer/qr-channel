@@ -24,8 +24,5 @@
       "jsqr",
       "qrcode-generator"
     ]
-  },
-  "include": [
-    "*.js"
-  ]
+  }
 }
