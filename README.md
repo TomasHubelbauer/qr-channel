@@ -59,17 +59,14 @@ in all MarkDown files.
 
 This has been done before and I've attempted it several times before as well.
 
-- (2014) https://franklinta.com/2014/10/19/serverless-webrtc-using-qr-codes/
-- (2015) https://github.com/phiresky/webrtc-remote-touch-pen-input
-- (2018) https://github.com/AquiGorka/webrtc-qr
+- (2014) [serverless-webrtc-qrcode](https://github.com/fta2012/serverless-webrtc-qrcode) by [fta2012](https://github.com/fta2012)
+- (2015) [webrtc-remote-touch-pen-input](https://github.com/phiresky/webrtc-remote-touch-pen-input) by [phiresky](https://github.com/phiresky)
+- (2018) [webrtc-qr](https://github.com/AquiGorka/webrtc-qr) by [AquiGorka](https://github.com/AquiGorka)
 
-Unfortunately, this idea has also been patented in 2018:
+Unfortunately, this idea has also [been patented](https://patents.google.com/patent/US20160021148A1) in 2018.
 
-https://patents.google.com/patent/US20160021148A1
-
-The patent is invalid as there was prior art before the time of application,
-but has been granted and overturning it would require a court challenge.
-Until that happens, it's probably unsafe to use this in a commercial product.
+I hope that the patent is invalid as there was prior art before the time of application, but has been granted and overturning
+it would require a court challenge I think. Until that happens, it's probably unsafe to use this in a commercial product.
 
 I am doing it again because I like the idea and I want to finally put forth a prototype of my own that I'll actually finish.
 In the future I'd like to explore ways of bringing down the time required to establish the peer connection.
