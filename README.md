@@ -49,7 +49,6 @@ in all MarkDown files.
 - [ ] Compress and decompress ICE in `encode` & `melt`, fit multiple into a QR code (limit to type number 5)
 - [ ] Figure out [this problem](https://stackoverflow.com/q/53958469/2715716) and fix `jsQR` not being seen by TypeScript
   - [ ] See if jsQR maintainers [find a way](https://github.com/cozmo/jsQR/issues/108)
-- [ ] Figure out why `exclude` doesn't work to exclude `node_modules` and TypeScript thus checks `.d.ts` files there
 - [ ] See if it could be possible to pull the dependencies as ES native modules
   - https://github.com/kazuhikoarase/qrcode-generator/issues/65
   - https://github.com/cozmo/jsQR/issues/107
