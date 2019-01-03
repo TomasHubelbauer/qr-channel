@@ -76,9 +76,12 @@ In the future I'd like to explore ways of bringing down the time required to est
 
 ### Packages Used
 
-- QR code reading: `jsQR`
-  - [GitHub](https://github.com/cozmo/jsQR)
-  - [npm](https://www.npmjs.com/package/jsqr)
-- QR code generation: `qrcode-generator`
-  - [GitHub](https://github.com/kazuhikoarase/qrcode-generator)
-  - [npm](https://www.npmjs.com/package/qrcode-generator)
+#### `jsQR` by [@cozmo](https://github.com/cozmo): reading QR codes from `ImageData`
+
+- [GitHub](https://github.com/cozmo/jsQR)
+- [npm](https://www.npmjs.com/package/jsqr)
+
+#### `qrcode-generator` by [@kazuhikoarase](https://github.com/kazuhikoarase): calculating QR code modules for drawing on `canvas`
+
+- [GitHub](https://github.com/kazuhikoarase/qrcode-generator)
+- [npm](https://www.npmjs.com/package/qrcode-generator)
