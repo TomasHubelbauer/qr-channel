@@ -9,16 +9,20 @@ export default async function coding() {
     await navigator.mediaDevices.getUserMedia({ video: true });
 
     const peerConnection1 = new RTCPeerConnection();
-    monitor(peerConnection1, '1');
-    peerConnection1.addEventListener('signalingstatechange', _ => console.log('1 signaling state ' + peerConnection1.signalingState));
-    peerConnection1.addEventListener('icegatheringstatechange', _ => console.log('1 ICE gathering state ' + peerConnection1.iceGatheringState));
-    peerConnection1.addEventListener('connectionstatechange', _ => console.log('1 connection state ' + peerConnection1.connectionState));
+    monitor(peerConnection1, '1', {
+      onsignalingstatechange: event => event.currentTarget.signalingState,
+      onicegatheringstatechange: event => event.currentTarget.iceGatheringState,
+      onconnectionstatechange: event => event.currentTarget.connectionState,
+      onicecandidate: event => event.candidate,
+    });
 
     const peerConnection2 = new RTCPeerConnection();
-    monitor(peerConnection2, '2');
-    peerConnection2.addEventListener('signalingstatechange', _ => console.log('2 signaling state ' + peerConnection1.signalingState));
-    peerConnection2.addEventListener('icegatheringstatechange', _ => console.log('2 ICE gathering state ' + peerConnection1.iceGatheringState));
-    peerConnection2.addEventListener('connectionstatechange', _ => console.log('2 connection state ' + peerConnection1.connectionState));
+    monitor(peerConnection2, '2', {
+      onsignalingstatechange: event => event.currentTarget.signalingState,
+      onicegatheringstatechange: event => event.currentTarget.iceGatheringState,
+      onconnectionstatechange: event => event.currentTarget.connectionState,
+      onicecandidate: event => event.candidate,
+    });
 
     const dataChannel = peerConnection1.createDataChannel('');
     monitor(dataChannel, 'dc 1');
@@ -47,7 +51,6 @@ export default async function coding() {
 
     const seen1 = [];
     peerConnection1.addEventListener('icecandidate', event => {
-      console.log('1 ICE candidate ' + (event.candidate ? event.candidate.candidate : 'null'))
       if (event.candidate !== null) {
         const ices = encode(peerConnection1.localDescription).ices;
         for (const ice of ices.filter(i => !seen1.includes(i))) {
@@ -64,7 +67,6 @@ export default async function coding() {
 
     const seen2 = [];
     peerConnection2.addEventListener('icecandidate', event => {
-      console.log('2 ICE candidate ' + (event.candidate ? event.candidate.candidate : 'null'))
       if (event.candidate !== null) {
         const ices = encode(peerConnection2.localDescription).ices;
         for (const ice of ices.filter(i => !seen2.includes(i))) {

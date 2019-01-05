@@ -12,7 +12,12 @@ export default async function reply(message) {
   if (message === undefined) {
     peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
     window.offer = peerConnection;
-    monitor(peerConnection, 'peerConnection');
+    monitor(peerConnection, 'peerConnection', {
+      onsignalingstatechange: event => event.currentTarget.signalingState,
+      onicegatheringstatechange: event => event.currentTarget.iceGatheringState,
+      onconnectionstatechange: event => event.currentTarget.connectionState,
+      onicecandidate: event => event.candidate,
+    });
     
     const dataChannel = peerConnection.createDataChannel('');
     monitor(dataChannel, 'dataChannel');
@@ -88,7 +93,12 @@ export default async function reply(message) {
   switch (sessionDescription.type) {
     case 'offer': {
       peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
-      monitor(peerConnection, 'peerConnection');
+      monitor(peerConnection, 'peerConnection', {
+        onsignalingstatechange: event => event.currentTarget.signalingState,
+        onicegatheringstatechange: event => event.currentTarget.iceGatheringState,
+        onconnectionstatechange: event => event.currentTarget.connectionState,
+        onicecandidate: event => event.candidate,
+      });
       
       await peerConnection.setRemoteDescription(sessionDescription);
       
