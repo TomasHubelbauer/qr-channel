@@ -3,6 +3,7 @@ import replyingTest from './test/replying2.js';
 //import scan from './scan.js';
 import reply from './reply.js';
 
+// TODO: Change the tests to be dynamic imports once Firefox supports them
 window.addEventListener('load', async () => {
   // Use non-default logger when debugging on mobile
   //console.log = log;
