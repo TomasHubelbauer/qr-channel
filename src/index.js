@@ -8,7 +8,7 @@ window.addEventListener('load', async () => {
   // Use non-default logger when debugging on mobile
   //console.log = log;
 
-  await codingTest();
+  //await codingTest();
   
   // Fire and forget infinite scanning for QR codes
   //scan(reply);
