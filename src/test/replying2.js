@@ -45,12 +45,12 @@ export default async function coding(onMessage) {
     }
   });
 
-  // Set the offer and the candidates to the peer connectiob
+  // Set the offer and the candidates to the peer connection
   await peerConnection.setRemoteDescription(offer);
   for (const candidate of candidates) {
     const melted = melt(candidate, peerConnection.remoteDescription);
     if (melted === undefined) {
-        throw new Error('FUCK!');
+        throw new Error('Unexpected duplicate candidate');
     }
 
     await peerConnection.addIceCandidate(melted.sdp);
