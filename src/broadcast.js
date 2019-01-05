@@ -35,6 +35,11 @@ export default function broadcast(connection) {
   if (iceGatheringStateP === null) {
     throw new Error('The #iceGatheringStateP element was not found.');
   }
+
+  const iceConnectionStateP = document.querySelector('#iceConnectionStateP');
+  if (iceConnectionStateP === null) {
+    throw new Error('The #iceConnectionStateP element was not found.');
+  }
   
   if (peerConnection === undefined) {
     peerConnection = connection;
@@ -48,6 +53,7 @@ export default function broadcast(connection) {
   typeP.textContent += ' → ' + peerConnection.localDescription.type;
   peerConnection.addEventListener('signalingstatechange', event => signalingStateP.textContent += ' → ' + event.currentTarget.signalingState);
   peerConnection.addEventListener('icegatheringstatechange', event => iceGatheringStateP.textContent += ' → ' + event.currentTarget.iceGatheringState);
+  peerConnection.addEventListener('iceconnectionstatechange', event => iceConnectionStateP.textContent += ' → ' + event.currentTarget.iceConnectionState);
 }
 
 async function rotate() {
