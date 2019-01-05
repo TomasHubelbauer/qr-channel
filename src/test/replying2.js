@@ -1,6 +1,5 @@
 import decode from '../decode.js';
 import monitor from '../monitor.js';
-import log from '../log.js';
 import melt from '../melt.js';
 import encode from '../encode.js';
 
