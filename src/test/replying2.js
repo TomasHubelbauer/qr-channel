@@ -31,7 +31,8 @@ export default async function coding(onMessage) {
   }
 
   // Create test peer connection and start collecting its ICE candidates
-  const peerConnection = new RTCPeerConnection();
+  const peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+  window.answer = peerConnection;
   monitor(peerConnection, 'test pc');
   peerConnection.addEventListener('signalingstatechange', _ => console.log('test pc signaling state ' + peerConnection.signalingState));
   peerConnection.addEventListener('icegatheringstatechange', _ => console.log('test pc ICE gathering state ' + peerConnection.iceGatheringState));

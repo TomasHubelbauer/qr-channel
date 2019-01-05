@@ -11,10 +11,15 @@ export default async function reply(message) {
   // Display the initial welcome offer which either will be replied to or replaced with a peer's offer
   if (message === undefined) {
     peerConnection = new RTCPeerConnection({ iceServers: [ { urls: 'stun:stun.services.mozilla.com' } ] });
+    window.offer = peerConnection;
     monitor(peerConnection, 'peerConnection');
     
     const dataChannel = peerConnection.createDataChannel('');
     monitor(dataChannel, 'dataChannel');
+
+    peerConnection.addEventListener('icecandidate', event => {
+
+    });
     
     const sessionDescription = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(sessionDescription);

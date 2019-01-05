@@ -45,31 +45,37 @@ export default async function coding() {
     await peerConnection2.setLocalDescription(answer);
     await peerConnection1.setRemoteDescription(answer);
 
+    const seen1 = [];
     peerConnection1.addEventListener('icecandidate', event => {
       console.log('1 ICE candidate ' + (event.candidate ? event.candidate.candidate : 'null'))
       if (event.candidate !== null) {
         const ices = encode(peerConnection1.localDescription).ices;
-        const ice = ices[ices.length - 1];
-        const candidate = melt(ice, peerConnection2.localDescription);
-        if (candidate === undefined) {
-          throw new Error('TODO: Handle this case');
+        for (const ice of ices.filter(i => !seen1.includes(i))) {
+          seen1.push(ice);
+          const candidate = melt(ice, peerConnection2.localDescription);
+          if (candidate === undefined) {
+            throw new Error('Duplicate candidate found!');
+          }
+          
+          peerConnection2.addIceCandidate(candidate.sdp);
         }
-        
-        peerConnection2.addIceCandidate(candidate.sdp);
       }
     });
 
+    const seen2 = [];
     peerConnection2.addEventListener('icecandidate', event => {
       console.log('2 ICE candidate ' + (event.candidate ? event.candidate.candidate : 'null'))
       if (event.candidate !== null) {
         const ices = encode(peerConnection2.localDescription).ices;
-        const ice = ices[ices.length - 1];
-        const candidate = melt(ice, peerConnection1.localDescription);
-        if (candidate === undefined) {
-          throw new Error('TODO: Handle this case');
+        for (const ice of ices.filter(i => !seen2.includes(i))) {
+          seen2.push(ice);
+          const candidate = melt(ice, peerConnection1.localDescription);
+          if (candidate === undefined) {
+            throw new Error('Duplicate candidate found!');
+          }
+          
+          peerConnection1.addIceCandidate(candidate.sdp);
         }
-        
-        peerConnection1.addIceCandidate(candidate.sdp);
       }
     });
 

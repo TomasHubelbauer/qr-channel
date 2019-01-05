@@ -1,4 +1,4 @@
-//import codingTest from './test/coding.js';
+import codingTest from './test/coding.js';
 import replyingTest from './test/replying2.js';
 //import scan from './scan.js';
 import reply from './reply.js';
@@ -7,7 +7,7 @@ window.addEventListener('load', async () => {
   // Use non-default logger when debugging on mobile
   //console.log = log;
 
-  //await codingTest();
+  await codingTest();
   
   // Fire and forget infinite scanning for QR codes
   //scan(reply);
