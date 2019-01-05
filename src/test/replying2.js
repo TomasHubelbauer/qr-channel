@@ -36,12 +36,16 @@ export default async function coding(onMessage) {
   peerConnection.addEventListener('signalingstatechange', _ => console.log('test pc signaling state ' + peerConnection.signalingState));
   peerConnection.addEventListener('icegatheringstatechange', _ => console.log('test pc ICE gathering state ' + peerConnection.iceGatheringState));
   peerConnection.addEventListener('connectionstatechange', _ => console.log('test pc connection state ' + peerConnection.connectionState));
+
+  const seen = [];
   peerConnection.addEventListener('icecandidate', event => {
     console.log('test PC ICE candidate ' + (event.candidate ? event.candidate.candidate : 'null'))
     if (event.candidate !== null) {
       const ices = encode(peerConnection.localDescription).ices;
-      const ice = ices[ices.length - 1];
-      onMessage(ice);
+      for (const ice of ices.filter(i => !seen.includes(i))) {
+        seen.push(ice);
+        onMessage(ice);
+      }
     }
   });
 
