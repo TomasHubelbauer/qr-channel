@@ -14,10 +14,10 @@ window.addEventListener('load', async () => {
   //scan(reply);
   
   // Start broadcasting my own welcome offer
-  //reply();
+  reply();
   
   // Run the replying test
-  //await replyingTest(reply);
+  await replyingTest(reply);
 });
 
 window.addEventListener('unhandledrejection', event => alert(event.reason));

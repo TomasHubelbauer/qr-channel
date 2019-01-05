@@ -21,10 +21,6 @@ export default async function reply(message) {
     
     const dataChannel = peerConnection.createDataChannel('');
     monitor(dataChannel, 'dataChannel');
-
-    peerConnection.addEventListener('icecandidate', event => {
-
-    });
     
     const sessionDescription = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(sessionDescription);
