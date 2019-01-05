@@ -56,11 +56,10 @@ export default async function coding() {
         for (const ice of ices.filter(i => !seen1.includes(i))) {
           seen1.push(ice);
           const candidate = melt(ice, peerConnection2.localDescription);
-          if (candidate === undefined) {
-            throw new Error('Duplicate candidate found!');
+          if (candidate !== undefined) {
+            // Ignore same duplicate being seen twice or already being in the other connection from its gathering
+            peerConnection2.addIceCandidate(candidate.sdp);
           }
-          
-          peerConnection2.addIceCandidate(candidate.sdp);
         }
       }
     });
@@ -72,11 +71,10 @@ export default async function coding() {
         for (const ice of ices.filter(i => !seen2.includes(i))) {
           seen2.push(ice);
           const candidate = melt(ice, peerConnection1.localDescription);
-          if (candidate === undefined) {
-            throw new Error('Duplicate candidate found!');
+          if (candidate !== undefined) {
+            // Ignore same duplicate being seen twice or already being in the other connection from its gathering
+            peerConnection1.addIceCandidate(candidate.sdp);
           }
-          
-          peerConnection1.addIceCandidate(candidate.sdp);
         }
       }
     });
