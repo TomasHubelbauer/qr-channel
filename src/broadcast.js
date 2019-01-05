@@ -43,7 +43,7 @@ export default function broadcast(connection) {
   
   if (peerConnection === undefined) {
     peerConnection = connection;
-    // Fire and forget a rotation in an independent flow
+    // Fire and forget the rotation in an independent flow
     rotate();
   } else {
     // Replace and reuse the existing rotation
