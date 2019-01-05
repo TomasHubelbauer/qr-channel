@@ -13,7 +13,6 @@
     "extendedDiagnostics": true,
     "noEmit": true,
     "target": "esnext",
-    "alwaysStrict": true,
     "disableSizeLimit": true,
     "listFiles": true,
     "noFallthroughCasesInSwitch": true,
