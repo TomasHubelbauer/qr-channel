@@ -5,6 +5,19 @@ export default function broadcast(connection) {
   // Stop the existing rotation by clearing the session description
   if (connection === undefined) {
     peerConnection = undefined;
+
+    /** @type {HTMLCanvasElement|null} */
+    const codeCanvas = document.querySelector('#codeCanvas');
+    if (codeCanvas === null) {
+      throw new Error('The #codeCanvas element was not found.');
+    }
+
+    const context = codeCanvas.getContext('2d');
+    if (context === null) {
+      throw new Error('Failed to obtain canvas context');
+    }
+
+    context.clearRect(0, 0, codeCanvas.width, codeCanvas.height);
     return;
   }
   
@@ -33,8 +46,8 @@ export default function broadcast(connection) {
   }
   
   typeP.textContent += ' → ' + peerConnection.localDescription.type;
-  peerConnection.addEventListener('signalingstatechange', () => signalingStateP.textContent += ' → ' + peerConnection.signalingState);
-  peerConnection.addEventListener('icegatheringstatechange', () => iceGatheringStateP.textContent += ' → ' + peerConnection.iceGatheringState);
+  peerConnection.addEventListener('signalingstatechange', event => signalingStateP.textContent += ' → ' + event.currentTarget.signalingState);
+  peerConnection.addEventListener('icegatheringstatechange', event => iceGatheringStateP.textContent += ' → ' + event.currentTarget.iceGatheringState);
 }
 
 async function rotate() {

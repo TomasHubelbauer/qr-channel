@@ -1,12 +1,8 @@
-/** @type {'body'|'log'|'alert'} */
+/** @type {'body'|'alert'} */
 const mode = 'body';
 let logsP;
 export default function log(message) {
   switch (mode) {
-    case 'log': {
-      console.log(message);
-      break;
-    }
     case 'alert': {
       alert(message);
       break;

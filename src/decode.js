@@ -8,7 +8,7 @@ export default function decode(value) {
   
   const id = value.substring(0, bitIndex);
   if (!/^\d+$/.test(id)) {
-    throw new Error(`The session ID (0-${bitIndex}) is not numeric: '${id}'`);
+    throw new Error(`The session ID (0-${bitIndex}) is not numeric: '${id}'. SDP: ${value}`);
   }
   
   /** @type {RTCSdpType} */
