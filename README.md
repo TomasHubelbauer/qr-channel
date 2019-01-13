@@ -52,7 +52,6 @@ in all MarkDown files.
 - [ ] See if it could be possible to pull the dependencies as ES native modules
   - https://github.com/kazuhikoarase/qrcode-generator/issues/65
   - https://github.com/cozmo/jsQR/issues/107
-- [ ] Add a license file
 
 ## Crediting
 
