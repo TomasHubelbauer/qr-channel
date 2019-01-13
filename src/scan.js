@@ -31,6 +31,7 @@ export default async function scan(onMessage) {
       const imageData = viewfinderContext.getImageData(0, 0, viewfinderCanvas.width, viewfinderCanvas.height);
       const code = jsQR(imageData.data, imageData.width, imageData.height);
       if (code !== null && code.data !== '') {
+        navigator.vibrate(100);
         onMessage(code.data);
       }
     }
