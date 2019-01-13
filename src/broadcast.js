@@ -1,4 +1,5 @@
 import encode from './encode.js';
+import sleep from './sleep.js';
 
 let peerConnection;
 export default function broadcast(connection) {
@@ -109,6 +110,6 @@ async function rotate() {
     }
 
     counter++;
-    await new Promise(resolve => window.setTimeout(resolve, 250));
+    await sleep(250);
   }
 }

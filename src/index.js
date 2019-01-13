@@ -1,4 +1,5 @@
 import codingTest from './test/coding.js';
+import codingTest2 from './test/coding2.js';
 import replyingTest from './test/replying2.js';
 //import scan from './scan.js';
 import reply from './reply.js';
@@ -9,15 +10,16 @@ window.addEventListener('load', async () => {
   //console.log = log;
 
   //await codingTest();
+  await codingTest2();
   
   // Fire and forget infinite scanning for QR codes
   //scan(reply);
   
   // Start broadcasting my own welcome offer
-  reply();
+  //reply();
   
   // Run the replying test
-  await replyingTest(reply);
+  //await replyingTest(reply);
 });
 
 window.addEventListener('unhandledrejection', event => alert(event.reason));

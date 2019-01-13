@@ -2,32 +2,32 @@ import decode from '../decode.js';
 import monitor from '../monitor.js';
 import melt from '../melt.js';
 import encode from '../encode.js';
+import scan from './scanMock.js';
+import sleep from '../sleep.js';
 
 export default async function coding(onMessage) {
-  // Get the offer code
-  /** @type {HTMLCanvasElement|null} */
-  const codeCanvas = document.querySelector('#codeCanvas');
-  if (codeCanvas === null) {
-    throw new Error('The #codeCanvas element was not found.');
-  }
-
   // Collect the offer SDP and the ICE candidate SDP
   let offer;
   const candidates = [];
-  while (offer === undefined || candidates.length < 2 /* TODO: Display end of candidates message and use it to stop this */) {
-    const code = codeCanvas.title;
-    if (code === '') {
-        // Wait until the offering codes start showing
-    } else if (code.startsWith('a=')) {
-        // Ignore multiple scans of the same candidate
-        if (!candidates.includes(code)) {
-            candidates.push(code);
-        }
-    } else {
-        offer = decode(code);
+  scan(message => {
+    // Ignore further messages if we have all we need
+    if (offer !== undefined && candidates.length >= 2) {
+      return;
     }
 
-    await new Promise(resolve => window.setTimeout(resolve, 100));
+    if (message.startsWith('a=')) {
+      // Ignore multiple scans of the same candidate
+      if (!candidates.includes(message)) {
+        candidates.push(message);
+      }
+    } else {
+      offer = decode(message);
+    }
+  });
+
+  // Idle until we have scanned the offer and the two candidates
+  while (offer === undefined || candidates.length < 2 /* TODO: Display end of candidates message and use it to stop this */) {
+    await sleep(100);
   }
 
   // Create test peer connection and start collecting its ICE candidates

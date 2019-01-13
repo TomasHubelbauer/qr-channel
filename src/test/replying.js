@@ -1,3 +1,5 @@
+import sleep from "../sleep";
+
 export default async function replying(onMessage) {
   /** @type {HTMLCanvasElement|null} */
   const codeCanvas = document.querySelector('#codeCanvas');
@@ -10,7 +12,7 @@ export default async function replying(onMessage) {
   });
   
   while (true) {
-    await new Promise(resolve => window.setTimeout(resolve, 100));
+    await sleep(100);
     const message = codeCanvas.title;
     if (message === '') {
       continue;

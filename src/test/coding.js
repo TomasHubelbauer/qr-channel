@@ -6,7 +6,9 @@ import melt from '../melt.js';
 export default async function coding() {
   try {
     // Obtain a dummy media stream first so that iOS Safari reveals host candidates (permissions need to be granted for that)
-    await navigator.mediaDevices.getUserMedia({ video: true });
+    if (navigator.vendor === 'Apple Computer, Inc.') {
+      await navigator.mediaDevices.getUserMedia({ video: true });
+    }
 
     const peerConnection1 = new RTCPeerConnection();
     monitor(peerConnection1, '1', {
