@@ -1,4 +1,4 @@
-import sleep from "../sleep";
+import sleep from "../sleep.js";
 
 // TODO: Change this to an async iterator once browser support is there https://github.com/Fyrd/caniuse/issues/3690
 export default async function scan(onMessage, source) {
