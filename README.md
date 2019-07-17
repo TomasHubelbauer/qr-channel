@@ -99,3 +99,7 @@ and simplify the flow:
 - The QR scanner on the phone finds the offer code and opens the browser with the offer in the URL which shows the answer
 - The web app scan its field of view until it sees the answer code at which point the flow end
 - A WebRTC connection using the offer and the answer is established
+
+On Android the QR scanner is in Camera app settings under *Google Lens Suggestions*.
+
+On iOS the QR scanner is a widget that can be added to the Control Centre and starts camera with scanning enabled.
