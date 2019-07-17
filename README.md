@@ -82,3 +82,20 @@ In the future I'd like to explore ways of bringing down the time required to est
 
 - [GitHub](https://github.com/kazuhikoarase/qrcode-generator)
 - [npm](https://www.npmjs.com/package/qrcode-generator)
+
+---
+
+I started working on https://github.com/TomasHubelbauer/js-qr-scanner-library-comparison
+to see if there is a QR library that is faster or better at scanning than Cozmo's but
+that doesn't appear to be the case.
+
+I could also use the JavaScript QR reader on desktop only because phones have a built-in
+one these days. But it would probably be better to make the roles explicit in tha case
+and simplify the flow:
+
+- User opens the camera app on their phone and set it to the selfie camera
+- User opens the web app and an offer code is automatically displayed and answer scanning started
+- User scans the offer code by pointing the phone's display to the latop screen (which makes the latop see the phone screen)
+- The QR scanner on the phone finds the offer code and opens the browser with the offer in the URL which shows the answer
+- The web app scan its field of view until it sees the answer code at which point the flow end
+- A WebRTC connection using the offer and the answer is established
