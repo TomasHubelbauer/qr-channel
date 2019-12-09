@@ -1,19 +1,13 @@
 # [QR Channel](https://tomashubelbauer.github.io/qr-channel/)
 
+[**LIVE**](https://tomashubelbauer.github.io/qr-channel/)
+
 This is an experiment in establishing WebRTC peer connection with a data channel between two devices equipped with web cams by
 exchanging QR codes with offer/answer SDP data and ICE candidate data.
 
 I also have a Web Bluetooth based solution in the works, [BT Channel](https://github.com/TomasHubelbauer/bt-channel).
 
 ## Running
-
-[
-  ![](https://dev.azure.com/tomashubelbauer/QR%20Channel/_apis/build/status/QR%20Channel?branchName=master)
-](https://dev.azure.com/tomashubelbauer/QR%20Channel/_build/latest?definitionId=10?branchName=master)
-
-Please note that the above badge corresponds to a strict TypeScript type check status.
-There is no build per se as this is a static file JavaScript project hosted using GitHub Pages
-with an [**online demo** at tomashubelbauer.github.io/qr-channel](https://tomashubelbauer.github.io/qr-channel/).
 
 `start index.html`
 
@@ -33,25 +27,24 @@ GitHub issues are closed, use a pull request to start discussion about a patch o
 
 The PR will be type checked before it can be merged. This is a JavaScript project which uses JSDoc through TypeScript.
 
-- [ ] Finalize PR blocking using Azure Pipelines
+## To-Do
 
-### Roadmap
+### Finalize `reply.js` using [the test rig](https://github.com/TomasHubelbauer/qr-channel/src/test/replying)
 
-Also see
-[`TODO` comments](https://github.com/TomasHubelbauer/qr-channel/search?q=todo&unscoped_q=todo)
-in the source code and MarkDown checkboxen
-([GitHub can't find these](https://help.github.com/articles/searching-code/#considerations-for-code-search))
-in all MarkDown files.
+Verify with real devices
 
-- [ ] Finalize `reply.js` using [the test rig](https://github.com/TomasHubelbauer/qr-channel/src/test/replying)
-      and verify with real devices
-- [ ] Test that the candidate `melt` function works in the coding test laying ground for the ICE compression/decompression
-- [ ] Compress and decompress ICE in `encode` & `melt`, fit multiple into a QR code (limit to type number 5)
-- [ ] Figure out [this problem](https://stackoverflow.com/q/53958469/2715716) and fix `jsQR` not being seen by TypeScript
-  - [ ] See if jsQR maintainers [find a way](https://github.com/cozmo/jsQR/issues/108)
-- [ ] See if it could be possible to pull the dependencies as ES native modules
-  - https://github.com/kazuhikoarase/qrcode-generator/issues/65
-  - https://github.com/cozmo/jsQR/issues/107
+### Test that the candidate `melt` function works in the coding test laying ground for the ICE compression/decompression
+
+### Compress and decompress ICE in `encode` & `melt`, fit multiple into a QR code (limit to type number 5)
+
+### Figure out [this problem](https://stackoverflow.com/q/53958469/2715716) and fix `jsQR` not being seen by TypeScript
+
+### See if jsQR maintainers [find a way](https://github.com/cozmo/jsQR/issues/108)
+
+### See if it could be possible to pull the dependencies as ES native modules
+
+- https://github.com/kazuhikoarase/qrcode-generator/issues/65
+- https://github.com/cozmo/jsQR/issues/107
 
 ## Crediting
 
